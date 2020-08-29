@@ -26,6 +26,8 @@ class TimidAgent(Agent):
         If the pacman is not in danger, we return Directions.STOP
         If the pacman is in danger we return the direction to the ghost.
         """
+        if(ghost.isScared()): return Directions.STOP
+
         pacPos = pacman.getPosition()
         ghostPos = ghost.getPosition()
 
@@ -60,16 +62,16 @@ class TimidAgent(Agent):
 
         heading = agentState.getDirection()
 
-        print(agentState, heading)
+        print(agentState)
 
         # are we in danger_check
         # see getPacmanState() and getGhostStates()
         GhostList = state.getGhostStates()
         for Ghost in GhostList:
             direction = self.inDanger(agentState, Ghost)
-        print(direction)
+            print(Ghost.getPosition(), direction)
 
-        if(direction != Directions.STOP):
+        #if(direction != Directions.STOP):
 
         if heading == Directions.STOP:
             # Pacman is stopped, assume North (true at beginning of game)
