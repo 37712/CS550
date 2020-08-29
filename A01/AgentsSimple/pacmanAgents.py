@@ -18,6 +18,10 @@ import random
 import game
 import util
 
+#testing
+import time
+
+# always turn left agent
 class LeftTurnAgent(game.Agent):
     "An agent that turns left at every opportunity"
 
@@ -33,7 +37,12 @@ class LeftTurnAgent(game.Agent):
 
         # Get the agent's state from the game state and find agent heading
         agentState = state.getPacmanState()
+
+        print(agentState)
+
         heading = agentState.getDirection()
+
+        print(heading)
 
         if heading == Directions.STOP:
             # Pacman is stopped, assume North (true at beginning of game)
@@ -54,8 +63,11 @@ class LeftTurnAgent(game.Agent):
             else:
                 action = Directions.STOP  # Can't move!
 
+        #time.sleep(3)
+        input()
         return action
 
+# follows points
 class GreedyAgent(Agent):
     def __init__(self, evalFn="scoreEvaluation"):
         self.evaluationFunction = util.lookup(evalFn, globals())
