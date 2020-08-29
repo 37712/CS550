@@ -38,7 +38,7 @@ class TimidAgent(Agent):
             elif(ghostPos[0] <= pacPos[0] + dist and pacPos[0] < ghostPos[0]):
                 return Directions.EAST
         # column
-        if(pacPos[0] == pacPos[0]):
+        if(pacPos[0] == ghostPos[0]):
             if(pacPos[1] - dist <= ghostPos[1] and ghostPos[1] < pacPos[1]):
                 return Directions.SOUTH
             elif(ghostPos[1] <= pacPos[1] + dist and pacPos[1] < ghostPos[1]):
@@ -70,8 +70,8 @@ class TimidAgent(Agent):
         for Ghost in GhostList:
             direction = self.inDanger(agentState, Ghost)
             print(Ghost.getPosition(), direction)
-
-        #if(direction != Directions.STOP):
+            if(direction != Directions.STOP): break
+        
 
         if heading == Directions.STOP:
             # Pacman is stopped, assume North (true at beginning of game)
