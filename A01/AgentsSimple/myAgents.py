@@ -1,8 +1,27 @@
+"""
+Pair Programming Equitable Participation & Honesty Affidavit
+We the undersigned promise that we have in good faith attempted to follow the principles of pair programming.
+Although we were free to discuss ideas with others, the implementation is our own.
+We have shared a common workspace and taken turns at the keyboard for the majority of the work that we are submitting.
+Furthermore, any non programming portions of the assignment were done independently.
+We recognize that should this not be the case, we will be subject to penalties as outlined in the course syllabus.
+
+
+
+
+Pair Programmer 1 (print & sign your name, then date it) Scott Sindewald 8/30/2020
+
+
+
+
+Pair Programmer 2 (print & sign your name, then date it) Carlos Gamino Reyes 8/30/2020
+
+"""
+
 
 from pacman import Directions
 from game import Agent, Actions
 from pacmanAgents import LeftTurnAgent
-
 
 
 class TimidAgent(Agent):
@@ -66,12 +85,12 @@ class TimidAgent(Agent):
 
         # are we in danger_check
         # see getPacmanState() and getGhostStates()
-        GhostList = state.getGhostStates()
-        for Ghost in GhostList:
+        ghost_list = state.getGhostStates()
+        for Ghost in ghost_list:
             direction = self.inDanger(agentState, Ghost)
             print(Ghost.getPosition(), direction)
-            if(direction != Directions.STOP): break
-        
+            if direction != Directions.STOP: break
+
 
         if heading == Directions.STOP:
             # Pacman is stopped, assume North (true at beginning of game)
@@ -92,7 +111,17 @@ class TimidAgent(Agent):
             else:
                 action = Directions.STOP  # Can't move!
 
-        input()
+        if direction != Directions.STOP: # If danger is detected.
+            if Directions.REVERSE[direction] in legal: # If reversing danger direction is legal.
+                action = Directions.REVERSE[direction]
+            elif Directions.LEFT[direction] in legal: # If left turn from danger is legal.
+                action = Directions.LEFT[direction]
+            elif Directions.RIGHT[direction] in legal: # If right turn from danger is legal.
+                action = Directions.RIGHT[direction]
+            elif direction in legal: # Head in direction of danger
+                action = direction
+            else:
+                action = Directions.STOP # Can't move.
+        #input()
         return action
 
-        #raise NotImplemented
