@@ -8,13 +8,10 @@ We recognize that should this not be the case, we will be subject to penalties a
 
 
 
-
-Pair Programmer 1 (print & sign your name, then date it) Scott Sindewald 8/30/2020
-
+Pair Programmer 1 (print & sign your name, then date it)    Scott Sindewald 8/30/2020
 
 
-
-Pair Programmer 2 (print & sign your name, then date it) Carlos Gamino Reyes 8/30/2020
+Pair Programmer 2 (print & sign your name, then date it)    Carlos Gamino Reyes 8/30/2020
 
 """
 
@@ -35,7 +32,8 @@ class TimidAgent(Agent):
         # Add anything else you think you need here
 
     def inDanger(self, pacman, ghost, dist=3):
-        """inDanger(pacman, ghost) - Is the pacman in danger
+        """
+        inDanger(pacman, ghost) - Is the pacman in danger
         For better or worse, our definition of danger is when the pacman and
         the specified ghost are:
            in the same row or column,
@@ -82,18 +80,21 @@ class TimidAgent(Agent):
         heading = agentState.getDirection()
 
         print(agentState)
+        #print("state.getNumAgents = "+state.getNumAgents())
 
-        # are we in danger_check
-        # see getPacmanState() and getGhostStates()
-        ghost_list = state.getGhostStates()
-        for Ghost in ghost_list:
-            direction = self.inDanger(agentState, Ghost)
-            print(Ghost.getPosition(), direction)
-            if direction != Directions.STOP: break
-
+        # if there are no ghosts
+        direction = Directions.STOP
+        if state.getNumAgents() > 1:
+            # are we in danger_check
+            # see getPacmanState() and getGhostStates()
+            ghost_list = state.getGhostStates()
+            for Ghost in ghost_list:
+                direction = self.inDanger(agentState, Ghost)
+                print(Ghost.getPosition(), direction)
+                if direction != Directions.STOP: break
 
         if heading == Directions.STOP:
-            # Pacman is stopped, assume North (true at beginning of game)
+            # Pacman is stopped (true at beginning of game), assume North 
             heading = Directions.NORTH
 
         # Turn left if possible
@@ -110,18 +111,19 @@ class TimidAgent(Agent):
                 action = Directions.REVERSE[heading]  # Turn around
             else:
                 action = Directions.STOP  # Can't move!
-
-        if direction != Directions.STOP: # If danger is detected.
-            if Directions.REVERSE[direction] in legal: # If reversing danger direction is legal.
+        
+        # If danger is detected
+        if direction != Directions.STOP:
+            if Directions.REVERSE[direction] in legal: # If reversing danger direction is legal
                 action = Directions.REVERSE[direction]
-            elif Directions.LEFT[direction] in legal: # If left turn from danger is legal.
+            elif Directions.LEFT[direction] in legal: # If left turn from danger is legal
                 action = Directions.LEFT[direction]
-            elif Directions.RIGHT[direction] in legal: # If right turn from danger is legal.
+            elif Directions.RIGHT[direction] in legal: # If right turn from danger is legal
                 action = Directions.RIGHT[direction]
             elif direction in legal: # Head in direction of danger
                 action = direction
             else:
-                action = Directions.STOP # Can't move.
+                action = Directions.STOP # Can't move
         #input()
         return action
 

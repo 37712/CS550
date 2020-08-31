@@ -90,7 +90,7 @@ class GameState:
         if agentIndex is None:
             agentIndex = self.pacagent
 
-#        GameState.explored.add(self)
+        #GameState.explored.add(self)
         if self.isWin() or self.isLose(): return []
 
         if agentIndex == 0:  # Pacman is moving

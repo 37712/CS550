@@ -1,3 +1,9 @@
+// for unix systems like linux
+python3 pacman.py --layout mediumClassic --pacman TimidAgent
+python3 pacman.py --layout testMaze --pacman TimidAgent
+python3 pacman.py --layout tinyMaze --pacman TimidAgent
+
+// other
 python pacman.py
 python pacman.py --layout testMaze --pacman GoWestAgent
 python pacman.py --layout mediumMaze --pacman LeftTurnAgent
