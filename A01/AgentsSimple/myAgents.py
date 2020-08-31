@@ -80,7 +80,7 @@ class TimidAgent(Agent):
         heading = agentState.getDirection()
 
         print(agentState)
-        #print("state.getNumAgents = "+state.getNumAgents())
+        #print("NumOfAgents = " + str(state.getNumAgents()))
 
         # if there are no ghosts
         direction = Directions.STOP

@@ -64,7 +64,7 @@ class LeftTurnAgent(game.Agent):
                 action = Directions.STOP  # Can't move!
 
         #time.sleep(3)
-        input()
+        #input()
         return action
 
 # follows points
