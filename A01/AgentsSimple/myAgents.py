@@ -65,11 +65,11 @@ class TimidAgent(Agent):
 
         # if there is no danger return stop
         return Directions.STOP
-    
+
     def getAction(self, state):
         """
         state - GameState
-        Checks if pacman is in danger for each ghost. Once, the first instance of danger is detected, pacman chooses
+        Checks if pacman is in danger for each ghost. Once the first instance of danger is detected, pacman chooses
         a different direction based on the priority: reverse, left and right of danger. If none are available, pacman
         heads in the direction of danger or stops if unable. If no danger is detected, pacman functions like the
         LeftTurnAgent.
@@ -94,7 +94,7 @@ class TimidAgent(Agent):
                 if direction != Directions.STOP: break
 
         if heading == Directions.STOP:
-            # Pacman is stopped (true at beginning of game), assume North 
+            # Pacman is stopped (true at beginning of game), assume North
             heading = Directions.NORTH
 
         # Turn left if possible
@@ -111,7 +111,7 @@ class TimidAgent(Agent):
                 action = Directions.REVERSE[heading]  # Turn around
             else:
                 action = Directions.STOP  # Can't move!
-        
+
         # If danger is detected
         if direction != Directions.STOP:
             if Directions.REVERSE[direction] in legal: # If reversing danger direction is legal
@@ -125,4 +125,3 @@ class TimidAgent(Agent):
             else:
                 action = Directions.STOP # Can't move!
         return action
-
