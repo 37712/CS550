@@ -24,12 +24,12 @@ from pacmanAgents import LeftTurnAgent
 class TimidAgent(Agent):
     """
     A simple agent for PacMan
+    Two functions: inDanger and getAction
     """
 
     # constructor
     def __init__(self):
         super().__init__()  # Call parent constructor
-        # Add anything else you think you need here
 
     def inDanger(self, pacman, ghost, dist=3):
         """
@@ -41,24 +41,26 @@ class TimidAgent(Agent):
            and the agents are <= dist units away from one another
 
         If the pacman is not in danger, we return Directions.STOP
-        If the pacman is in danger we return the direction to the ghost.
+        If the pacman is in danger, we return the direction to the ghost.
+        If ghost is scared, we return Directions.STOP
         """
-        if(ghost.isScared()): return Directions.STOP
 
-        pacPos = pacman.getPosition()
-        ghostPos = ghost.getPosition()
+        if ghost.isScared(): return Directions.STOP # If ghosts are scared, agent is not in danger
 
-        # ROW
-        if(pacPos[1] == ghostPos[1]):
-            if(pacPos[0] - dist <= ghostPos[0] and ghostPos[0] < pacPos[0]):
+        pacPos = pacman.getPosition() # Get (x,y) position of pacman
+        ghostPos = ghost.getPosition() # Get (x,y) position of ghost
+
+        # row
+        if(pacPos[1] == ghostPos[1]): # If ghost and pacman are in the same row
+            if(pacPos[0] - dist <= ghostPos[0] and ghostPos[0] < pacPos[0]): # If ghost is within 3 units to left
                 return Directions.WEST
-            elif(ghostPos[0] <= pacPos[0] + dist and pacPos[0] < ghostPos[0]):
+            elif(ghostPos[0] <= pacPos[0] + dist and pacPos[0] < ghostPos[0]): # If ghost is within 3 units to right
                 return Directions.EAST
         # column
-        if(pacPos[0] == ghostPos[0]):
-            if(pacPos[1] - dist <= ghostPos[1] and ghostPos[1] < pacPos[1]):
+        if(pacPos[0] == ghostPos[0]): # If ghost and pacman are in the same column
+            if(pacPos[1] - dist <= ghostPos[1] and ghostPos[1] < pacPos[1]): # If ghost is within 3 units below
                 return Directions.SOUTH
-            elif(ghostPos[1] <= pacPos[1] + dist and pacPos[1] < ghostPos[1]):
+            elif(ghostPos[1] <= pacPos[1] + dist and pacPos[1] < ghostPos[1]): # If ghost is within 3 units above
                 return Directions.NORTH
 
         # if there is no danger return stop
@@ -67,8 +69,10 @@ class TimidAgent(Agent):
     def getAction(self, state):
         """
         state - GameState
-        
-        Fill in appropriate documentation
+        Checks if pacman is in danger for each ghost. Once, the first instance of danger is detected, pacman chooses
+        a different direction based on the priority: reverse, left and right of danger. If none are available, pacman
+        heads in the direction of danger or stops if unable. If no danger is detected, pacman functions like the
+        LeftTurnAgent.
         """
 
         # List of directions the agent can choose from
@@ -79,18 +83,14 @@ class TimidAgent(Agent):
 
         heading = agentState.getDirection()
 
-        print(agentState)
-        #print("NumOfAgents = " + str(state.getNumAgents()))
-
         # if there are no ghosts
         direction = Directions.STOP
         if state.getNumAgents() > 1:
             # are we in danger_check
             # see getPacmanState() and getGhostStates()
             ghost_list = state.getGhostStates()
-            for Ghost in ghost_list:
-                direction = self.inDanger(agentState, Ghost)
-                print(Ghost.getPosition(), direction)
+            for ghost in ghost_list:
+                direction = self.inDanger(agentState, ghost)
                 if direction != Directions.STOP: break
 
         if heading == Directions.STOP:
@@ -120,10 +120,9 @@ class TimidAgent(Agent):
                 action = Directions.LEFT[direction]
             elif Directions.RIGHT[direction] in legal: # If right turn from danger is legal
                 action = Directions.RIGHT[direction]
-            elif direction in legal: # Head in direction of danger
+            elif direction in legal: # If direction of danger is legal
                 action = direction
             else:
                 action = Directions.STOP # Can't move
-        #input()
         return action
 
