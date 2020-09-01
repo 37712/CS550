@@ -78,16 +78,16 @@ class TimidAgent(Agent):
         # List of directions the agent can choose from
         legal = state.getLegalPacmanActions()
 
-        # Get the agent's state from the game state and find agent heading
+        # Get the agent's state and heading from the game state
         agentState = state.getPacmanState()
-
         heading = agentState.getDirection()
 
-        # if there are no ghosts
+        # in case there are no ghosts
         direction = Directions.STOP
+
+        # if there are ghosts
         if state.getNumAgents() > 1:
             # are we in danger_check
-            # see getPacmanState() and getGhostStates()
             ghost_list = state.getGhostStates()
             for ghost in ghost_list:
                 direction = self.inDanger(agentState, ghost)
@@ -123,6 +123,6 @@ class TimidAgent(Agent):
             elif direction in legal: # If direction of danger is legal
                 action = direction
             else:
-                action = Directions.STOP # Can't move
+                action = Directions.STOP # Can't move!
         return action
 
