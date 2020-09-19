@@ -10,8 +10,6 @@ def polyval(fpoly, x):
         y_value += fpoly[i]*(x**(fpoly_size-(i+1)))
     return y_value
 
-test_poly = [4,0,9,3]
-test_derivative = polyval(test_poly,5)
 
 
 def derivative(fpoly):
@@ -45,13 +43,13 @@ def NewtonRaphson(fpoly, a, tolerance = .00001):
     print(abs(x_cur-x_prev))
     print(tolerance)
     while(abs(x_cur-x_prev)>tolerance):
-        poly_x = polyval(fpoly,x_prev)
-        gradient = polyval(derivative(fpoly),x_prev)
-        print("poly_a = ",poly_a," gradient = ",gradient)
+        poly_x = polyval(fpoly,x_cur)
+        gradient = polyval(derivative(fpoly),x_cur)
+        print("poly_x = ",poly_x," gradient = ",gradient)
         x_prev =x_cur
         x_cur = x_prev - poly_x/gradient
         print("x_prev = ",x_prev," x_cur = ",x_cur)
     return x_cur
 
-root = NewtonRaphson( [7, 3, -5, 32, -7], 5)
+root = NewtonRaphson( [7, 3, -5, 32, -7], 50)
 print("root = ", root)
