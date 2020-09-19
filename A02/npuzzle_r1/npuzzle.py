@@ -41,7 +41,7 @@ class NPuzzle(Problem):
     
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
-
+        return state.goal_test()
         raise NotImplemented
 
     
