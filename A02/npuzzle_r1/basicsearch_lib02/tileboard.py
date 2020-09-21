@@ -28,7 +28,7 @@ class TileBoard(Board):
             raise ValueError("Bad board size\n" +
                 "Must be one less than an odd perfect square 8, 24, ...")
 
-        # initialize parent
+        # initialize parent, from board class
         super().__init__(self.boardsize, self.boardsize)
 
 
