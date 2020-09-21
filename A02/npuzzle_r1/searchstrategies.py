@@ -36,8 +36,44 @@ Manhattan - city block heuristic search.  To restrict the complexity of
 
 import math
 
+# might need to import seachrep/node and tileboard for the parent and child nodes
+
 class BreadthFirst:
     "BreadthFirst - breadth first search"
+
+    @classmethod
+    def g(cls, parentnode, action, childnode):
+        """"g - cost from initial state to childnode
+        constrained such that the last edge of the search space
+        moves from parentnode to childnode via the specified action
+        """
+        # maybe we need get_g and get_h from seachrep/node
+        raise NotImplemented
+    
+    @classmethod
+    def h(cls, searchnode):
+        "h - heuristic value"
+        raise NotImplemented
+
+class DepthFirst:
+    "DepthFirst - depth first search"
+
+    @classmethod
+    def g(cls, parentnode, action, childnode):
+        """"g - cost from initial state to childnode
+        constrained such that the last edge of the search space
+        moves from parentnode to childnode via the specified action
+        """
+        raise NotImplemented
+    
+    @classmethod
+    def h(cls, searchnode):
+        "h - heuristic value"
+        raise NotImplemented
+
+class Manhattan:
+    "Manhattan distance"
+
     @classmethod
     def g(cls, parentnode, action, childnode):
         """"g - cost from initial state to childnode

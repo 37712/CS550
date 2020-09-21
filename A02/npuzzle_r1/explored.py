@@ -8,8 +8,10 @@ class Explored(object):
 
     def __init__(self):
         "__init__() - Create an empty explored set"
-        
-        raise NotImplemented
+        # we should use dict or list to store this info
+        self.explored_map = dict()
+        # __init__ should not return anything
+        #raise NotImplemented
 
     def exists(self, state):
         """

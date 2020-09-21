@@ -26,23 +26,26 @@ class NPuzzle(Problem):
         # dictionary, e.g. kwargs[“keyname”], or passed to another function 
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
-
+        
+        # I am lost
+        #super().__init__(TileBoard(n, ???))
         raise NotImplemented
         
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"
 
-        raise NotImplemented
+        raise state.get_actions()
     
     def result(self, state, action):
         "result(state, action)- apply action to state and return new state"
-
-        raise NotImplemented
+        # to apply an action you need the move() function from tyle board, I think
+        raise state.move(action)
     
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
-        return state.goal_test()
-        raise NotImplemented
+        # is state solved for the entire tileboard
+        return state.solved()
+
 
     
         
