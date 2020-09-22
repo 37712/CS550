@@ -3,7 +3,7 @@ searchstrategies
 
 Module to provide implementations of g and h for various search strategies.
 In each case, the functions are class methods as we don't need an instance
-of the class.  
+of the class.
 
 If you are unfamiliar with Python class methods, Python uses a function
 decorator (indicated by an @ to indicate that the next method is a class
@@ -13,11 +13,11 @@ class SomeClass:
     @classmethod
     def foobar(cls, arg1, arg2):
         "foobar(arg1, arg2) - does ..."
-        
+
         code... class variables are accessed as cls.var (if needed)
         return computed value
 
-A caller would import SomeClass and then call, e.g. :  
+A caller would import SomeClass and then call, e.g. :
     SomeClass.foobar("hola","amigos")
 
 Contains g and h functions for:
@@ -31,12 +31,13 @@ Manhattan - city block heuristic search.  To restrict the complexity of
         678
     When multiple solutions are allowed, the heuristic becomes a little more
     complex as the city block distance must be estimated to each possible solution
-    state. 
+    state.
 """
 
 import math
-
-# might need to import seachrep/node and tileboard for the parent and child nodes
+from basicsearch_lib02.searchrep import *
+from basicsearch_lib02.tileboard import *
+# ask if we need to import seachrep/node and tileboard for the parent and child nodes
 
 class BreadthFirst:
     "BreadthFirst - breadth first search"
@@ -48,12 +49,16 @@ class BreadthFirst:
         moves from parentnode to childnode via the specified action
         """
         # maybe we need get_g and get_h from seachrep/node
-        raise NotImplemented
-    
+        #g = childnode.get_g()
+        #g = len(childnode.path())
+        g = childnode.depth
+        return g
+
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
-        raise NotImplemented
+        h = 0
+        return h
 
 class DepthFirst:
     "DepthFirst - depth first search"
@@ -64,30 +69,35 @@ class DepthFirst:
         constrained such that the last edge of the search space
         moves from parentnode to childnode via the specified action
         """
-        raise NotImplemented
-    
+        g = 0
+        return g
+
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
-        raise NotImplemented
+        #h = -childnode.get_h()
+        #h = -len(childnode.path())
+        h = -childnode.depth
+        return h
 
 class Manhattan:
     "Manhattan distance"
 
     @classmethod
     def g(cls, parentnode, action, childnode):
-        """"g - cost from initial state to childnode
-        constrained such that the last edge of the search space
-        moves from parentnode to childnode via the specified action
         """
-        raise NotImplemented
-    
+        123
+        456
+        78
+        """
+        return childnode.depth
+
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
+        sum = 0;
         raise NotImplemented
 
 # To complete:
 # Write two more classes, DepthFirst and Manhattan
 # that support appropriate g/h with the same signatures for the class functions
-

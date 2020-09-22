@@ -9,9 +9,7 @@ class Explored(object):
     def __init__(self):
         "__init__() - Create an empty explored set"
         # we should use dict or list or set to store this info
-        self.explored_map = dict()
-        # __init__ should not return anything
-        #raise NotImplemented
+        self.explored_set = dict()
 
     def exists(self, state):
         """
@@ -19,11 +17,7 @@ class Explored(object):
         :param state:  Hashable problem state
         :return: True if already seen, False otherwise4
         """
-        # do we need to hash the state??? "hashable problem state"
-        if(state in explored_map): return True
-        else: return false
-        #raise NotImplemented
-
+        return hash(state) in explored_set
 
     def add(self, state):
         """
@@ -32,6 +26,5 @@ class Explored(object):
         :return: None
         """
         # do we hash the state? why?
-        raise NotImplemented
-
-
+        if(! exists(state)):
+            explored_set[hash(state)] = state

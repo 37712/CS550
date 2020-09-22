@@ -10,45 +10,39 @@ class NPuzzle(Problem):
     """
     def __init__(self, n, force_state=None, **kwargs):
         """"__init__(n, force_state, **kwargs)
-        
+
         NPuzzle constructor.  Creates an initial TileBoard of size n.
         If force_state is not None, the puzzle is initialized to the
         specified state instead of being generated randomly.
-        
+
         The parent's class constructor is then called with the TileBoard
-        instance any any remaining arguments captured in **kwargs.        
-        
+        instance any any remaining arguments captured in **kwargs.
+
         """
-        
+
         # Note on **kwargs:
-        # **kwargs is Python construct that captures any remaining arguments 
-        # into a dictionary.  The dictionary can be accessed like any other 
-        # dictionary, e.g. kwargs[“keyname”], or passed to another function 
+        # **kwargs is Python construct that captures any remaining arguments
+        # into a dictionary.  The dictionary can be accessed like any other
+        # dictionary, e.g. kwargs[“keyname”], or passed to another function
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
-        
+
         # I am lost
         #super().__init__(TileBoard(n, ???))
+        #we need to do something with g and h
+        super().__init__(TileBoard(n, force_state), g = kwargs['g'], h = kwargs['h'])
         raise NotImplemented
-        
+
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"
+        return state.get_actions()
 
-        raise state.get_actions()
-    
     def result(self, state, action):
         "result(state, action)- apply action to state and return new state"
         # to apply an action you need the move() function from tyle board, I think
-        raise state.move(action)
-    
+        return state.move(action)
+
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
         # is state solved for the entire tileboard
         return state.solved()
-
-
-    
-        
-
-
-
