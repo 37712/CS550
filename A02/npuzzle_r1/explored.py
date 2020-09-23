@@ -26,5 +26,5 @@ class Explored(object):
         :return: None
         """
         # do we hash the state? why?
-        if(! exists(state)):
+        if(not exists(state)):
             explored_set[hash(state)] = state

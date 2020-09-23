@@ -30,8 +30,8 @@ class NPuzzle(Problem):
         # I am lost
         #super().__init__(TileBoard(n, ???))
         #we need to do something with g and h
-        super().__init__(TileBoard(n, force_state), g = kwargs['g'], h = kwargs['h'])
-        raise NotImplemented
+        print(**kwargs)
+        super().__init__(TileBoard(n, force_state), kwargs['g'], kwargs['h'])
 
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"
