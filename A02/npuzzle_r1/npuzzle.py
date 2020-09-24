@@ -46,4 +46,5 @@ class NPuzzle(Problem):
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
         # is state solved for the entire tileboard
-        return state.solved()
+        #return state.solved()
+        return state in self.goals

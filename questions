@@ -5,14 +5,14 @@ for quesion 2, how do we calculate the new positon once we have step size
 for question 3, what is mutation and crossover methods supposed to do
 
 is it ok to import classes from other files that we might need
-for example on searchstrategies.py we imported searchrep and tileboard 
+for example on searchstrategies.py we imported searchrep and tileboard
 
 what is the goal state, where is the tileboard supposed to be, middle or at a corner and what corner
 
 goal state should be when all the blocks are in order and the blank block is int he bottom right
 
 for manhattan distance, are we supposed to add up all of the distances each tile is away from their correct positions?
-yes, we add the distance of each node all toguether
+yes, we add the distance of each node all together
 
 what does force state in npuzzle mean?
 force state allows us to force a preset puzzle
@@ -24,3 +24,35 @@ other
 when dequeue a node we take a look to see it is the goal if not then we put it in the explored set
 
 never need to turn on multiple solutions
+
+
+
+
+
+************additional info**************
+
+Does a state contain nodes or does a node contain states?
+
+Use expand to create children nodes
+
+It will create a list of child nodes
+
+State is instance of tailboard
+
+Problem is instance of npuzzle
+
+Check all children before checking for goal
+
+Check if in explored before putting in frontier. Frontier organizes automatically
+
+
+
+Will the frontier set contain nodes, actions or states?
+
+Frontier set contains search nodes
+
+How to calculate Manhattan distance?
+
+Manhattan distance is adding the distance for each value in puzzle from their correct place
+
+Debug where I am, state, g and h

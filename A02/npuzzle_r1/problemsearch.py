@@ -5,6 +5,7 @@ problemsearch - Functions for seaarching.
 from basicsearch_lib02.searchrep import (Node, print_nodes)
 from basicsearch_lib02.queues import PriorityQueue
 from basicsearch_lib02.timer import Timer
+from explored.py import *
 
 from explored import Explored
 
@@ -76,10 +77,24 @@ def graph_search(problem, verbose=False, debug=False):
       need to provide debugging information
       use search information and priority queue to solve problem
       """
-
+      # list of actions to solution
       t = Timer() # starts the timer
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
-      
+      explored = Explored() # explored set
+      # need to dequeue and add child nodes to queue
+      frontier.append(problem.initial)
+      while(frontier.__len__()!=0):
+          current = frontier.pop()
+          explored.add(current) # add initial state to explored
+          if problem.goal_test(current): # if the initial state is the goal
+            return(current.path(), explored.len(), t) # return path size 0, explored size 1, and time elapsed
+          actions = current.get_actions()
+
+      path = [] # no solution found
+      return(path, explored.len(), t) # return empty path, number of nodes explored and time elapsed
+
+
+      #frontier.append(problem.initial) # add the first state to the queue
 
       # we need to return 3 things path, nodes_explored, elapsed_s
       #return ???
