@@ -8,7 +8,7 @@ class NPuzzle(Problem):
     NPuzzle - Problem representation for an N-tile puzzle
     Provides implementations for Problem actions specific to N tile puzzles.
     """
-    def __init__(self, n, force_state=None, **kwargs):
+    def __init__(self, n, force_state = None, **kwargs):
         """"__init__(n, force_state, **kwargs)
 
         NPuzzle constructor.  Creates an initial TileBoard of size n.
@@ -30,8 +30,9 @@ class NPuzzle(Problem):
         # I am lost
         #super().__init__(TileBoard(n, ???))
         #we need to do something with g and h
-        print(**kwargs)
-        super().__init__(TileBoard(n, force_state), kwargs['g'], kwargs['h'])
+
+        super().__init__(TileBoard(n, force_state = force_state),
+                         g = kwargs['g'], h = kwargs['h'])
 
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"

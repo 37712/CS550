@@ -27,24 +27,25 @@ def driver() :
     timeElapsedSec = dict() # time elapsed for each of the seach methods for each of the puzzles
 
     # initialize dictionaries with list for every seach method
-    for method in searchType:
-        numOfNodes[method] = list()
-        timeElapsedMin[method] = list()
-        timeElapsedSec[method] = list()
+    for search in searchType:
+        numOfNodes[search] = list()
+        timeElapsedMin[search] = list()
+        timeElapsedSec[search] = list()
 
-    for i in range(numPuzzles):
+    """for i in range(numPuzzles):
 
         print("puzzle number",i)
 
-        for search in searchType:
+        for search in searchType:"""
 
-            # prints out the name of the search trategy used to solve the puzzle
-            print("solving with", search.__name__)
+    # prints out the name of the search trategy used to solve the puzzle
+    print("solving with", search.__name__)
 
-            #create the puzzle
-            npuzzle = NPuzzle(puzzleSize, search.g, search.h)
+    #create the puzzle
+    npuzzle = NPuzzle(puzzleSize, g = search.g, h = search.h)
 
-            #path, nodes_explored, timeElapsedSec[search] = graph_search(npuzzle, debug=False, verbose=False)
+    #solving the npuzzle
+    path, nodes_explored, timeElapsedSec[search] = graph_search(npuzzle, debug=False, verbose=False)
 
             
 

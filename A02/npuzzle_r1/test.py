@@ -19,20 +19,22 @@ def add(state):
     if(not exists(state)):
         explored_set[hash(state)] = state
 
-# this is our main
-#print(hash("hello") in explored_set)
-
 def foo():
     return "hello", 123, "world"
 
 def doo(x = False):
     return x
 
-def eoo(**kwargs):
+def eoo(**kwargs): # basically a dictionary
     return kwargs['q']
 
+def goo(a,b,c):
+    print(a)
+    print(b)
+    print(c)
+
 """
-#######################################TEST#########################
+#######################################TEST#######################################
 """
 
 def driver():
@@ -47,5 +49,7 @@ def driver():
     print(doo(100))
 
     print(eoo(a ="adsfasdf", o = 3245342, q = "hello master", z = 12431234))
+
+    goo(c = 111, a = 222, b = 333)
 
 driver()
