@@ -17,7 +17,8 @@ class Explored(object):
         :param state:  Hashable problem state
         :return: True if already seen, False otherwise4
         """
-        return hash(state) in self.explored_set
+        #return hash(state) in self.explored_set
+        return state.__hash__() in self.explored_set
 
     def add(self, state):
         """
@@ -27,4 +28,6 @@ class Explored(object):
         """
         # we use the hash as the index to save the state
         if(not self.exists(state)):
-            self.explored_set[hash(state)] = state
+            #self.explored_set[hash(state)] = state
+            self.explored_set[state.__hash__()] = state
+        # It looks like there is already a hash function for states

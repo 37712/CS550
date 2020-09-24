@@ -79,7 +79,7 @@ def graph_search(problem, verbose=False, debug=False):
 
       t = Timer() # starts the timer
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
-
+      
 
       # we need to return 3 things path, nodes_explored, elapsed_s
       #return ???
