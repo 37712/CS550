@@ -1,3 +1,6 @@
+from basicsearch_lib02.timer import Timer
+import time
+from statistics import (mean, stdev)  # used for printing summary
 
 class myClass(object):
     def __init__(self):
@@ -52,10 +55,28 @@ def driver():
     print(eoo(a ="adsfasdf", o = 3245342, q = "hello master", z = 12431234))
 
     goo(c = 111, a = 222, b = 333)
-    """
-    
+        
     x = myClass()
     x.add("hello")
     x.exists("hello")
+    
+    t = Timer()
+    while(True):
+        print("%dmin %dsec" % (int(t.elapsed_s()/60), t.elapsed_s()%60))
+        time.sleep(1)
+    
+    path = None
+    assert path is not None
+    """
+
+    x = list()
+    x.append(8)
+    x.append(6)
+    x.append(4)
+    x.append(1)
+    x.append(7)
+    print(x)
+    print(mean(x))
+    print(stdev(x))
 
 driver()
