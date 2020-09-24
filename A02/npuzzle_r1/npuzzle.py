@@ -27,10 +27,7 @@ class NPuzzle(Problem):
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
 
-        # I am lost
-        #super().__init__(TileBoard(n, ???))
-        #we need to do something with g and h
-
+        # not tested
         super().__init__(TileBoard(n, force_state = force_state),
                          g = kwargs['g'], h = kwargs['h'])
 
@@ -46,5 +43,5 @@ class NPuzzle(Problem):
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
         # is state solved for the entire tileboard
-        #return state.solved()
-        return state in self.goals
+        #return state in self.goals # needs to return boolean not state goal
+        return state.solved()
