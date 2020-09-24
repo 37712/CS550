@@ -17,7 +17,7 @@ class Explored(object):
         :param state:  Hashable problem state
         :return: True if already seen, False otherwise4
         """
-        return hash(state) in explored_set
+        return hash(state) in self.explored_set
 
     def add(self, state):
         """
@@ -25,6 +25,6 @@ class Explored(object):
         :param state:  A problem state that is hashable, e.g. a tuple
         :return: None
         """
-        # do we hash the state? why?
-        if(not exists(state)):
-            explored_set[hash(state)] = state
+        # we use the hash as the index to save the state
+        if(not self.exists(state)):
+            self.explored_set[hash(state)] = state
