@@ -37,7 +37,7 @@ Manhattan - city block heuristic search.  To restrict the complexity of
 import math
 from basicsearch_lib02.searchrep import *
 from basicsearch_lib02.tileboard import *
-
+import math
 class BreadthFirst:
     "BreadthFirst - breadth first search"
 
@@ -87,19 +87,30 @@ class Manhattan:
         """
         123
         456
-        78
+        78.
+
+        567
+        328
+        .41
         """
-        return childnode.depth
+        return childnode.depth * 2
 
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
-        """
         goal_state = [1,2,3,4,5,6,7,8,None]
-        flattened_state = state.state_tuple()
-        #for value in goal_state:
+        current_state = searchnode.state.state_tuple()
+        h=0
+        for goal_index, goal_value in enumerate(goal_state):
+            for current_index, current_value in enumerate(current_state):
+                if goal_value == current_value:
+                    goal_col = int(goal_index%3)
+                    goal_row = int((goal_index)/3)
+                    current_col = int(current_index%3)
+                    current_row = int((current_index)/3)
+                    h+= 2*(abs(goal_col-current_col) + abs(goal_row-current_row))
+        return h
         # Need to implement: find distance each value is from goal position and add up the distances
-        """
 
 # To complete:
 # Write two more classes, DepthFirst and Manhattan
