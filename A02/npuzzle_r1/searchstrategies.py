@@ -95,7 +95,10 @@ class Manhattan:
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
-        sum = 0;
+        goal_state = [1,2,3,4,5,6,7,8,None]
+        flattened_state = state.state_tuple()
+        for value in goal_state:
+        # Need to implement: find distance each value is from goal position and add up the distances
         raise NotImplemented
 
 # To complete:
