@@ -80,28 +80,37 @@ def graph_search(problem, verbose=False, debug=False):
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
       explored = Explored() # explored set, NOT REALLY A SET
       # need to dequeue and add child nodes to queue
-      frontier.append(problem.initial)
+      root = Node(problem, problem.initial)
+      frontier.append(root)
       done = False
       optimal = None
       path = []
       while(done == False):
             current = frontier.pop() # Dequeue current node
+            print("##############################")
+            #print(current)
             if debug == True: # used for debugging
                   print("For the current node, g = ", current.get_g()) # display current node's g cost
                   print("\nh = ", current.get_h()) # display current node's h cost
                   print("The current state is\n", current, "\n") # display current node
             explored.add(current) # add current state to explored
-            if problem.goal_test(current): # if the current state is the goal
+            if problem.goal_test(current.state): # if the current state is the goal
                   if optimal == None: # no solution found yet
                         optimal = current # the only solution so far is the most optimal
-                  elif current.len() < optimal.len(): # if the path length is shorter than that of the optimal one
+                  elif len(current.path()) < len(optimal.path()): # if the path length is shorter than that of the optimal one
                         optimal = current # the current solution is the optimal one so far
             else:
-                  child_nodes = current.expand() # expand the state to find child nodes
+                  child_nodes = current.expand(problem) # expand the state to find child nodes
+                  #print_nodes(child_nodes)
                   for child in child_nodes:
                         if not explored.exists(child): # if we haven't encountered the states yet
                               frontier.append(child) # add them to the frontier
             done = frontier.__len__() == 0 # If all out of states to explore, end loop
+            print(done)
+            print(frontier.__len__())
+            for i in range(0, frontier.__len__()):
+                print(frontier.A[i])
+            input()
 
       if optimal != None and verbose == True: # if we found a solution and want more detail
             solution_path = optimal.path() # create list of nodes to solution
