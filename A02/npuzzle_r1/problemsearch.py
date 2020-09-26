@@ -90,6 +90,7 @@ def graph_search(problem, verbose=False, debug=False):
       while(done == False):
 
             current = frontier.pop() # Dequeue current node
+            #print(current)
 
             if(debug == True and i % 100000 == 0):
                   print("############# %d #################" % i)
@@ -105,14 +106,19 @@ def graph_search(problem, verbose=False, debug=False):
                   elif len(current.path()) < len(optimal.path()): # if the path length is shorter than that of the optimal one
                         optimal = current # the current solution is the optimal one so far
 
-                  if debug == True: # used for debugging
-                        print("###optimal found, i = %d ###" % i)
+                  if debug: # used for debugging
+                        print("###goal found, i = %d ###" % i)
                         print(current.state) # display current node
                         print("length", len(current.path()))
+                  
+                  if verbose:
+                        print("############# %d #################" % i)
+                        for node in current.path():
+                              print(node)
+                        input()
                                     
             else:
                   child_nodes = current.expand(problem) # expand the state to find child nodes
-                  #print_nodes(child_nodes)
 
                   for child in child_nodes:
                         if not explored.exists(child.state): # if we haven't encountered the states yet
@@ -126,8 +132,6 @@ def graph_search(problem, verbose=False, debug=False):
             print(optimal) # display current node
             print("length", len(optimal.path()))
             print("iterations =",i)
-      
-      print("max length", length)
 
       if optimal != None and verbose == True: # if we found a solution and want more detail
             solution_path = optimal.path() # create list of nodes to solution
@@ -139,11 +143,6 @@ def graph_search(problem, verbose=False, debug=False):
                   print("Move ", i, "\n")
                   print(solution_path[i])
       if optimal == None: # no solution found
-            return(path, len(explored.explored_set), t.elapsed_s) # return empty path, number of nodes explored and time elapsed
+            return(path, len(explored.explored_set), t.elapsed_s()) # return empty path, number of nodes explored and time elapsed
       else: # solution found
-            return(optimal.path(), len(explored.explored_set), t.elapsed_s) # return solution path, number of nodes expanded and time
-
-      #frontier.append(problem.initial) # add the first state to the queue
-
-      # we need to return 3 things path, nodes_explored, elapsed_s
-      #return ???
+            return(optimal.path(), len(explored.explored_set), t.elapsed_s()) # return solution path, number of nodes expanded and time

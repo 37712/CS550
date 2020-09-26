@@ -13,12 +13,12 @@ from problemsearch import graph_search
 import collections
 
 numPuzzles = 1 #31 # number of puzzles
-puzzleSize = 8 # size of puzzel, 8 will give us a 3x3 grid puzzle
+puzzleSize = 8 # size of puzzel, 8 will give us a 3x3 grid puzzle, 3 will give us a 2x2 puzzle
 searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 
 
 #used for configuration purposes
-debug = True
+debug = False
 vervose = False
 
 def driver() :
@@ -37,8 +37,7 @@ def driver() :
     # graph_search will return 3 values, the path, nodes explored, and elapsed time in seconds
     path, explored, elapsedtime = graph_search(npuzzle, debug=debug, verbose=vervose)
 
-    print("puzzle solved in %dmin %dsec"
-        % (int(elapsedtime/60), elapsedtime%60))
+    print("puzzle solved in %dmin %dsec" % (elapsedtime/60, elapsedtime%60))
 
     # appending the lenth of the path to the list
     lengthOfPath.append(len(path))
