@@ -18,7 +18,7 @@ searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 
 
 #used for configuration purposes
-debug = False
+debug = True
 vervose = False
 
 def driver() :
@@ -35,7 +35,7 @@ def driver() :
 
     # solving the npuzzle
     # graph_search will return 3 values, the path, nodes explored, and elapsed time in seconds
-    path, explored, elapsedtime = graph_search(npuzzle, debug=False, verbose=False)
+    path, explored, elapsedtime = graph_search(npuzzle, debug=debug, verbose=vervose)
 
     print("puzzle solved in %dmin %dsec"
         % (int(elapsedtime/60), elapsedtime%60))

@@ -85,32 +85,49 @@ def graph_search(problem, verbose=False, debug=False):
       done = False
       optimal = None
       path = []
+      i = 0
+      length = 0
       while(done == False):
+
             current = frontier.pop() # Dequeue current node
-            print("##############################")
-            #print(current)
-            if debug == True: # used for debugging
-                  print("For the current node, g = ", current.get_g()) # display current node's g cost
-                  print("\nh = ", current.get_h()) # display current node's h cost
-                  print("The current state is\n", current, "\n") # display current node
-            explored.add(current) # add current state to explored
+
+            if(debug == True and i % 100000 == 0):
+                  print("############# %d #################" % i)
+                  print(current.state)
+                  print("length", frontier.__len__())
+            
+            explored.add(current.state) # add current state to explored
+
             if problem.goal_test(current.state): # if the current state is the goal
+
+                  if debug == True: # used for debugging
+                        print("###optimal found, i = %d ###" % i)
+                        print(optimal) # display current node
+                        print("length", len(optimal.path()))
+
                   if optimal == None: # no solution found yet
                         optimal = current # the only solution so far is the most optimal
                   elif len(current.path()) < len(optimal.path()): # if the path length is shorter than that of the optimal one
                         optimal = current # the current solution is the optimal one so far
+                                    
             else:
                   child_nodes = current.expand(problem) # expand the state to find child nodes
                   #print_nodes(child_nodes)
+
                   for child in child_nodes:
-                        if not explored.exists(child): # if we haven't encountered the states yet
+                        if not explored.exists(child.state): # if we haven't encountered the states yet
                               frontier.append(child) # add them to the frontier
+            
             done = frontier.__len__() == 0 # If all out of states to explore, end loop
-            print(done)
-            print(frontier.__len__())
-            for i in range(0, frontier.__len__()):
-                print(frontier.A[i])
-            input()
+            i = i + 1
+            if(frontier.__len__() > length): length = frontier.__len__()
+
+      if debug == True: # used for debugging
+            print(optimal) # display current node
+            print("length", len(optimal.path()))
+            print("iterations =",i)
+      
+      print("max length", length)
 
       if optimal != None and verbose == True: # if we found a solution and want more detail
             solution_path = optimal.path() # create list of nodes to solution
@@ -122,9 +139,9 @@ def graph_search(problem, verbose=False, debug=False):
                   print("Move ", i, "\n")
                   print(solution_path[i])
       if optimal == None: # no solution found
-            return(path, len(explored.explored_set), t) # return empty path, number of nodes explored and time elapsed
+            return(path, len(explored.explored_set), t.elapsed_s) # return empty path, number of nodes explored and time elapsed
       else: # solution found
-            return(optimal.path(), len(explored.explored_set), t) # return solution path, number of nodes expanded and time
+            return(optimal.path(), len(explored.explored_set), t.elapsed_s) # return solution path, number of nodes expanded and time
 
       #frontier.append(problem.initial) # add the first state to the queue
 
