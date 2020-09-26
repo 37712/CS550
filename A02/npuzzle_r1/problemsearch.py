@@ -100,15 +100,15 @@ def graph_search(problem, verbose=False, debug=False):
 
             if problem.goal_test(current.state): # if the current state is the goal
 
-                  if debug == True: # used for debugging
-                        print("###optimal found, i = %d ###" % i)
-                        print(optimal) # display current node
-                        print("length", len(optimal.path()))
-
                   if optimal == None: # no solution found yet
                         optimal = current # the only solution so far is the most optimal
                   elif len(current.path()) < len(optimal.path()): # if the path length is shorter than that of the optimal one
                         optimal = current # the current solution is the optimal one so far
+
+                  if debug == True: # used for debugging
+                        print("###optimal found, i = %d ###" % i)
+                        print(current.state) # display current node
+                        print("length", len(current.path()))
                                     
             else:
                   child_nodes = current.expand(problem) # expand the state to find child nodes
