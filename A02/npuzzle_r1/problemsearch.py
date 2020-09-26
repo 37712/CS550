@@ -5,8 +5,6 @@ problemsearch - Functions for seaarching.
 from basicsearch_lib02.searchrep import (Node, print_nodes)
 from basicsearch_lib02.queues import PriorityQueue
 from basicsearch_lib02.timer import Timer
-from explored.py import *
-
 from explored import Explored
 
 
@@ -80,44 +78,44 @@ def graph_search(problem, verbose=False, debug=False):
       # list of actions to solution
       t = Timer() # starts the timer
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
-      explored = Explored() # explored set
+      explored = Explored() # explored set, NOT REALLY A SET
       # need to dequeue and add child nodes to queue
       frontier.append(problem.initial)
       done = False
       optimal = None
       path = []
       while(done == False):
-          current = frontier.pop() # Dequeue current node
-          if debug == True: # used for debugging
-              print("For the current node, g = ", current.get_g()) # display current node's g cost
-              print("\nh = ", current.get_h()) # display current node's h cost
-              print("The current state is\n", current, "\n") # display current node
-          explored.add(current) # add current state to explored
-          if problem.goal_test(current): # if the current state is the goal
-            if optimal == None: # no solution found yet
-                optimal = current # the only solution so far is the most optimal
-            elif current.len() < optimal.len(): # if the path length is shorter than that of the optimal one
-                optimal = current # the current solution is the optimal one so far
-          else:
-              child_nodes = current.expand() # expand the state to find child nodes
-              for child in child_nodes:
-                  if not explored.exists(child): # if we haven't encountered the states yet
-                      frontier.append(child) # add them to the frontier
-          done = frontier.len() == 0 # If all out of states to explore, end loop
+            current = frontier.pop() # Dequeue current node
+            if debug == True: # used for debugging
+                  print("For the current node, g = ", current.get_g()) # display current node's g cost
+                  print("\nh = ", current.get_h()) # display current node's h cost
+                  print("The current state is\n", current, "\n") # display current node
+            explored.add(current) # add current state to explored
+            if problem.goal_test(current): # if the current state is the goal
+                  if optimal == None: # no solution found yet
+                        optimal = current # the only solution so far is the most optimal
+                  elif current.len() < optimal.len(): # if the path length is shorter than that of the optimal one
+                        optimal = current # the current solution is the optimal one so far
+            else:
+                  child_nodes = current.expand() # expand the state to find child nodes
+                  for child in child_nodes:
+                        if not explored.exists(child): # if we haven't encountered the states yet
+                              frontier.append(child) # add them to the frontier
+            done = frontier.__len__() == 0 # If all out of states to explore, end loop
 
       if optimal != None and verbose == True: # if we found a solution and want more detail
-          solution_path = optimal.path() # create list of nodes to solution
-          num_moves = len(solution_path) # number of moves to goal
-          print("Solution in ",num_moves," moves.\n") # heading of detail
-          print("Intial state\n")
-          print(solution_path[0],"\n") # first state printed
-          for(i in range(1,len(solution_path))): # print each move in order
-              print("Move ", i, "\n")
-              print(solution_path[i])
+            solution_path = optimal.path() # create list of nodes to solution
+            num_moves = len(solution_path) # number of moves to goal
+            print("Solution in ",num_moves," moves.\n") # heading of detail
+            print("Intial state\n")
+            print(solution_path[0],"\n") # first state printed
+            for i in range(1,len(solution_path)): # print each move in order
+                  print("Move ", i, "\n")
+                  print(solution_path[i])
       if optimal == None: # no solution found
-          return(path, explored.len(), t) # return empty path, number of nodes explored and time elapsed
+            return(path, len(explored.explored_set), t) # return empty path, number of nodes explored and time elapsed
       else: # solution found
-          return(optimal.path(), explored.len(), t) # return solution path, number of nodes expanded and time
+            return(optimal.path(), len(explored.explored_set), t) # return solution path, number of nodes expanded and time
 
       #frontier.append(problem.initial) # add the first state to the queue
 

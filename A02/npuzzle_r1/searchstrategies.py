@@ -37,7 +37,6 @@ Manhattan - city block heuristic search.  To restrict the complexity of
 import math
 from basicsearch_lib02.searchrep import *
 from basicsearch_lib02.tileboard import *
-# ask if we need to import seachrep/node and tileboard for the parent and child nodes
 
 class BreadthFirst:
     "BreadthFirst - breadth first search"
@@ -77,7 +76,7 @@ class DepthFirst:
         "h - heuristic value"
         #h = -childnode.get_h()
         #h = -len(childnode.path())
-        h = -childnode.depth
+        h = -searchnode.depth
         return h
 
 class Manhattan:
@@ -95,11 +94,12 @@ class Manhattan:
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
+        """
         goal_state = [1,2,3,4,5,6,7,8,None]
         flattened_state = state.state_tuple()
-        for value in goal_state:
+        #for value in goal_state:
         # Need to implement: find distance each value is from goal position and add up the distances
-        raise NotImplemented
+        """
 
 # To complete:
 # Write two more classes, DepthFirst and Manhattan
