@@ -34,10 +34,6 @@ Manhattan - city block heuristic search.  To restrict the complexity of
     state.
 """
 
-import math
-from basicsearch_lib02.searchrep import *
-from basicsearch_lib02.tileboard import *
-import math
 class BreadthFirst:
     "BreadthFirst - breadth first search"
 
@@ -47,9 +43,6 @@ class BreadthFirst:
         constrained such that the last edge of the search space
         moves from parentnode to childnode via the specified action
         """
-        # maybe we need get_g and get_h from seachrep/node
-        #g = childnode.get_g()
-        #g = len(childnode.path())
         g = childnode.depth
         return g
 
@@ -74,8 +67,6 @@ class DepthFirst:
     @classmethod
     def h(cls, searchnode):
         "h - heuristic value"
-        #h = -childnode.get_h()
-        #h = -len(childnode.path())
         h = -searchnode.depth
         return h
 
@@ -111,7 +102,3 @@ class Manhattan:
                     h+= 2*(abs(goal_col-current_col) + abs(goal_row-current_row))
         return h
         # Need to implement: find distance each value is from goal position and add up the distances
-
-# To complete:
-# Write two more classes, DepthFirst and Manhattan
-# that support appropriate g/h with the same signatures for the class functions

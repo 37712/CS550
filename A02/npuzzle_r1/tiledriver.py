@@ -12,7 +12,7 @@ from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 from problemsearch import graph_search
 import collections
 
-numPuzzles = 1 #31 # number of puzzles
+numPuzzles = 3 #31 # number of puzzles
 puzzleSize = 8 # size of puzzel, 8 will give us a 3x3 grid puzzle
 searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 
@@ -33,7 +33,7 @@ def driver() :
         timeElapsedSec[search] = list()
 
     # PROCESSING SOLUTIONS FOR PUZZLES
-    for i in range(numPuzzles):
+    for i in range(1,numPuzzles+1):
 
         print("puzzle number",i)
 
@@ -64,22 +64,22 @@ def driver() :
     # SUMMARY PRINT OUT SECTION
     
     print("#####SUMMARY PRINT OUT#####")
-    print("\t\tBreadthFirst\t\tDepthFirst\t\tManhattan")
+    print("\t\tBreadthFirst\t\t\tDepthFirst\t\t\tManhattan")
     
-    # print length of parth summary
-    print("length of path\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\t" % (
+    # print path length summary
+    print("path length\tmean %.2f, std %.2f\tmean %.2f, std %.2f\tmean %.2f, std %.2f\t" % (
         mean(lengthOfPath[BreadthFirst]), stdev(lengthOfPath[BreadthFirst]),
         mean(lengthOfPath[DepthFirst]), stdev(lengthOfPath[DepthFirst]),
         mean(lengthOfPath[Manhattan]), stdev(lengthOfPath[Manhattan])))
 
     # print number of nodes summary
-    print("length of path\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\t" % (
+    print("num of nodes\tmean %.2f, std %.2f\tmean %.2f, std %.2f\tmean %.2f, std %.2f\t" % (
         mean(numOfNodes[BreadthFirst]), stdev(numOfNodes[BreadthFirst]),
         mean(numOfNodes[DepthFirst]), stdev(numOfNodes[DepthFirst]),
         mean(numOfNodes[Manhattan]), stdev(numOfNodes[Manhattan])))
 
-    # print elapsed time summary
-    print("length of path\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\tmean %d.2f, std %d.2f\t" % (
+    # print time elapsed summary
+    print("time elapsed\tmean %.2f, std %.2f\tmean %.2f, std %.2f\tmean %.2f, std %.2f\t" % (
         mean(timeElapsedSec[BreadthFirst]), stdev(timeElapsedSec[BreadthFirst]),
         mean(timeElapsedSec[DepthFirst]), stdev(timeElapsedSec[DepthFirst]),
         mean(timeElapsedSec[Manhattan]), stdev(timeElapsedSec[Manhattan])))

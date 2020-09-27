@@ -18,8 +18,8 @@ searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 
 
 #used for configuration purposes
-debug = False
-vervose = False
+debug = True
+vervose = True
 
 def driver() :
 
@@ -28,7 +28,7 @@ def driver() :
     timeElapsedSec = list()
 
     # PROCESSING 
-    search = BreadthFirst
+    search = DepthFirst
 
     # create the puzzle
     npuzzle = NPuzzle(puzzleSize, g = search.g, h = search.h)

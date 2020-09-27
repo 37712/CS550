@@ -26,5 +26,5 @@ class Explored(object):
         :return: None
         """
         # we use the hash as the index to save the state
-        if(not self.exists(state)):
+        if not self.exists(state):
             self.explored_set[state.__hash__()] = state
