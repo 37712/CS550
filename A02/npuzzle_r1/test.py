@@ -28,7 +28,7 @@ def driver() :
     timeElapsedSec = list()
 
     # PROCESSING 
-    search = DepthFirst
+    search = BreadthFirst
 
     # create the puzzle
     npuzzle = NPuzzle(puzzleSize, g = search.g, h = search.h)

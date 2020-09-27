@@ -83,19 +83,17 @@ def graph_search(problem, verbose=False, debug=False):
       # need to dequeue and add child nodes to queue
       root = Node(problem, problem.initial)
       frontier.append(root)
-      done = False
       solution = None
       path = []
       i = 0
-      while(not done):
+      while(frontier.__len__() > 0):
 
             current = frontier.pop() # Dequeue current node
-            #print(current)
 
             if(debug == True and i % 100000 == 0):
                   print("############# %d #################" % i)
                   print(current.state)
-                  print("length", frontier.__len__())
+                  print("nodes in frontier", frontier.__len__())
             
             explored.add(current.state) # add current state to explored
 
@@ -106,13 +104,8 @@ def graph_search(problem, verbose=False, debug=False):
                         print(current.state) # display current node
                         print("length", len(current.path()))
                   
-                  if verbose:
-                        print("############# %d #################" % i)
-                        for node in current.path():
-                              print(node)
-                  
-                  done = True
                   solution = current
+                  break
                 
             else:
                   child_nodes = current.expand(problem) # expand the state to find child nodes
@@ -120,23 +113,18 @@ def graph_search(problem, verbose=False, debug=False):
                   for child in child_nodes:
                         if not explored.exists(child.state): # if we haven't encountered the states yet
                               frontier.append(child) # add them to the frontier
-                  done = frontier.__len__() == 0 # If all out of states to explore, end loop
             
-            i = i + 1 # used for debug and verbose purposes
-
-      if debug: # used for debugging
-            print(solution) # display current node
-            print("length", len(solution.path()))
-            print("iterations =",i)
+            i = i + 1 # used for debug and verbose purposes            
 
       if solution != None and verbose == True: # if we found a solution and want more detail
             solution_path = solution.path() # create list of nodes to solution
-            num_moves = len(solution_path) # number of moves to goal
+            num_moves = len(solution_path) - 1 # number of moves to goal
+            print("############# %d #################" % i)
             print("Solution in ",num_moves," moves.\n") # heading of detail
-            print("Intial state\n")
-            print(solution_path[0],"\n") # first state printed
+            print("Intial state")
+            print(solution_path[0]) # first state printed
             for i in range(1,len(solution_path)): # print each move in order
-                  print("Move ", i, "\n")
+                  print("\nMove ", i, "")
                   print(solution_path[i])
 
       if solution == None: # no solution found
