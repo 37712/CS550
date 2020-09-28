@@ -99,6 +99,6 @@ class Manhattan:
                     goal_row = int((goal_index)/3)
                     current_col = int(current_index%3)
                     current_row = int((current_index)/3)
-                    h+= 2*(abs(goal_col-current_col) + abs(goal_row-current_row))
+                    h += 2*(abs(goal_col-current_col) + abs(goal_row-current_row))
         return h
         # Need to implement: find distance each value is from goal position and add up the distances

@@ -19,7 +19,7 @@ searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 
 #used for configuration purposes
 debug = False
-vervose = False
+verbose = False
 
 def driver() :
     lengthOfPath = dict() # number of steps to solution for each search type
@@ -62,10 +62,10 @@ def driver() :
             timeElapsedSec[search].append(elapsedtime)
 
     # SUMMARY PRINT OUT SECTION
-    
+
     print("#####SUMMARY PRINT OUT#####")
     print("\t\tBreadthFirst\t\t\tDepthFirst\t\t\tManhattan")
-    
+
     # print path length summary
     print("path length\tmean %.2f, std %.2f\tmean %.2f, std %.2f\tmean %.2f, std %.2f\t" % (
         mean(lengthOfPath[BreadthFirst]), stdev(lengthOfPath[BreadthFirst]),

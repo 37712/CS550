@@ -26,8 +26,7 @@ class NPuzzle(Problem):
         # dictionary, e.g. kwargs[“keyname”], or passed to another function
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
-
-        # not tested
+        # calls Problem constructor and passes instance of Tileboard as the initial state
         super().__init__(TileBoard(n, force_state = force_state),
                          g = kwargs['g'], h = kwargs['h'])
 
@@ -43,5 +42,5 @@ class NPuzzle(Problem):
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
         # is state solved for the entire tileboard
-        #return state in self.goals # needs to return boolean not state goal
+        # return state in self.goals # needs to return boolean not state goal
         return state.solved()

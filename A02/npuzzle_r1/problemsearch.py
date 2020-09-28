@@ -87,14 +87,13 @@ def graph_search(problem, verbose=False, debug=False):
       path = []
       i = 0
       while(frontier.__len__() > 0):
-
             current = frontier.pop() # Dequeue current node
 
             if(debug == True and i % 100000 == 0):
                   print("############# %d #################" % i)
                   print(current.state)
                   print("nodes in frontier", frontier.__len__())
-            
+
             explored.add(current.state) # add current state to explored
 
             if problem.goal_test(current.state): # if the current state is the goal
@@ -103,18 +102,19 @@ def graph_search(problem, verbose=False, debug=False):
                         print("###goal found, i = %d ###" % i)
                         print(current.state) # display current node
                         print("length", len(current.path()))
-                  
+
                   solution = current
                   break
-                
+
             else:
                   child_nodes = current.expand(problem) # expand the state to find child nodes
 
                   for child in child_nodes:
                         if not explored.exists(child.state): # if we haven't encountered the states yet
-                              frontier.append(child) # add them to the frontier
-            
-            i = i + 1 # used for debug and verbose purposes            
+                            if not frontier.__contains__(child): # if the child is not already in the frontier
+                                frontier.append(child) # add it to the frontier
+
+            i = i + 1 # used for debug and verbose purposes
 
       if solution != None and verbose == True: # if we found a solution and want more detail
             solution_path = solution.path() # create list of nodes to solution
