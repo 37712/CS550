@@ -23,7 +23,7 @@ from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 from problemsearch import graph_search
 import collections
 
-numPuzzles = 3 #31 # number of puzzles
+numPuzzles = 31 #31 # number of puzzles
 puzzleSize = 8 # size of puzzel, 8 will give us a 3x3 grid puzzle
 searchType = [BreadthFirst, DepthFirst, Manhattan] # list of search methods
 

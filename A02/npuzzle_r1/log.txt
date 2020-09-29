@@ -1,0 +1,238 @@
+karuros@karuros-desktop:~/Documents/Git Projects/CS550/A02/npuzzle_r1$ python3 tiledriver.py 
+puzzle number 1
+solving with BreadthFirst
+puzzle solved in 0min 18sec
+solving with DepthFirst
+puzzle solved in 0min 29sec
+solving with Manhattan
+puzzle solved in 0min 12sec
+puzzle number 2
+solving with BreadthFirst
+puzzle solved in 0min 28sec
+solving with DepthFirst
+puzzle solved in 0min 19sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 3
+solving with BreadthFirst
+puzzle solved in 0min 15sec
+solving with DepthFirst
+puzzle solved in 0min 31sec
+solving with Manhattan
+puzzle solved in 0min 2sec
+puzzle number 4
+solving with BreadthFirst
+puzzle solved in 0min 1sec
+solving with DepthFirst
+puzzle solved in 0min 19sec
+solving with Manhattan
+puzzle solved in 0min 3sec
+puzzle number 5
+solving with BreadthFirst
+puzzle solved in 0min 17sec
+solving with DepthFirst
+puzzle solved in 0min 19sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 6
+solving with BreadthFirst
+puzzle solved in 0min 10sec
+solving with DepthFirst
+puzzle solved in 0min 30sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 7
+solving with BreadthFirst
+puzzle solved in 0min 28sec
+solving with DepthFirst
+puzzle solved in 0min 24sec
+solving with Manhattan
+puzzle solved in 0min 4sec
+puzzle number 8
+solving with BreadthFirst
+puzzle solved in 0min 7sec
+solving with DepthFirst
+puzzle solved in 0min 12sec
+solving with Manhattan
+puzzle solved in 0min 3sec
+puzzle number 9
+solving with BreadthFirst
+puzzle solved in 0min 30sec
+solving with DepthFirst
+puzzle solved in 0min 32sec
+solving with Manhattan
+puzzle solved in 0min 2sec
+puzzle number 10
+solving with BreadthFirst
+puzzle solved in 0min 13sec
+solving with DepthFirst
+puzzle solved in 0min 26sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 11
+solving with BreadthFirst
+puzzle solved in 0min 21sec
+solving with DepthFirst
+puzzle solved in 0min 27sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 12
+solving with BreadthFirst
+puzzle solved in 0min 31sec
+solving with DepthFirst
+puzzle solved in 0min 3sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 13
+solving with BreadthFirst
+puzzle solved in 0min 23sec
+solving with DepthFirst
+puzzle solved in 0min 23sec
+solving with Manhattan
+puzzle solved in 0min 10sec
+puzzle number 14
+solving with BreadthFirst
+puzzle solved in 0min 30sec
+solving with DepthFirst
+puzzle solved in 0min 17sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 15
+solving with BreadthFirst
+puzzle solved in 0min 22sec
+solving with DepthFirst
+puzzle solved in 0min 33sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 16
+solving with BreadthFirst
+puzzle solved in 0min 25sec
+solving with DepthFirst
+puzzle solved in 0min 26sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 17
+solving with BreadthFirst
+puzzle solved in 0min 22sec
+solving with DepthFirst
+puzzle solved in 0min 28sec
+solving with Manhattan
+puzzle solved in 0min 2sec
+puzzle number 18
+solving with BreadthFirst
+puzzle solved in 0min 30sec
+solving with DepthFirst
+puzzle solved in 0min 36sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 19
+solving with BreadthFirst
+puzzle solved in 0min 14sec
+solving with DepthFirst
+puzzle solved in 0min 27sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 20
+solving with BreadthFirst
+puzzle solved in 0min 8sec
+solving with DepthFirst
+puzzle solved in 0min 36sec
+solving with Manhattan
+puzzle solved in 0min 6sec
+puzzle number 21
+solving with BreadthFirst
+puzzle solved in 0min 23sec
+solving with DepthFirst
+puzzle solved in 0min 33sec
+solving with Manhattan
+puzzle solved in 0min 12sec
+puzzle number 22
+solving with BreadthFirst
+puzzle solved in 0min 17sec
+solving with DepthFirst
+puzzle solved in 0min 35sec
+solving with Manhattan
+puzzle solved in 0min 2sec
+puzzle number 23
+solving with BreadthFirst
+puzzle solved in 0min 22sec
+solving with DepthFirst
+puzzle solved in 0min 33sec
+solving with Manhattan
+puzzle solved in 0min 14sec
+puzzle number 24
+solving with BreadthFirst
+puzzle solved in 0min 3sec
+solving with DepthFirst
+puzzle solved in 0min 26sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 25
+solving with BreadthFirst
+puzzle solved in 0min 30sec
+solving with DepthFirst
+puzzle solved in 0min 16sec
+solving with Manhattan
+puzzle solved in 0min 8sec
+puzzle number 26
+solving with BreadthFirst
+puzzle solved in 0min 8sec
+solving with DepthFirst
+puzzle solved in 0min 9sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 27
+solving with BreadthFirst
+puzzle solved in 0min 15sec
+solving with DepthFirst
+puzzle solved in 0min 30sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 28
+solving with BreadthFirst
+puzzle solved in 0min 32sec
+solving with DepthFirst
+puzzle solved in 0min 32sec
+solving with Manhattan
+puzzle solved in 0min 2sec
+puzzle number 29
+solving with BreadthFirst
+puzzle solved in 0min 28sec
+solving with DepthFirst
+puzzle solved in 0min 11sec
+solving with Manhattan
+puzzle solved in 0min 1sec
+puzzle number 30
+solving with BreadthFirst
+puzzle solved in 0min 24sec
+solving with DepthFirst
+puzzle solved in 0min 23sec
+solving with Manhattan
+puzzle solved in 0min 0sec
+puzzle number 31
+solving with BreadthFirst
+puzzle solved in 0min 1sec
+solving with DepthFirst
+puzzle solved in 0min 27sec
+solving with Manhattan
+puzzle solved in 0min 4sec
+#####SUMMARY PRINT OUT#####
+
+		BreadthFirst
+path length	mean 23.39, std 2.92
+num of nodes	mean 118276.06, std 50091.53
+time elapsed	mean 19.68, std 9.43
+
+		DepthFirst
+path length	mean 47094.87, std 17850.91
+num of nodes	mean 146858.58, std 37702.29
+time elapsed	mean 25.45, std 8.42
+
+		A* - Manhattan
+path length	mean 23.26, std 3.84
+num of nodes	mean 19925.48, std 21406.97
+time elapsed	mean 3.41, std 4.04
+
+
+time elapsed to solve all puzzles 25min 11sec
+
