@@ -70,39 +70,38 @@ def graph_search(problem, verbose=False, debug=False):
       elapsed_s is the elapsed wall clock time performing the search
       """
       """
-      need to print each state,
-      need to provide debugging information
-      use search information and priority queue to solve problem
+      uses a priority queue for the frontier and an instance of the Explored class for
+      the explored set
       """
 
       # list of actions to solution
       t = Timer() # starts the timer
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
       explored = Explored() # explored set, NOT REALLY A SET, it is a dictionary
-      frontier.append(Node(problem, problem.initial))
+      frontier.append(Node(problem, problem.initial)) # add initial node to the frontier
       solution = None
       i = 0 # used for debug and verbose purposes
       while(frontier.__len__() > 0):
-            
+
             current = frontier.pop() # Dequeue current node
 
             if(debug == True and i % 100000 == 0):
-                  print("############# %d #################" % i)
-                  print(current.state)
-                  print("nodes in frontier", frontier.__len__())
-                  print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
+                  print("############# %d #################" % i) # display iteration number
+                  print(current.state) # display current node
+                  print("nodes in frontier", frontier.__len__()) # display lenght of frontier set
+                  print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60)) # display time elapsed
 
             explored.add(current.state) # add current state to explored
-            
+
             if problem.goal_test(current.state): # if the current state is the goal
 
                   if debug: # used for debugging
-                        print("###goal found, i = %d ###" % i)
+                        print("###goal found, i = %d ###" % i) # display the iteration number for when the goal was found
                         print(current.state) # display current node
-                        print("length", len(current.path()))
-                        print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
+                        print("length", len(current.path())) # display current node path length
+                        print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60)) # display time elapsed
 
-                  solution = current
+                  solution = current # found goal and end loop
                   break
 
             else:
@@ -112,7 +111,7 @@ def graph_search(problem, verbose=False, debug=False):
                         if not explored.exists(child.state): # if we haven't encountered the states yet
                               frontier.append(child) # add it to the frontier
                               explored.add(child.state) # add to explored to prevent duplication in frontier
-                                    
+
             i = i + 1 # used for debug and verbose purposes
 
       if solution != None and verbose == True: # if we found a solution and want more detail
@@ -122,10 +121,10 @@ def graph_search(problem, verbose=False, debug=False):
             print("Solution in ",num_moves," moves.\n") # heading of detail
             print("Intial state")
             print(solution_path[0]) # first state printed
-            print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
+            print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60)) # display time elapsed
             for i in range(1,len(solution_path)): # print each move in order
-                  print("\nMove ", i, "")
-                  print(solution_path[i])
+                  print("\nMove ", i, "") # display move number
+                  print(solution_path[i]) # display move
 
       if solution == None: # no solution found
             print("no solution found")
