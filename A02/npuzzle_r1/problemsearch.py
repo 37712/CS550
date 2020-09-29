@@ -7,7 +7,6 @@ from basicsearch_lib02.queues import PriorityQueue
 from basicsearch_lib02.timer import Timer
 from explored import Explored
 
-
 def graph_search(problem, verbose=False, debug=False):
       """graph_search(problem, verbose, debug) - Given a problem representation
       (instance of basicsearch_lib02.representation.Problem or derived class),
@@ -79,29 +78,29 @@ def graph_search(problem, verbose=False, debug=False):
       # list of actions to solution
       t = Timer() # starts the timer
       frontier = PriorityQueue() # we are always going to have a frontier and we always need to put in to priority queue
-      explored = Explored() # explored set, NOT REALLY A SET
-      # need to dequeue and add child nodes to queue
-      root = Node(problem, problem.initial)
-      frontier.append(root)
+      explored = Explored() # explored set, NOT REALLY A SET, it is a dictionary
+      frontier.append(Node(problem, problem.initial))
       solution = None
-      path = []
-      i = 0
+      i = 0 # used for debug and verbose purposes
       while(frontier.__len__() > 0):
+            
             current = frontier.pop() # Dequeue current node
 
             if(debug == True and i % 100000 == 0):
                   print("############# %d #################" % i)
                   print(current.state)
                   print("nodes in frontier", frontier.__len__())
+                  print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
 
             explored.add(current.state) # add current state to explored
-
+            
             if problem.goal_test(current.state): # if the current state is the goal
 
                   if debug: # used for debugging
                         print("###goal found, i = %d ###" % i)
                         print(current.state) # display current node
                         print("length", len(current.path()))
+                        print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
 
                   solution = current
                   break
@@ -111,9 +110,9 @@ def graph_search(problem, verbose=False, debug=False):
 
                   for child in child_nodes:
                         if not explored.exists(child.state): # if we haven't encountered the states yet
-                            if not frontier.__contains__(child): # if the child is not already in the frontier
-                                frontier.append(child) # add it to the frontier
-
+                              frontier.append(child) # add it to the frontier
+                              explored.add(child.state) # add to explored to prevent duplication in frontier
+                                    
             i = i + 1 # used for debug and verbose purposes
 
       if solution != None and verbose == True: # if we found a solution and want more detail
@@ -123,12 +122,14 @@ def graph_search(problem, verbose=False, debug=False):
             print("Solution in ",num_moves," moves.\n") # heading of detail
             print("Intial state")
             print(solution_path[0]) # first state printed
+            print("time elapsed %dmin %dsec" % (t.elapsed_s()/60, t.elapsed_s()%60))
             for i in range(1,len(solution_path)): # print each move in order
                   print("\nMove ", i, "")
                   print(solution_path[i])
 
       if solution == None: # no solution found
             print("no solution found")
+            path = [] # if no solution found return empty list
             return(path, len(explored.explored_set), t.elapsed_s()) # return empty path, number of nodes explored and time elapsed
       else: # solution found
             return(solution.path(), len(explored.explored_set), t.elapsed_s()) # return solution path, number of nodes expanded and time
