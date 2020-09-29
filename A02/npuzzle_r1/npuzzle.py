@@ -32,6 +32,7 @@ class NPuzzle(Problem):
 
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"
+        # check legal actions
         return state.get_actions()
 
     def result(self, state, action):
@@ -42,5 +43,4 @@ class NPuzzle(Problem):
     def goal_test(self, state):
         "goal_test(state) - Is state a goal?"
         # is state solved for the entire tileboard
-        # return state in self.goals # needs to return boolean not state goal
         return state.solved()
