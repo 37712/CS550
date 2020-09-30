@@ -28,7 +28,7 @@ class NPuzzle(Problem):
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
         # calls Problem constructor and passes instance of Tileboard as the initial state
         super().__init__(TileBoard(n, force_state = force_state),
-                         g = kwargs['g'], h = kwargs['h'])
+                         **kwargs)
 
     def actions(self, state):
         "actions(state) - find a set of actions applicable to specified state"
