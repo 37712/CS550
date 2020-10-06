@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/ # we have a folder called lib for this assigment that we need
 lib64/
 parts/
 sdist/
