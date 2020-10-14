@@ -4,7 +4,8 @@ Created on Mar 1, 2015
 @author: mroch
 '''
 import copy
-from lib import checkerboard
+#from lib import checkerboard
+import checkerboard
 
 boards = dict()
 

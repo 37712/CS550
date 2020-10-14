@@ -13,7 +13,9 @@
 #
 # Decompilation is cheating, don't do it.
 import statistics
-
+import ai
+from lib import human, checkerboard, timer
+#from lib import tonto
 
 # Python can load compiled modules using the imp module (deprecated)
 # We'll format the path to the tonto module based on the
@@ -28,12 +30,7 @@ if True:
     tonto = imp.load_compiled("tonto", modpath)
 
 
-# human - human player, prompts for input    
-from lib import human, checkerboard, tonto
-
-from lib.timer import Timer
-
-
+# this is where the game actually starts
 def Game(red=human.Strategy, black=tonto.Strategy,
          maxplies=6, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
@@ -47,8 +44,34 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     Returns winning player 'r' or 'b'
     """
 
-    raise NotImplemented
-            
+    board = checkerboard.CheckerBoard()
+
+    # search strategies
+    player_1 = red('r', board, maxplies)
+    player_2 = black('b', board, maxplies)
+
+    turnCount = firstmove
+
+    # while the game is not finished
+    while(True):
+
+        ##### first player's turn #####
+        print("player_1")
+        # get new board and best move/action
+        board, action = player_1.play(board)
+        # no best action, player_1 has lost
+        if(action == None): break
+        
+        ##### second player's turn #####
+        print("player_2")
+        # get new board and best move/action
+        board, action = player_2.play(board)
+        # no best action, player_2 has lost
+        if(action == None): break
+
+        turnCount += 1
+        
+
 if __name__ == "__main__":
     # Examples
     # Starting from specific board with default strategy
@@ -57,7 +80,10 @@ if __name__ == "__main__":
     #Game(init=boardlibrary.boards["EndGame1"], firstmove = 1)
 
     # Tonto vs Tonto
-    Game(red=tonto.Strategy, black=tonto.Strategy)
+    #Game(red=tonto.Strategy, black=tonto.Strategy)
+
+    # my test
+    Game(red=human.Strategy, black=ai.Strategy)
 
     #Play with default strategies...
     #Game()

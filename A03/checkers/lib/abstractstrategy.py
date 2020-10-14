@@ -22,6 +22,8 @@ class Strategy:
         self.maxplies = maxplies
         self.verbose = verbose
 
+    # why is this not working
+    # we are not even supposed to be messing around with this file
     def verbose(self, enabled=True):
         """
         verbose - enable/disable verbose mode
