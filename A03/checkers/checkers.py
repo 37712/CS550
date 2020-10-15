@@ -51,6 +51,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     player_2 = black('b', board, maxplies)
 
     turnCount = firstmove
+    gameState = None
 
     # while the game is not finished
     while(True):
@@ -60,17 +61,25 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         # get new board and best move/action
         board, action = player_1.play(board)
         # no best action, player_1 has lost
-        if(action == None): break
+        if(action == None):
+            gameState = "r"
+            break
         
         ##### second player's turn #####
         print("player_2")
         # get new board and best move/action
         board, action = player_2.play(board)
         # no best action, player_2 has lost
-        if(action == None): break
+        if(action == None):
+            gameState = "b"
+            break
+
+        # is it a draw?
+        if(turnCount >= 64): break
 
         turnCount += 1
-        
+
+    return gameState
 
 if __name__ == "__main__":
     # Examples

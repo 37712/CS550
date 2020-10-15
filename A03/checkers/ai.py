@@ -141,7 +141,8 @@ class Strategy(abstractstrategy.Strategy):
         """
         action = self.search.alphabeta(board)
 
-        # if action is None then
+        # if action is None then no action is possible
+        # therefore you loose
         if(action == None): return board, None
 
         newboard = board.move(action)
@@ -160,6 +161,7 @@ class Strategy(abstractstrategy.Strategy):
         """
 
         # I AM LOST ?????? how do ?????
+        # rows and columns
 
         raise NotImplemented
         
