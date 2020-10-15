@@ -3,8 +3,8 @@ import math
 
 
 class AlphaBetaSearch:
-    
-    def __init__(self, strategy, maxplayer, minplayer, maxplies=3, 
+
+    def __init__(self, strategy, maxplayer, minplayer, maxplies=3,
                  verbose=False):
         """"alphabeta_search - Initialize a class capable of alphabeta search
         problem - problem representation
@@ -30,7 +30,7 @@ class AlphaBetaSearch:
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
         return self.maxvalue(state, -math.inf, math.inf, 0)[1]
-    
+
     # this is used by both min and max values
     def cutoff(self, state, ply):
         """
@@ -67,7 +67,7 @@ class AlphaBetaSearch:
 
         else:
             for action in state.get_actions(self.maxplayer):
-                
+
                 # get temporary min value, [0] is the return value
                 tmpValue = self.minvalue(state.move(action), alpha, beta, ply + 1)[0]
 
@@ -75,14 +75,14 @@ class AlphaBetaSearch:
                 if(tmpValue > value):
                     value = tmpValue
                     maxaction = action
-                
+
                 # if value is greater or equal to upper bound, prune
                 if(value >= beta): break # skip the rest of the posible actions
 
                 else: alpha = max(alpha, value) # new max value
 
         return value, maxaction
-                    
+
     def minvalue(self, state, alpha, beta, ply):
         """
         minvalue - alpha/beta search from a minimum node
@@ -109,7 +109,7 @@ class AlphaBetaSearch:
                 if(tmpValue < value):
                     value = tmpValue
                     minaction = action
-                
+
                 # if value is less or equal to lower bound, prune
                 if(value <= alpha): break # skip the rest of the posible actions
 
@@ -118,7 +118,7 @@ class AlphaBetaSearch:
         return value, minaction
 
 class Strategy(abstractstrategy.Strategy):
-    """Your strategy, maybe you can beat Tamara Tansykkuzhina, 
+    """Your strategy, maybe you can beat Tamara Tansykkuzhina,
        2019 World Women's Champion
     """
 
@@ -127,13 +127,13 @@ class Strategy(abstractstrategy.Strategy):
         Strategy - Concrete implementation of abstractstrategy.Strategy
         See abstractstrategy.Strategy for parameters
        """
-        
+
         super(Strategy, self).__init__(*args)
-        
+
         self.search = \
             AlphaBetaSearch(self, self.maxplayer, self.minplayer,
                                    maxplies=self.maxplies, verbose=False)
-     
+
     def play(self, board):
         """
         play(board) - Find best move on current board for the maxplayer
@@ -147,7 +147,7 @@ class Strategy(abstractstrategy.Strategy):
 
         newboard = board.move(action)
         return newboard, action
-    
+
     # what is the utility of the state/checkerboard
     def evaluate(self, state, turn = None):
         """
@@ -155,32 +155,92 @@ class Strategy(abstractstrategy.Strategy):
         utility of a non-terminal state
         :param state: Game state
         :param turn: Optional turn (None to omit)
-        :return:  utility or utility estimate based on strengh of board
+        :return:  utility or utility estimate based on strength of board
                   (bigger numbers for max player, smaller numbers for
                    min player)
         """
+        # Pawns for each player
+        playerPawnCount = state.get_pawnsN()[0];
+        opponentPawnCount = state.get_pawnsN()[1];
+
+        # Kings for each player
+        playerKingCount = state.get_kingsN()[0];
+        opponentKingCount =  state.get_kingsN()[1];
+
+        # create lists for both players containing the distance to king for each piece
+        playerDistList = []
+        opponentDistList = []
+
+        # iterate through each row and column and identify pawns for turn player
+        # or opponent. Then determine the distance to king for the piece and
+        # append its distance to the appropriate list
+        for r, c, piece in state:
+            print(f'player token {piece} at row={r}, col={c}')
+            piecePlayer, isKing = state.identifypiece(piece)
+            # if current player
+            if(piecePlayer == state.playeridx(self.maxplayer)):
+                if (not isKing):
+                    playerDistList.append(state.disttoking(self.maxplayer, r))
+            # if other player
+            else:
+                if(not isKing):
+                    opponentDistList.append(state.disttoking(self.minplayer, r))
+
+        # Sum of each distance list (sum of total moves from king for each pawn)
+        playerDistSum = sum(playerDistList)
+        opponentDistSum = sum(opponentDistList)
+
+        # Mean of each distance list (mean of total moves from king for each pawn)
+        playerDistMean = playerDistSum / len(playerDistList)
+        opponentDistMean = oppponentDistSum / len(opponentDistList)
+
+        # Max of each distance list (max of total moves from king for each pawn)
+        playerDistMax = max(playerDistList)
+        opponentDistMax = max(opponentDistList)
+
+        # Number of possible moves per player
+        playerMoveList = state.get_actions(self.maxplayer)
+        playerNumMoves = len(playerMoveList)
+        opponentMoveList = state.get_actions(self.minplayer)
+        opponentNumMoves =  len(opponentMoveList)
+
+        # Number of possible jumps per action per player
+        playerCaptureSum = 0;
+        opponentCaptureSum = 0;
+        # the length of the each move in move list will always be 1 value longer
+        # than the total number of captures
+        # standard length for the tuple at the second index in move is 2. When there is a possible
+        # capture, the length of the tuple at the second index will be greater
+        for move in playerMoveList:
+            if(len(move[1]>2):
+                playerCaptureSum += len(move) - 1
+
+        for move in opponentMoveList:
+            if(len(move[1]>2):
+                opponentCaptureSum += len(move) - 1
+
+        # player
+        # need to apply weights to each factor and sum. Negative weights applied
+        # to opponent.
 
         # I AM LOST ?????? how do ?????
         # rows and columns
 
         raise NotImplemented
-        
+
 
 # Run test cases if invoked as main module
 if __name__ == "__main__":
     b = boardlibrary.boards["StrategyTest1"]
     redstrat = Strategy('r', b, 6)
     blackstrat = Strategy('b', b, 6)
-    
+
     print(b)
-    (nb, action) = redsttrat.play(b)
+    (nb, action) = redstrat.play(b)
     print("Red would select ", action)
     print(nb)
-    
-    
-    (nb, action) = blacstrat.play(b)
+
+
+    (nb, action) = blackstrat.play(b)
     print("Black would select ", action)
     print(nb)
-    
- 
-

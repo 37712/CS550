@@ -2,25 +2,25 @@
 from lib.board import Board
 from copy import copy, deepcopy
 import operator
-   
+
 class CheckerBoard(Board):
     '''
     CheckerBoard - Class for representing a checkerboard
     and making legal moves.
-    
+
     All references to players in that are accessible externally to this
-    class should use the pawn names. 
-    
+    class should use the pawn names.
+
     Note that this implementation is designed for readability, not
     efficiency.  There are many changes that could be made to
     improve the speed of this class. As an example, the board could
-    be represented as a single list of 32 positions.  
+    be represented as a single list of 32 positions.
 
     You should not be making changes to the design for this
     assignment, but if you want to have fun later, redesigning
     it for efficiency could be fun and improve the number of plys
     that can be efficiently searched.
-    
+
     Board notation:
     Board is arranged as with black pieces on top, red pieces on bottom
     Positions are denoted (row, column).
@@ -30,56 +30,56 @@ class CheckerBoard(Board):
     Note that playable columns alternate.  In row 0, they are 1, 3, 5, 7
     and in row 1 they are 0, 2, 4, 6 making a modulo 2 counting scheme
     useful for determining which columns are valid.
-    
+
     Initial board:
-       0  1  2  3  4  5  6  7 
-    0  .  b  .  b  .  b  .  b 
-    1  b  .  b  .  b  .  b  . 
-    2  .  b  .  b  .  b  .  b 
-    3  .  .  .  .  .  .  .  . 
-    4  .  .  .  .  .  .  .  . 
-    5  r  .  r  .  r  .  r  . 
-    6  .  r  .  r  .  r  .  r 
-    7  r  .  r  .  r  .  r  .      
+       0  1  2  3  4  5  6  7
+    0  .  b  .  b  .  b  .  b
+    1  b  .  b  .  b  .  b  .
+    2  .  b  .  b  .  b  .  b
+    3  .  .  .  .  .  .  .  .
+    4  .  .  .  .  .  .  .  .
+    5  r  .  r  .  r  .  r  .
+    6  .  r  .  r  .  r  .  r
+    7  r  .  r  .  r  .  r  .
     '''
 
     # class variables and methods  -------------------------------------------
-    
+
     # Lists for pawn, king, and player checks
     pawns = ['r', 'b']      # red and black pawns
     kings = ['R', 'B']      # red and black kings
     players = [['r', 'R'], ['b', 'B']]  # pieces for each player
-    
+
     # Possible moves that will need to be validated for any position
     # pawns[0] red player moves towards top of board (row 0)
     # pawns[1] black player moves towards bottom of board (row N)
     pawnmoves = {pawns[0] : [ (-1, -1), (-1, 1)],
                  pawns[1] : [ (1, -1), (1, 1)]}
     # kings can move forwards and backwards
-    kingmoves = [ (-1, 1), (1, 1), (-1, -1), (1, -1) ]    
-    
-    
+    kingmoves = [ (-1, 1), (1, 1), (-1, -1), (1, -1) ]
+
+
     step = 2  # Number of steps between valid columns
-    
+
     # Number of moves for smallest tour
     # Tours end in the place they started and can only be done
     # by kings
     shortest_tour = 4
-    
+
     # class methods - useful for evaluation methods
     @classmethod
     def piece_types(cls, player):
         """piece_types - Return pawn and king values for specified player
         e.g. piece_types('r') returns ['r', 'R']
         """
-        
+
         try:
             index = cls.pawns.index(player)
         except ValueError:
             raise ValueError("No such player")
-        
+
         return cls.players[index]
-    
+
     @classmethod
     def other_player(cls, player):
         "other_player(player) - Return other player pawn based on a pawn"
@@ -87,24 +87,24 @@ class CheckerBoard(Board):
             index = cls.pawns.index(player)
         except ValueError:
             raise ValueError("No such player")
-        
+
         return cls.pawns[(index + 1) % 2]
-        
+
     @classmethod
     def ispawn(cls, piece):
         "True if piece is a pawn"
         return piece in cls.pawns
-    
+
     @classmethod
     def isking(cls, piece):
         "True if piece is a king"
         return piece in cls.kings
-    
+
     @classmethod
     def isplayer(cls, player, piece):
         """isplayer - Does a piece belong to a player.
         Given a player name (value of cls.pawns r/b unless changed)
-        and a piece from a board, does this piece belong to the 
+        and a piece from a board, does this piece belong to the
         specified player?
         Example:  isplayer('r', 'R') returns True
                   isplayer('r', None) returns False
@@ -114,19 +114,19 @@ class CheckerBoard(Board):
             index = cls.pawns.index(player)
         except ValueError:
             raise ValueError("No such player")
-        
+
         return piece in cls.players[index]
-    
+
     @classmethod
     def playeridx(cls, player):
         "playeridx(player) - Give idx of player based on pawn name"
-       
-        try: 
+
+        try:
             pidx = cls.pawns.index(player)
         except ValueError:
             raise ValueError("Unknown player")
         return pidx
-    
+
     @classmethod
     def identifypiece(cls, piece):
         """identifytpiece(piece)
@@ -146,24 +146,24 @@ class CheckerBoard(Board):
                 kingP = True
             except ValueError:
                 raise ValueError("Unknown piece type")
-            
-        return (idx, kingP)
-            
-            
 
-        
+        return (idx, kingP)
+
+
+
+
     # instance methods -------------------------------------------------
 
     def __init__(self):
         "CheckerBoard - Create a new checkerboard"
-        
+
         # Create the board
         self.edgesize = 8  # Number of squares per edge
         # Checkers only move on the dark squares, so game space
         # is only half as many states.  Note the number of valid
         # locations per row.
         self.locations_per_row = int(self.edgesize / self.step)
-                        
+
         super(CheckerBoard, self).__init__(self.edgesize, self.edgesize,
                                            displaycol=3)
         # for each row, indicate whether the squares that pieces move
@@ -172,12 +172,12 @@ class CheckerBoard(Board):
         # and in others they are (0, 2, 4, ...)+1 = (1, 3, 5, 7, ...
         # We store a 0 or 1 offset value for each row.
         self.coloffset = [(r + 1) % self.step for r in range(self.edgesize)]
-            
+
         rowpieces = 3  # Initial rows of checkers for each side
 
         # rows in which the players are kinged
-        self.kingrows = [0, self.edgesize - 1] 
-          
+        self.kingrows = [0, self.edgesize - 1]
+
         # Valid spaces are offset in each row.  At top left of board
         # row 0, col 0, the column offset is 0 before we reach the first
         # valid location.
@@ -186,7 +186,7 @@ class CheckerBoard(Board):
         # to an offset of 0:  [2, 0]
         # Establish a set of offsets that indicate whether column 0 or 1
         # is the first valid position
-        
+
         self.pawnsN = [0, 0]  # Number remaining pawns, indexed by player
         self.kingsN = [0, 0]  # Number remaining kings
         for row in range(self.rows):
@@ -203,64 +203,64 @@ class CheckerBoard(Board):
             # Place spaces in illegal positions to make board more readable
             for col in range(self.locations_per_row):
                 self.board[row][col * self.step+(self.coloffset[row]+1)%2]=' '
-            
-                    
+
+
         self.movecount = 0
         # Counters for draw detection
-        
+
         # Note that World Checker/Draughts Federation (WCDF) rules indicate that
         # reaching the same configuration board configuration 3 times in a row
         # is also a draw, but this is not implemented.
-        
+
         # Used for detecting draws which are defined as N moves without
         # advancing a pawn AND no captures
         self.drawthreshN = 40
         self.lastcapture = 0  # move # of last capture
         self.lastpawnadvance = 0  # move number of last pawn advance
-    
+    # distance to king
     def disttoking(self, player, row):
         "disttoking - how many rows from king position for player given row"
     
         # find row offset of any legal move for a pawn,
         # that is, which way does the pawn move?
-        direction = self.pawnmoves[player][0][0]  
+        direction = self.pawnmoves[player][0][0]
         if direction < 0:
             distance = row  # red
         else:
             distance = self.rows -1 - row  # black
-        return distance        
-    
+        return distance
+
     def get_pawnsN(self):
         "get_pawnsN - Return counts of pawns"
         return self.pawnsN
-    
+
     def get_kingsN(self):
         "get_kingsN - Return counts of kings"
         return self.kingsN
-    
+
     def isempty(self, row, col):
         "isempty - Is the specified space empty?"
         return self.board[row][col] == None
-    
+
     def clearboard(self):
         """clearboard - remove all pieces
         Useful for building specific board configurations
         WARNING:  Piece counts will be incorrect after calling
         this.  Call update_counts() to correct after placing new pieces
         """
-        
+
         # Iterate over every piece and remove it
         for (r, c, piece) in self:
             self.place(r, c, None)
-    
+
     def update_counts(self):
         """update_counts - When mucking around with the board, the counts
         of pawns and kings may be corrupted.  This method updates them.  Valid
-        moves will not cause any problems, this is mainly for testing. 
+        moves will not cause any problems, this is mainly for testing.
         """
         self.pawnsN = [0, 0]
         self.kingsN = [0, 0]
-        
+
         # Iterate through pieces
         for (_r, _c, piece) in self:
             # Find player index and piece type
@@ -270,10 +270,10 @@ class CheckerBoard(Board):
                 self.kingsN[playerId] += 1
             else:
                 self.pawnsN[playerId] += 1
-        
+
     def place(self, row, col, piece):
         "place(row, col, piece) - put a piece on the board"
-        
+
         # Overrides parent as some spaces are illegal
         if col < 0 or col > self.cols or row < 0 or row > self.rows:
             raise ValueError('Bad row or column')
@@ -283,7 +283,7 @@ class CheckerBoard(Board):
             else:
                 raise ValueError("Column must be even for row %d" % (row))
         self.board[row][col] = piece
-    
+
     def is_terminal(self):
         """is_terminal - check if game over
         Returns tuple (terminal, winner)
@@ -291,7 +291,7 @@ class CheckerBoard(Board):
         winner - only applicable if terminal is true
             indicates winner by player color or None for draw
         """
-        
+
         # Add the pawns and kings together
         piececounts = list(map(operator.add, self.pawnsN, self.kingsN))
         if not piececounts[0]:
@@ -308,21 +308,21 @@ class CheckerBoard(Board):
             terminal = \
                 self.movecount - self.lastpawnadvance >= self.drawthreshN and \
                 self.movecount - self.lastcapture >= self.drawthreshN
-        
+
         return (terminal, winner)
-                     
+
     def get_actions(self, player):
         """"Return actions for specified player, CheckerBoard.pawns[i]
         Valid actions are lists of the following form:
-        
-        [move1, move2, move3, ..., moveN] where each move consists of 
+
+        [move1, move2, move3, ..., moveN] where each move consists of
         a list of two or more tuples
-        
-        The first tuple represents the original position (row, col) of 
+
+        The first tuple represents the original position (row, col) of
         the piece, e.g. (5,4)
-        
+
         A second tuple is either a simple move represented as (row, col) or
-        a capture which is a 3-tuple with the third element being a 
+        a capture which is a 3-tuple with the third element being a
         tuple indicating the captured piece.
 
         Examples:
@@ -336,12 +336,12 @@ class CheckerBoard(Board):
         5  r  .  r  .  r  .  r  .   results in     5  r  .  r  .  .  .  r  .
         6  .  r  .  r  .  r  .  r                  6  .  r  .  r  .  r  .  r
         7  r  .  r  .  r  .  r  .                  7  r  .  r  .  r  .  r  .
-    
+
         captures are mandatory.  If any captures exist, normally valid
-        non-capture move actions will not be returned. 
-        
+        non-capture move actions will not be returned.
+
         given the following board position, red player captures are as
-        follows:  
+        follows:
            0  1  2  3  4  5  6  7
         0  .  b  .  b  .  b  .  b
         1  b  .  b  .  b  .  b  .
@@ -351,12 +351,12 @@ class CheckerBoard(Board):
         5  r  . <r> . <r> .  .  .    with <> to make it easier to see
         6  .  r  .  r  .  r  .  r
         7  r  .  r  .  r  .  r  .
-        [[(4, 7), (2, 5, (3, 6))], 
-         [(5, 2), (3, 4, (4, 3))], 
+        [[(4, 7), (2, 5, (3, 6))],
+         [(5, 2), (3, 4, (4, 3))],
          [(5, 4), (3, 2, (4, 3))]]
-         
-        Example of multiple jump moves by red player.  As per World Checkers 
-        Draughts Federation Rules, once started a multiple jump move must 
+
+        Example of multiple jump moves by red player.  As per World Checkers
+        Draughts Federation Rules, once started a multiple jump move must
         be made to completion.
            0  1  2  3  4  5  6  7
         0  .  b  .  b  .  b  .  b
@@ -371,17 +371,17 @@ class CheckerBoard(Board):
         Note that had multiple capture moves been possible, it is not mandatory
         to take the one with the most jumps
         """
-        
-        try: 
+
+        try:
             pidx = self.pawns.index(player)
         except ValueError:
             raise ValueError("Unknown player")
-        
+
         # If we see any captures along the way, we will stop looking
         # for moves that do not capture as they will be filtered out
         # at the end.
         moves = []
-       
+
         # Scan each square
         for r in range(self.rows):
             for c in range(self.coloffset[r], self.cols, self.step):
@@ -399,7 +399,7 @@ class CheckerBoard(Board):
 
         # Check if any captures are possible
         # If so, remove all non-capture moves as player must make
-        # a capture move if one is available.         
+        # a capture move if one is available.
         captureP = False  # capture predicate
         for a in moves:
             # each action is
@@ -413,7 +413,7 @@ class CheckerBoard(Board):
             # We only need to check the first destination to see if it
             # has a capture tuple after the destination row and column
             moves = [m for m in moves if len(m[1]) > 2]
-            
+
         return moves
 
     @classmethod
@@ -445,16 +445,16 @@ class CheckerBoard(Board):
         for r in range(self.rows):
             for c in range(self.coloffset[r], self.cols, self.step):
                 if self.board[r][c]:
-                    yield (r, c, self.board[r][c])                    
-        
+                    yield (r, c, self.board[r][c])
+
     def move(self, move, validate=[], verbose=False):
         """move - Apply a move and return a new board
         move should be a list of the format described in get_actions
-        It is assumed that the move is valid unless validate is set to a 
+        It is assumed that the move is valid unless validate is set to a
         list of moves (presumably produced by get_actions(), get_actions is
         not called as this has probably already been computed.
         """
-        
+
         if validate:
             if move not in validate:
                 raise ValueError("Invalid move")
@@ -466,14 +466,14 @@ class CheckerBoard(Board):
         newboard.kingsN = copy(self.kingsN)
         newboard.board = deepcopy(self.board)
         newboard.movecount += 1  # Record new move
-        
+
         (firstr, firstc) = (lastr, lastc) = move[0]
         piece = self.get(lastr, lastc)
         oldpiece = piece  # Just in case we change and want to print
         newboard.place(lastr, lastc, None)  # Remove from current position
-        
+
         captures = 0  # number of captures for verbose output and draw detection
-        # Loop through move sequence, removing any 
+        # Loop through move sequence, removing any
         # captured pieces as we go along
         for item in move[1:]:
             if len(item) > 2:
@@ -482,7 +482,7 @@ class CheckerBoard(Board):
                 posn = item[2]  # captured position
                 capturedpiece = newboard.get(posn[0], posn[1])
 
-                # Remove the piece                
+                # Remove the piece
                 newboard.place(posn[0], posn[1], None)
 
                 # Decrement count for captured piece
@@ -491,13 +491,13 @@ class CheckerBoard(Board):
                     newboard.kingsN[pieceidx] -= 1
                 else:
                     newboard.pawnsN[pieceidx] -= 1
-                    
-            # update last known location of moving piece, might happen 
+
+            # update last known location of moving piece, might happen
             # more than once in a multiple jump move
             # In any case, last row and column will represent the final
-            # position of the piece when we finish the loop    
+            # position of the piece when we finish the loop
             (lastr, lastc) = item[0:2]
-        
+
         if lastr == 0 or lastr + 1 == self.rows:
             # At end, do we need to crown a pawn?
             try:
@@ -506,23 +506,23 @@ class CheckerBoard(Board):
                 piece = self.players[playeridx][1]  # king
             except ValueError:
                 pass  # not a pawn
-        
+
         # Put the piece as the last location of the move sequence
         newboard.place(lastr, lastc, piece)
-        
+
         if captures:
             # Captured something, note the move for draw detection
             newboard.lastcapture = newboard.movecount
-            
+
         if self.ispawn(oldpiece):
             # Advanced a pawn, note move number for draw detection
-            newboard.lastpawnadvance = newboard.movecount 
+            newboard.lastpawnadvance = newboard.movecount
             if oldpiece != piece:
                 # Kinged, update counts
                 (pieceidx, kingP) = newboard.identifypiece(oldpiece)
                 newboard.pawnsN[pieceidx] -= 1
                 newboard.kingsN[pieceidx] += 1
-            
+
         if verbose:
             # Show the move if folks are interested...
             print()
@@ -535,29 +535,29 @@ class CheckerBoard(Board):
                 print("kinged, ")
             print()
             print(newboard)
-        
+
         return newboard
-            
+
     def onboard(self, r, c):
         "onboard - Specified row and column on the board?"
         return r >= 0 and r < self.rows and c >= 0 and c < self.cols
-     
+
     def genmoves(self, r, c, movepaths, playeridx):
         """genmoves - Generate moves from a specific position
         r,c - position
         movepaths - list of possible offsets (move directions) for piece
-            e.g. for kings:  [ (-1, 1), (1, 1), (-1, -1), (1, -1) ] 
+            e.g. for kings:  [ (-1, 1), (1, 1), (-1, -1), (1, -1) ]
             pawns will have a subset of this moving forward or backward
         player - current player 0|1
 
         Returns list of possible moves (see get_actions) and captures
         """
 
-        actions = self.__movehelper(r, c, movepaths, playeridx, [])        
+        actions = self.__movehelper(r, c, movepaths, playeridx, [])
         return actions
-        
 
-        
+
+
     def __movehelper(self, r, c, movepaths, playeridx, history):
         """__movehelper - Helper finds possible moves from a given position.
         Helper function for genmoves
@@ -568,7 +568,7 @@ class CheckerBoard(Board):
         Returns list of possible moves (see get_actions) and captures
         which indicates if a capture has been produced by the moves
         generated here or was already true.
-        
+
         This function is called recursively to track move paths
         """
 
@@ -578,8 +578,8 @@ class CheckerBoard(Board):
             rmove = r + m[0]
             cmove = c + m[1]
             # move only valid if it will be on the board
-            if self.onboard(rmove, cmove):                
-                
+            if self.onboard(rmove, cmove):
+
                 # check if blocked by opposing player, might be able to jump
                 if self.board[rmove][cmove] in self.players[otherplayer]:
                     # Blocked See if capture possible by moving one more time
@@ -599,21 +599,21 @@ class CheckerBoard(Board):
                         else:
                             # first jump
                             capture = [(r, c), (rjump, cjump, (rmove, cmove))]
-                                                
+
                         # Crown a king?
                         # As pawns can only move forward, just look if we have
-                        # moved to the first or last row. 
+                        # moved to the first or last row.
                         if rjump == 0 or rjump == self.rows:
                             # Piece has moved onto a first or last row
                             # If this is a pawn, we stop even if there
                             # is another capture available
-                            
+
                             # Was this a pawn?
                             (rstart, cstart) = (capture[0][0], capture[0][1])
                             if self.get(rstart, cstart) == self.pawns[playeridx]:
                                 # Can't move any more
                                 return [capture]
-                            
+
                         # We can make this move, but if we can continue
                         # to capture, we are obligated to do so.
                         # See if we can continue.
@@ -622,7 +622,7 @@ class CheckerBoard(Board):
                         #
                         # Note:  If we wanted to not force subsequent
                         # available jumps after the first one, we could
-                        # append the current capture move, and remove the 
+                        # append the current capture move, and remove the
                         # code that returns [history] when there are no
                         # available actions.
                         more = self.__movehelper(rjump, cjump, movepaths,
@@ -634,30 +634,30 @@ class CheckerBoard(Board):
                 # of captures
                 elif not self.board[rmove][cmove] and not history:
                     actions.append([(r, c), (rmove, cmove)])
-        
+
         if history and not actions:
             # One or more captures have been made, but when we called
             # __movehelper to see if there were any more, there were
             # no valid actions.  We set actions to be a list containing
             # the history that was required to arrive here.
             actions = [history]
-                    
-            
+
+
         return actions
-      
+
     def __valid_capture(self, capturedpiece, moveto, history):
         """__valid_capture
             capturedpiece - (r,c) tuple to be captured
             moveto - position to which we will jump
             history - previous jumps
-        
+
         already_captured - Prevent taking a piece more than once
         helper function for __movehelper
         """
-        
+
         valid = True  # Until we learn otherwise
 
-        # Verify that there's no piece at the destination.  
+        # Verify that there's no piece at the destination.
         # If there is a piece, check to see if it was the starting
         # position as it is possible to do a jump tour
         if self.board[moveto[0]][moveto[1]]:
@@ -668,7 +668,7 @@ class CheckerBoard(Board):
                 valid = history[0] == moveto
             else:
                 valid = False
-         
+
         if valid and len(history) > 1:
             for move in history[1:]:
                 # Anything in the history is a capture as __movehelper
@@ -677,14 +677,14 @@ class CheckerBoard(Board):
                 #  (newrow, newcol, (capturedrow, capturedcol))
                 # First position in history is the starting one, anything
                 # afterwards is a capture move.
-                
+
                 # If we already captured this piece, we cannot capture
                 # it again.
                 if move[2] == capturedpiece:
                     valid = False
 
         return valid
- 
+
     def recount_pieces(self):
         """recount_pieces() - Recount pawns and kings
         This utility function is not normally needed.  However, when
@@ -700,6 +700,3 @@ class CheckerBoard(Board):
                 self.kingsN[playeridx] += 1
             else:
                 self.pawnsN[playeridx] += 1
-    
-        
-        
