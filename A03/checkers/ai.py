@@ -1,5 +1,6 @@
 from lib import abstractstrategy, boardlibrary
 import math
+#import time
 
 
 class AlphaBetaSearch:
@@ -159,6 +160,7 @@ class Strategy(abstractstrategy.Strategy):
                   (bigger numbers for max player, smaller numbers for
                    min player)
         """
+        utilityEstimate = 0
         # Pawns for each player
         playerPawnCount = state.get_pawnsN()[0];
         opponentPawnCount = state.get_pawnsN()[1];
@@ -170,19 +172,26 @@ class Strategy(abstractstrategy.Strategy):
         # create lists for both players containing the distance to king for each piece
         playerDistList = []
         opponentDistList = []
-
+        playerEdgeCount = 0
+        opponentEdgeCount = 0
         # iterate through each row and column and identify pawns for turn player
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
         for r, c, piece in state:
             print(f'player token {piece} at row={r}, col={c}')
             piecePlayer, isKing = state.identifypiece(piece)
-            # if current player
+            # if player
             if(piecePlayer == state.playeridx(self.maxplayer)):
+                # if piece is on the edge
+                if(r==0 or r==7 or c==0 or c==7):
+                    playerEdgeCount += 1;
                 if (not isKing):
                     playerDistList.append(state.disttoking(self.maxplayer, r))
-            # if other player
+            # if opponent
             else:
+                # if piece is on the edge
+                if(r==0 or r==7 or c==0 or c==7):
+                    opponentEdgeCount += 1;
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, r))
 
@@ -192,12 +201,14 @@ class Strategy(abstractstrategy.Strategy):
 
         # Mean of each distance list (mean of total moves from king for each pawn)
         playerDistMean = playerDistSum / len(playerDistList)
-        opponentDistMean = oppponentDistSum / len(opponentDistList)
+        opponentDistMean = opponentDistSum / len(opponentDistList)
 
         # Max of each distance list (max of total moves from king for each pawn)
         playerDistMax = max(playerDistList)
         opponentDistMax = max(opponentDistList)
 
+        playerDistMin = min(playerDistList)
+        opponentDistMin = min(opponentDistList)
         # Number of possible moves per player
         playerMoveList = state.get_actions(self.maxplayer)
         playerNumMoves = len(playerMoveList)
@@ -212,35 +223,43 @@ class Strategy(abstractstrategy.Strategy):
         # standard length for the tuple at the second index in move is 2. When there is a possible
         # capture, the length of the tuple at the second index will be greater
         for move in playerMoveList:
-            if(len(move[1]>2):
+            # 2 is the length of the second element in move if there is no capture
+            if(len(move[1])>2):
                 playerCaptureSum += len(move) - 1
 
         for move in opponentMoveList:
-            if(len(move[1]>2):
+            if(len(move[1])>2):
                 opponentCaptureSum += len(move) - 1
 
-        # player
-        # need to apply weights to each factor and sum. Negative weights applied
-        # to opponent.
+        pW = 1
+        kW = 3
+        minDW = 2
+        capSW = 1
+        eCW = 1
+        # pawnCount, kingCount, sum of disttoking, mean of disttoking, max disttoking, moveSum, captureSum, edgeCount
+        playerEvaluation = playerPawnCount*pW + playerKingCount*kW + playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
+        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW + opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
 
-        # I AM LOST ?????? how do ?????
-        # rows and columns
+        utilityEstimate = playerEvaluation - opponentEvaluation
 
-        raise NotImplemented
+        print("Utility Estimate:", utilityEstimate)
+        return utilityEstimate
 
 
 # Run test cases if invoked as main module
 if __name__ == "__main__":
-    b = boardlibrary.boards["StrategyTest1"]
-    redstrat = Strategy('r', b, 6)
-    blackstrat = Strategy('b', b, 6)
+    #board = boardlibrary.boards["StrategyTest1"]
+    board = boardlibrary.boards["Test1"]
+    redstrat = Strategy('r', board, 3)
+    blackstrat = Strategy('b', board, 3)
 
-    print(b)
-    (nb, action) = redstrat.play(b)
+    print(board)
+    (newboard, action) = redstrat.play(board)
     print("Red would select ", action)
-    print(nb)
+    print(newboard)
 
-
-    (nb, action) = blackstrat.play(b)
+"""
+    (newboard, action) = blackstrat.play(board)
     print("Black would select ", action)
-    print(nb)
+    print(newboard)
+"""
