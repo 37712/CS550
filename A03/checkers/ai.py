@@ -30,7 +30,7 @@ class AlphaBetaSearch:
 
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
-        return self.maxvalue(state, -math.inf, math.inf, 0)[1]
+        return self.maxvalue(state, -math.inf, math.inf, 1)[1]
 
     # this is used by both min and max values
     def cutoff(self, state, ply):
@@ -44,7 +44,9 @@ class AlphaBetaSearch:
         # cut off condition
         if(self.maxplies == ply): return True
         # terminal state
-        if(state.is_terminal()): return True
+        if(state.is_terminal()[0]): return True
+
+        
         # continue search
         return False
 
@@ -68,7 +70,7 @@ class AlphaBetaSearch:
 
         else:
             for action in state.get_actions(self.maxplayer):
-
+                print(action)
                 # get temporary min value, [0] is the return value
                 tmpValue = self.minvalue(state.move(action), alpha, beta, ply + 1)[0]
 
@@ -149,7 +151,7 @@ class Strategy(abstractstrategy.Strategy):
         newboard = board.move(action)
         return newboard, action
 
-    # what is the utility of the state/checkerboard
+    # what is the utility of a state/checkerboard
     def evaluate(self, state, turn = None):
         """
         evaluate - Determine utility of terminal state or estimated
@@ -162,12 +164,12 @@ class Strategy(abstractstrategy.Strategy):
         """
         utilityEstimate = 0
         # Pawns for each player
-        playerPawnCount = state.get_pawnsN()[0];
-        opponentPawnCount = state.get_pawnsN()[1];
+        playerPawnCount = state.get_pawnsN()[0]
+        opponentPawnCount = state.get_pawnsN()[1]
 
         # Kings for each player
-        playerKingCount = state.get_kingsN()[0];
-        opponentKingCount =  state.get_kingsN()[1];
+        playerKingCount = state.get_kingsN()[0]
+        opponentKingCount =  state.get_kingsN()[1]
 
         # create lists for both players containing the distance to king for each piece
         playerDistList = []
@@ -178,7 +180,7 @@ class Strategy(abstractstrategy.Strategy):
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
         for r, c, piece in state:
-            print(f'player token {piece} at row={r}, col={c}')
+            #print(f'player token {piece} at row={r}, col={c}')
             piecePlayer, isKing = state.identifypiece(piece)
             # if player
             if(piecePlayer == state.playeridx(self.maxplayer)):
@@ -230,7 +232,7 @@ class Strategy(abstractstrategy.Strategy):
         for move in opponentMoveList:
             if(len(move[1])>2):
                 opponentCaptureSum += len(move) - 1
-
+        """
         pW = 1
         kW = 3
         minDW = 2
@@ -239,6 +241,10 @@ class Strategy(abstractstrategy.Strategy):
         # pawnCount, kingCount, sum of disttoking, mean of disttoking, max disttoking, moveSum, captureSum, edgeCount
         playerEvaluation = playerPawnCount*pW + playerKingCount*kW + playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
         opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW + opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
+        """
+
+        playerEvaluation = playerPawnCount + playerKingCount + playerDistMin + playerEdgeCount
+        opponentEvaluation = opponentPawnCount + opponentKingCount + opponentDistMin + opponentEdgeCount        
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
@@ -248,10 +254,10 @@ class Strategy(abstractstrategy.Strategy):
 
 # Run test cases if invoked as main module
 if __name__ == "__main__":
+
     #board = boardlibrary.boards["StrategyTest1"]
-    board = boardlibrary.boards["Test1"]
+    board = boardlibrary.boards["SingleHopsRed"]
     redstrat = Strategy('r', board, 3)
-    blackstrat = Strategy('b', board, 3)
 
     print(board)
     (newboard, action) = redstrat.play(board)
@@ -259,6 +265,7 @@ if __name__ == "__main__":
     print(newboard)
 
 """
+    blackstrat = Strategy('b', board, 3)
     (newboard, action) = blackstrat.play(board)
     print("Black would select ", action)
     print(newboard)
