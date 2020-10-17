@@ -2,7 +2,6 @@ from lib import abstractstrategy, boardlibrary
 import math
 #import time
 
-
 class AlphaBetaSearch:
 
     def __init__(self, strategy, maxplayer, minplayer, maxplies=3,
@@ -30,7 +29,10 @@ class AlphaBetaSearch:
 
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
-        return self.maxvalue(state, -math.inf, math.inf, 1)[1]
+        value, maxaction = self.maxvalue(state, -math.inf, math.inf, 0)
+        #if self.verbose:
+        print("max value",value)
+        return maxaction
 
     # this is used by both min and max values
     def cutoff(self, state, ply):
@@ -45,8 +47,6 @@ class AlphaBetaSearch:
         if(self.maxplies == ply): return True
         # terminal state
         if(state.is_terminal()[0]): return True
-
-        
         # continue search
         return False
 
@@ -63,14 +63,14 @@ class AlphaBetaSearch:
         """
         value = -math.inf
         maxaction = None
-
+        
         #if cut off
         if(self.cutoff(state, ply)):
             value = self.strategy.evaluate(state)
 
         else:
             for action in state.get_actions(self.maxplayer):
-                print(action)
+
                 # get temporary min value, [0] is the return value
                 tmpValue = self.minvalue(state.move(action), alpha, beta, ply + 1)[0]
 
@@ -100,11 +100,11 @@ class AlphaBetaSearch:
         minaction = None
 
         #if cut off
-        if(self.cutoff(state, ply)): value = self.strategy.evaluate(state)
-
+        if(self.cutoff(state, ply)):
+            value = self.strategy.evaluate(state)
+        
         else:
             for action in state.get_actions(self.minplayer):
-
                 # get temporary max value, [0] is the return value
                 tmpValue = self.maxvalue(state.move(action), alpha, beta, ply + 1)[0]
 
@@ -143,6 +143,7 @@ class Strategy(abstractstrategy.Strategy):
         Returns (newboard, action)
         """
         action = self.search.alphabeta(board)
+        print("action taken:",action)
 
         # if action is None then no action is possible
         # therefore you loose
@@ -176,6 +177,10 @@ class Strategy(abstractstrategy.Strategy):
         opponentDistList = []
         playerEdgeCount = 0
         opponentEdgeCount = 0
+
+        playerDangerCount = 0
+        opponentDangerCount = 0
+
         # iterate through each row and column and identify pawns for turn player
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
@@ -184,16 +189,19 @@ class Strategy(abstractstrategy.Strategy):
             piecePlayer, isKing = state.identifypiece(piece)
             # if player
             if(piecePlayer == state.playeridx(self.maxplayer)):
+
                 # if piece is on the edge
                 if(r==0 or r==7 or c==0 or c==7):
-                    playerEdgeCount += 1;
+                    playerEdgeCount += 1
+                # if pawn
                 if (not isKing):
                     playerDistList.append(state.disttoking(self.maxplayer, r))
             # if opponent
             else:
                 # if piece is on the edge
                 if(r==0 or r==7 or c==0 or c==7):
-                    opponentEdgeCount += 1;
+                    opponentEdgeCount += 1
+                # if pawn
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, r))
 
@@ -202,8 +210,8 @@ class Strategy(abstractstrategy.Strategy):
         opponentDistSum = sum(opponentDistList)
 
         # Mean of each distance list (mean of total moves from king for each pawn)
-        playerDistMean = playerDistSum / len(playerDistList)
-        opponentDistMean = opponentDistSum / len(opponentDistList)
+        #playerDistMean = playerDistSum / len(playerDistList)
+        #opponentDistMean = opponentDistSum / len(opponentDistList)
 
         # Max of each distance list (max of total moves from king for each pawn)
         playerDistMax = max(playerDistList)
@@ -243,12 +251,11 @@ class Strategy(abstractstrategy.Strategy):
         opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW + opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
         """
 
-        playerEvaluation = playerPawnCount + playerKingCount + playerDistMin + playerEdgeCount
-        opponentEvaluation = opponentPawnCount + opponentKingCount + opponentDistMin + opponentEdgeCount        
+        playerEvaluation = playerPawnCount + playerKingCount - playerDistMin + playerEdgeCount
+        opponentEvaluation = opponentPawnCount + opponentKingCount - opponentDistMin + opponentEdgeCount        
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
-        print("Utility Estimate:", utilityEstimate)
         return utilityEstimate
 
 
@@ -256,17 +263,31 @@ class Strategy(abstractstrategy.Strategy):
 if __name__ == "__main__":
 
     #board = boardlibrary.boards["StrategyTest1"]
-    board = boardlibrary.boards["SingleHopsRed"]
+    board = boardlibrary.boards["Pristine"]
     redstrat = Strategy('r', board, 3)
+    blackstrat = Strategy('b', board, 3)
 
     print(board)
-    (newboard, action) = redstrat.play(board)
-    print("Red would select ", action)
-    print(newboard)
+    while(not board.is_terminal()[0]):
+        
+        print("RED TURN****************")
+        redstrat = Strategy('r', board, 3)
+        (board, action) = redstrat.play(board)
+        print("Red action", action)
+        print(board)
 
-"""
-    blackstrat = Strategy('b', board, 3)
-    (newboard, action) = blackstrat.play(board)
-    print("Black would select ", action)
-    print(newboard)
-"""
+        input()
+
+        print("BLACK TURN**************")
+        blackstrat = Strategy('b', board, 3)
+        (board, action) = blackstrat.play(board)
+        print("Black action", action)
+        print(board)
+
+        input()
+
+        
+
+        
+
+    print("DONE")

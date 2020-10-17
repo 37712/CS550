@@ -54,7 +54,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     gameState = None
 
     # while the game is not finished
-    while(True):
+    while(not board.is_terminal()[0]):
 
         ##### first player's turn #####
         print("player_1")
@@ -74,9 +74,6 @@ def Game(red=human.Strategy, black=tonto.Strategy,
             gameState = "b"
             break
 
-        # is it a draw?
-        if(turnCount >= 64): break
-
         turnCount += 1
 
     return gameState
@@ -92,7 +89,7 @@ if __name__ == "__main__":
     #Game(red=tonto.Strategy, black=tonto.Strategy)
 
     # my test
-    Game(red=human.Strategy, black=ai.Strategy)
+    Game(red=ai.Strategy, black=ai.Strategy)
 
     #Play with default strategies...
     #Game()
