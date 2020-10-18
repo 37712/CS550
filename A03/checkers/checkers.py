@@ -46,7 +46,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # create the board
     board = checkerboard.CheckerBoard()
-    #board = boardlibrary.boards["Test1"]
+    board = boardlibrary.boards["SingleHopsRed"]
 
     # create players
     player_1 = red('r', board, maxplies)

@@ -239,29 +239,35 @@ class Strategy(abstractstrategy.Strategy):
             if(len(action[1])>2):
                 opponentCaptureSum += len(action)-1 # -1 so that we only count captured pawns in that move
 
-        # this guarantees us NO DRAWS EVER
-        # is the state a repeat state
-        terminalStateValue = 0
-        # if we have gone through 35 turns/moves with no captures
-        if(state.movecount - state.lastcapture > 35):
-            terminalStateValue = state.movecount - state.lastcapture - 35
+        
 
         '''
-        #golden ratio, depricated, does not win anymore
+        #golden ratio, wins on regular board, decent weights
         pW = 2          # pawn weight
         kW = 5          # king weight
         minDW = 0.25    # min distance to king, for one piece
         capSW = 1       # capture sum wight
         eCW = 0.25      # edge count weight
+        tW = 0.5        # terminal weigth
+        turnvalue = 10  # value after wich terminal value starts incrementing
         '''
 
-        # needs work, currently will win or draw but not louse
-        pW = 3          # pawn weight
-        kW = 6          # king weight
-        minDW = 0.5     # min distance to king, for one piece
-        capSW = 0.25    # capture sum weight
-        eCW = 0.75      # edge count weight
-        tW = 0.5        # terminal weigth
+        #golden ratio, wins almost always
+        pW = 2          # pawn weight
+        kW = 5          # king weight
+        minDW = 0.25     # min distance to king, for one piece
+        capSW = 1    # capture sum weight
+        eCW = 0.25      # edge count weight
+        tW = 0.2        # terminal weigth
+        turnvalue = 10  # value after wich terminal value starts incrementing
+
+        # this makes it posible to get reduce or never end in a draw
+        # is the state a repeat state
+        terminalStateValue = 0
+        # if we have gone through X turns/moves with no captures
+        if(state.movecount - state.lastcapture > turnvalue):
+            terminalStateValue = state.movecount - state.lastcapture - turnvalue
+
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
         playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + \
                             playerCaptureSum*capSW + playerEdgeCount*eCW - terminalStateValue*tW
