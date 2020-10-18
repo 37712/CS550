@@ -14,7 +14,7 @@
 # Decompilation is cheating, don't do it.
 import statistics
 import ai
-from lib import human, checkerboard, timer
+from lib import human, checkerboard, boardlibrary 
 #from lib import tonto
 
 # Python can load compiled modules using the imp module (deprecated)
@@ -44,39 +44,42 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     Returns winning player 'r' or 'b'
     """
 
+    # create the board
     board = checkerboard.CheckerBoard()
+    board = boardlibrary.boards["Test2"]
 
-    # search strategies
-    player_1 = red('r', board, maxplies)
-    player_2 = black('b', board, maxplies)
+    # create players
+    player_1 = red('r', board, maxplies, verbose)
+    player_2 = black('b', board, maxplies, verbose)
 
-    turnCount = firstmove
-    gameState = None
+    turnCount = 0
+
+    if(verbose):print(board)
 
     # while the game is not finished
     while(not board.is_terminal()[0]):
 
         ##### first player's turn #####
-        print("player_1")
+        turnCount += 1
+        if(verbose):print("\n****player_1, turn",turnCount,"****")
         # get new board and best move/action
         board, action = player_1.play(board)
-        # no best action, player_1 has lost
-        if(action == None):
-            gameState = "r"
-            break
+        if(verbose):print(board, action)
+        print("player 1 evaluate =", player_1.evaluate(board))
+        print("player 2 evaluate =", player_2.evaluate(board))       
         
+        if(board.is_terminal()[0]):break
+
         ##### second player's turn #####
-        print("player_2")
+        turnCount += 1
+        if(verbose):print("\n****player_2, turn",turnCount,"****")
         # get new board and best move/action
         board, action = player_2.play(board)
-        # no best action, player_2 has lost
-        if(action == None):
-            gameState = "b"
-            break
+        if(verbose):print(board, action)
+        print("player 1 evaluate =", player_1.evaluate(board))
+        print("player 2 evaluate =", player_2.evaluate(board)) 
 
-        turnCount += 1
-
-    return gameState
+    return board.is_terminal()[1]
 
 if __name__ == "__main__":
     # Examples
@@ -89,7 +92,11 @@ if __name__ == "__main__":
     #Game(red=tonto.Strategy, black=tonto.Strategy)
 
     # my test
-    Game(red=ai.Strategy, black=ai.Strategy)
+    #print(Game(red=ai.Strategy, black=tonto.Strategy, maxplies=6))
+    #print(Game(red=ai.Strategy, black=ai.Strategy, maxplies=6))
+    #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
+    print(Game(red=ai.Strategy, black=human.Strategy, maxplies=6))
+    #print(Game(red=tonto.Strategy, black=ai.Strategy, maxplies=6))
 
     #Play with default strategies...
     #Game()

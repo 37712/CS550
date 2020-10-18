@@ -235,23 +235,42 @@ def init_boards():
     # Test 1
 
     #    0  1  2  3  4  5  6  7
-    # 0     .     .     .     b
+    # 0     .     b     .     .
     # 1  .     .     .     .
     # 2     .     .     .     .
     # 3  .     .     .     .
     # 4     .     .     .     .
     # 5  .     .     .     .
-    # 6     .     b     .     .
-    # 7  .     r     r     .
+    # 6     .     .     .     .
+    # 7  .     R     R     .
 
     b = checkerboard.CheckerBoard()
     b.clearboard()
-    b.place(7,2, 'r')
-    b.place(6,3,'b')
-    b.place(7,4,'r')
-    b.place(0,7, 'b')
+    b.place(7,2,'R')
+    b.place(0,3,'b')
+    b.place(7,4,'R')
     b.recount_pieces()
     boards["Test1"] = b
+
+    # Test 2
+
+    #    0  1  2  3  4  5  6  7
+    # 0     .     B     B     .
+    # 1  .     .     .     .
+    # 2     .     .     .     .
+    # 3  .     .     .     .
+    # 4     .     .     .     .
+    # 5  .     .     .     .
+    # 6     .     .     .     .
+    # 7  .     .     r     .
+
+    b = checkerboard.CheckerBoard()
+    b.clearboard()
+    b.place(0,3,'B')
+    b.place(7,4,'r')
+    b.place(0,5,'B')
+    b.recount_pieces()
+    boards["Test2"] = b
 
 
     # Draw

@@ -24,6 +24,7 @@ class Strategy:
 
     # why is this not working
     # we are not even supposed to be messing around with this file
+
     def verbose(self, enabled=True):
         """
         verbose - enable/disable verbose mode
@@ -31,7 +32,7 @@ class Strategy:
         :return:
         """
         self.verbose = verbose
-    
+
     def evaluate(self, game, turn=None):
         """
         evaluate - Provide a heuristic estimate of the utility of a given

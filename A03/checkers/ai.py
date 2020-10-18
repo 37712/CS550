@@ -4,7 +4,7 @@ import math
 
 class AlphaBetaSearch:
 
-    def __init__(self, strategy, maxplayer, minplayer, maxplies=3,
+    def __init__(self, strategy, maxplayer, minplayer, maxplies=6,
                  verbose=False):
         """"alphabeta_search - Initialize a class capable of alphabeta search
         problem - problem representation
@@ -30,8 +30,8 @@ class AlphaBetaSearch:
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
         value, maxaction = self.maxvalue(state, -math.inf, math.inf, 0)
-        #if self.verbose:
-        print("max value",value)
+        if self.verbose:
+            print("max value =",value)
         return maxaction
 
     # this is used by both min and max values
@@ -133,9 +133,8 @@ class Strategy(abstractstrategy.Strategy):
 
         super(Strategy, self).__init__(*args)
 
-        self.search = \
-            AlphaBetaSearch(self, self.maxplayer, self.minplayer,
-                                   maxplies=self.maxplies, verbose=False)
+        self.search = AlphaBetaSearch(self, self.maxplayer, self.minplayer,
+                                   maxplies=self.maxplies, verbose=args[3])
 
     def play(self, board):
         """
@@ -143,7 +142,6 @@ class Strategy(abstractstrategy.Strategy):
         Returns (newboard, action)
         """
         action = self.search.alphabeta(board)
-        print("action taken:",action)
 
         # if action is None then no action is possible
         # therefore you loose
@@ -178,85 +176,77 @@ class Strategy(abstractstrategy.Strategy):
         playerEdgeCount = 0
         opponentEdgeCount = 0
 
-        playerDangerCount = 0
-        opponentDangerCount = 0
-
         # iterate through each row and column and identify pawns for turn player
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
         for row, col, piece in state:
             #print(f'player token {piece} at row={r}, col={c}')
             piecePlayer, isKing = state.identifypiece(piece)
+
             # if player
             if(piecePlayer == state.playeridx(self.maxplayer)):
 
                 # if piece is on the edge
-                if(row==0 or row==7 or col==0 or col==7):
+                if((col==0 or col==7) and not isKing):
                     playerEdgeCount += 1
                 # if pawn
                 if (not isKing):
+                    
                     playerDistList.append(state.disttoking(self.maxplayer, row))
+
             # if opponent
             else:
+ 
                 # if piece is on the edge
-                if(row==0 or row==7 or col==0 or col==7):
+                if((col==0 or col==7) and not isKing):
                     opponentEdgeCount += 1
                 # if pawn
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, row))
 
-        playerDistSum=0;
-        opponentDistSum=0;
-        playerDistMean=0;
-        opponentDistMean=0;
-        playerDistMax=0;
-        opponentDistMax=0;
-        playerDistMin=0;
-        opponentDistMin=0;
-
-        # Sum of each distance list (sum of total moves from king for each pawn)
-        # Mean of each distance list (mean of total moves from king for each pawn)
-        # Max of each distance list (max of total moves from king for each pawn)
-        # Min of each distance list (min of total moves from king for each pawn)
+        # Min distance of all of the pawns to be king
+        playerDistMin=0
+        opponentDistMin=0
         if(len(playerDistList)>0):
-            playerDistSum = sum(playerDistList)
-            playerDistMean = playerDistSum / len(playerDistList)
-            playerDistMax = max(playerDistList)
             playerDistMin = min(playerDistList)
         if(len(opponentDistList)>0):
-            opponentDistSum = sum(opponentDistList)
-            opponentDistMean = opponentDistSum / len(opponentDistList)
-            opponentDistMax = max(opponentDistList)
             opponentDistMin = min(opponentDistList)
 
-        # Number of possible moves per player
+        # List of possible moves per player
         playerMoveList = state.get_actions(self.maxplayer)
-        playerNumMoves = len(playerMoveList)
         opponentMoveList = state.get_actions(self.minplayer)
-        opponentNumMoves =  len(opponentMoveList)
 
-        # Number of possible jumps per action per player
-        playerCaptureSum = 0;
-        opponentCaptureSum = 0;
+        # Number of possible captures per action per player
+        playerCaptureSum = 0
+        opponentCaptureSum = 0
         # the length of the each move in move list will always be 1 value longer
         # than the total number of captures
         # standard length for the tuple at the second index in move is 2. When there is a possible
         # capture, the length of the tuple at the second index will be greater
         for move in playerMoveList:
-            # 2 is the length of the second element in move if there is no capture
+            # if elemente [1] length is greater than 2 then there is a capture
             if(len(move[1])>2):
-                playerCaptureSum += len(move) - 1
+                playerCaptureSum += len(move)-1 # -1 so that we cut out the currentl positon
 
         for move in opponentMoveList:
+            # if elemente [1] length is greater than 2 then there is a capture
             if(len(move[1])>2):
-                opponentCaptureSum += len(move) - 1
+                opponentCaptureSum += len(move)-1 # -1 so that we cut out the currentl positon
 
-        pW = 1
-        kW = 3
-        minDW = 2
-        capSW = 1
-        eCW = 0.25
-        # pawnCount, kingCount, sum of disttoking, mean of disttoking, max disttoking, moveSum, captureSum, edgeCount
+        #golden ratio
+        '''
+        pW = 2          # pawn weight
+        kW = 5          # king weight
+        minDW = 0.25    # min distance to king, for one piece
+        capSW = 1       # capture sum wight
+        eCW = 0.25      # edge count weight
+        '''
+        pW = 4          # pawn weight
+        kW = 6          # king weight
+        minDW = 0.25    # min distance to king, for one piece
+        capSW = 1       # capture sum wight
+        eCW = 0.25      # edge count weight
+        # pawnCount, kingCount, min disttoking, captureSum, edgeCount
         playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
         opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
 
@@ -283,6 +273,7 @@ if __name__ == "__main__":
         print(board)
 
         input()
+
         if(board.is_terminal()[0]): break
 
         print("BLACK TURN**************")
@@ -292,9 +283,5 @@ if __name__ == "__main__":
         print(board)
 
         input()
-
-
-
-
 
     print("DONE")
