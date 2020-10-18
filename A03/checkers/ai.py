@@ -30,8 +30,8 @@ class AlphaBetaSearch:
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
         value, maxaction = self.maxvalue(state, -math.inf, math.inf, 0)
-        if self.verbose:
-            print("max value =",value)
+        #if self.verbose:
+        print("max value =",value)
         return maxaction
 
     # this is used by both min and max values
@@ -62,6 +62,8 @@ class AlphaBetaSearch:
         :return: (value, maxaction)
         """
         value = -math.inf
+        #print("here", value)
+        #input()
         maxaction = None
 
         #if cut off
@@ -129,12 +131,13 @@ class Strategy(abstractstrategy.Strategy):
         """
         Strategy - Concrete implementation of abstractstrategy.Strategy
         See abstractstrategy.Strategy for parameters
-       """
-
+        """
+        
         super(Strategy, self).__init__(*args)
-
-        self.search = AlphaBetaSearch(self, self.maxplayer, self.minplayer,
-                                   maxplies=self.maxplies, verbose=args[3])
+        
+        self.search = \
+            AlphaBetaSearch(self, self.maxplayer, self.minplayer,
+                                   maxplies=self.maxplies, verbose=False)
 
     def play(self, board):
         """
@@ -147,7 +150,9 @@ class Strategy(abstractstrategy.Strategy):
         # therefore you loose
         if(action == None): return board, None
 
+        # create new board by applying the action
         newboard = board.move(action)
+
         return newboard, action
 
     # what is the utility of a state/checkerboard
@@ -161,14 +166,19 @@ class Strategy(abstractstrategy.Strategy):
                   (bigger numbers for max player, smaller numbers for
                    min player)
         """
-        utilityEstimate = 0
-        # Pawns for each player
-        playerPawnCount = state.get_pawnsN()[0]
-        opponentPawnCount = state.get_pawnsN()[1]
 
-        # Kings for each player
-        playerKingCount = state.get_kingsN()[0]
-        opponentKingCount =  state.get_kingsN()[1]
+        utilityEstimate = 0
+        # Pawns and Kings for each player
+        if(self.maxplayer == 'r'):
+            playerPawnCount = state.get_pawnsN()[0]
+            opponentPawnCount = state.get_pawnsN()[1]
+            playerKingCount = state.get_kingsN()[0]
+            opponentKingCount =  state.get_kingsN()[1]
+        else:
+            playerPawnCount = state.get_pawnsN()[1]
+            opponentPawnCount = state.get_pawnsN()[0]
+            playerKingCount = state.get_kingsN()[1]
+            opponentKingCount =  state.get_kingsN()[0]
 
         # create lists for both players containing the distance to king for each piece
         playerDistList = []
@@ -180,13 +190,13 @@ class Strategy(abstractstrategy.Strategy):
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
         for row, col, piece in state:
-            #print(f'player token {piece} at row={r}, col={c}')
+            #print("player token {} at row={}, col={}".format(piece,row,col))
             piecePlayer, isKing = state.identifypiece(piece)
-
-            # if player
+            #print("piece {}, king {}".format(piecePlayer,isKing))
+            # if piece belongs to player (maxplayer)
             if(piecePlayer == state.playeridx(self.maxplayer)):
 
-                # if piece is on the edge
+                # if piece is on the edge, and not a king
                 if((col==0 or col==7) and not isKing):
                     playerEdgeCount += 1
                 # if pawn
@@ -194,16 +204,16 @@ class Strategy(abstractstrategy.Strategy):
                     
                     playerDistList.append(state.disttoking(self.maxplayer, row))
 
-            # if opponent
+            # if piece belongs to opponent (minplayer)
             else:
- 
-                # if piece is on the edge
+                #if(foo and turn): print("here", piecePlayer, isKing)
+                # if piece is on the edge, and not a king
                 if((col==0 or col==7) and not isKing):
                     opponentEdgeCount += 1
                 # if pawn
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, row))
-
+        
         # Min distance of all of the pawns to be king
         playerDistMin=0
         opponentDistMin=0
@@ -233,22 +243,40 @@ class Strategy(abstractstrategy.Strategy):
             if(len(move[1])>2):
                 opponentCaptureSum += len(move)-1 # -1 so that we cut out the currentl positon
 
-        #golden ratio
         '''
+        #golden ratio, depricated, does not win anymore
         pW = 2          # pawn weight
         kW = 5          # king weight
         minDW = 0.25    # min distance to king, for one piece
         capSW = 1       # capture sum wight
         eCW = 0.25      # edge count weight
         '''
-        pW = 4          # pawn weight
+
+        '''
+        # new golden ratio, garanteed win or draw against tonto
+        pW = 2.5          # pawn weight
+        kW = 5          # king weight
+        minDW = 0.5    # min distance to king, for one piece
+        capSW = 0.5       # capture sum wight
+        eCW = 0.25      # edge count weight
+        '''
+
+        # new golden ratio, confimed victorious against tonto
+        pW = 3          # pawn weight
         kW = 6          # king weight
-        minDW = 0.25    # min distance to king, for one piece
-        capSW = 1       # capture sum wight
+        minDW = 0.5    # min distance to king, for one piece
+        capSW = 0.75       # capture sum wight
         eCW = 0.25      # edge count weight
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
         playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
         opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
+
+        if(turn):
+            print("playerEvaluation =", playerEvaluation, self.maxplayer)
+            print(playerPawnCount*pW, playerKingCount*kW, -playerDistMin*minDW, playerCaptureSum*capSW, playerEdgeCount*eCW)
+
+            print("opponentEvaluation =", opponentEvaluation, self.maxplayer)
+            print(opponentPawnCount*pW, opponentKingCount*kW, -opponentDistMin*minDW, opponentCaptureSum*capSW, opponentEdgeCount*eCW)
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
@@ -259,16 +287,27 @@ class Strategy(abstractstrategy.Strategy):
 if __name__ == "__main__":
 
     #board = boardlibrary.boards["StrategyTest1"]
-    board = boardlibrary.boards["Pristine"]
-    redstrat = Strategy('r', board, 3)
-    blackstrat = Strategy('b', board, 3)
+    board = boardlibrary.boards["Test2"]
+    print(board)
+
+    Player_1 = Strategy('r', board, 3)
+    Player_2 = Strategy('b', board, 3)
+    print("Player_1, red")
+    Player_1.evaluate(board, True)
+    print("\n\nPlayer_2, black")
+    Player_2.evaluate(board, True)
+
+
+    '''
+    Player_1 = Strategy('r', board, 3)
+    Player_2 = Strategy('b', board, 3)
 
     print(board)
     while(not board.is_terminal()[0]):
 
         print("RED TURN****************")
-        redstrat = Strategy('r', board, 3)
-        (board, action) = redstrat.play(board)
+        Player_1 = Strategy('r', board, 3)
+        (board, action) = Player_1.play(board)
         print("Red action", action)
         print(board)
 
@@ -277,11 +316,11 @@ if __name__ == "__main__":
         if(board.is_terminal()[0]): break
 
         print("BLACK TURN**************")
-        blackstrat = Strategy('b', board, 3)
-        (board, action) = blackstrat.play(board)
+        Player_2 = Strategy('b', board, 3)
+        (board, action) = Player_2.play(board)
         print("Black action", action)
         print(board)
 
         input()
-
-    print("DONE")
+    '''
+    print("\nDONE")

@@ -46,11 +46,11 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # create the board
     board = checkerboard.CheckerBoard()
-    board = boardlibrary.boards["Test2"]
+    #board = boardlibrary.boards["Test1"]
 
     # create players
-    player_1 = red('r', board, maxplies, verbose)
-    player_2 = black('b', board, maxplies, verbose)
+    player_1 = red('r', board, maxplies)
+    player_2 = black('b', board, maxplies)
 
     turnCount = 0
 
@@ -58,7 +58,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # while the game is not finished
     while(not board.is_terminal()[0]):
-
+        
         ##### first player's turn #####
         turnCount += 1
         if(verbose):print("\n****player_1, turn",turnCount,"****")
@@ -66,9 +66,13 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         board, action = player_1.play(board)
         if(verbose):print(board, action)
         print("player 1 evaluate =", player_1.evaluate(board))
-        print("player 2 evaluate =", player_2.evaluate(board))       
+        print("player 2 evaluate =", player_2.evaluate(board))
+        if(action == None):
+            if verbose: print("Player_1 is Forfeit")
+            return 'b'
         
         if(board.is_terminal()[0]):break
+        #input()
 
         ##### second player's turn #####
         turnCount += 1
@@ -77,26 +81,23 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         board, action = player_2.play(board)
         if(verbose):print(board, action)
         print("player 1 evaluate =", player_1.evaluate(board))
-        print("player 2 evaluate =", player_2.evaluate(board)) 
+        print("player 2 evaluate =", player_2.evaluate(board))
+        if(action == None):
+            if verbose: print("Player_2 is Forfeit")
+            return 'r'
 
-    return board.is_terminal()[1]
+    return  board.is_terminal()[1] # returns winner
 
 if __name__ == "__main__":
-    # Examples
-    # Starting from specific board with default strategy
-    #Game(init=boardlibrary.boards["multihop"])
-    #Game(init=boardlibrary.boards["StrategyTest1"])
-    #Game(init=boardlibrary.boards["EndGame1"], firstmove = 1)
-
-    # Tonto vs Tonto
-    #Game(red=tonto.Strategy, black=tonto.Strategy)
 
     # my test
-    #print(Game(red=ai.Strategy, black=tonto.Strategy, maxplies=6))
-    #print(Game(red=ai.Strategy, black=ai.Strategy, maxplies=6))
-    #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
-    print(Game(red=ai.Strategy, black=human.Strategy, maxplies=6))
+    print(Game(red=ai.Strategy, black=tonto.Strategy, maxplies=6))
     #print(Game(red=tonto.Strategy, black=ai.Strategy, maxplies=6))
+    #print(Game(red=ai.Strategy, black=ai.Strategy, maxplies=6))
+    #print(Game(red=tonto.Strategy, black=tonto.Strategy, maxplies=6))
+    #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
+    #print(Game(red=ai.Strategy, black=human.Strategy, maxplies=6))
+    
 
     #Play with default strategies...
     #Game()
