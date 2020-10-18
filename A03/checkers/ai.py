@@ -131,9 +131,9 @@ class Strategy(abstractstrategy.Strategy):
         Strategy - Concrete implementation of abstractstrategy.Strategy
         See abstractstrategy.Strategy for parameters
         """
-        
+
         super(Strategy, self).__init__(*args)
-        
+
         self.search = \
             AlphaBetaSearch(self, self.maxplayer, self.minplayer,
                                    maxplies=self.maxplies, verbose=False)
@@ -145,11 +145,11 @@ class Strategy(abstractstrategy.Strategy):
         """
 
         print(self.maxplayer,"thinking using ai.py strategy...")
-
+        # use alpha beta search to find optimal move
         action = self.search.alphabeta(board)
 
         # if action is None then no action is possible
-        # therefore you loose
+        # therefore you lose
         if(action == None): return board, None
 
         # create new board by applying the action
@@ -196,7 +196,7 @@ class Strategy(abstractstrategy.Strategy):
             #print("player token {} at row={}, col={}".format(piece,row,col))
             piecePlayer, isKing = state.identifypiece(piece)
             #print("piece {}, king {}".format(piecePlayer,isKing))
-            
+
             # if piece belongs to player (maxplayer)
             if(piecePlayer == state.playeridx(self.maxplayer)):
 
@@ -215,7 +215,7 @@ class Strategy(abstractstrategy.Strategy):
                 # if pawn
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, row))
-        
+
         # Min distance of all of the pawns to be king
         playerDistMin=0
         opponentDistMin=0
@@ -228,20 +228,20 @@ class Strategy(abstractstrategy.Strategy):
         playerCaptureSum = 0
         opponentCaptureSum = 0
         # the length of the each move in move list will always be 1 value longer
-        # than the total number of captures
-        # standard length for the tuple at the second index in move is 2. When there is a possible
-        # capture, the length of the tuple at the second index will be greater
+        # than the total number of captures.
+        # The standard length for the tuple at the second index in move is 2. When there is a possible
+        # capture, the length of the tuple at the second index will be greater.
         for action in state.get_actions(self.maxplayer):
-            # if elemente [1] length is greater than 2 then there is a capture
+            # if element [1] length is greater than 2 then there is a capture
             if(len(action[1])>2):
                 playerCaptureSum += len(action)-1 # -1 so that we only count captured pawns in that move
 
         for action in state.get_actions(self.minplayer):
-            # if elemente [1] length is greater than 2 then there is a capture
+            # if element [1] length is greater than 2 then there is a capture
             if(len(action[1])>2):
                 opponentCaptureSum += len(action)-1 # -1 so that we only count captured pawns in that move
 
-        
+
 
         '''
         #golden ratio, wins on regular board, decent weights
@@ -275,7 +275,7 @@ class Strategy(abstractstrategy.Strategy):
             print(opponentPawnCount*pW, opponentKingCount*kW, -opponentDistMin*minDW, opponentCaptureSum*capSW, opponentEdgeCount*eCW)
 
 
-
+        # positive if good for player, negative if bad for the player
         utilityEstimate = playerEvaluation - opponentEvaluation
 
         return utilityEstimate
