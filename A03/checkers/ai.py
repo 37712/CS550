@@ -186,13 +186,15 @@ class Strategy(abstractstrategy.Strategy):
         playerEdgeCount = 0
         opponentEdgeCount = 0
 
-        # iterate through each row and column and identify pawns for turn player
+        # iterate through each piece and identify pawns for turn player
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
         for row, col, piece in state:
+
             #print("player token {} at row={}, col={}".format(piece,row,col))
             piecePlayer, isKing = state.identifypiece(piece)
             #print("piece {}, king {}".format(piecePlayer,isKing))
+            
             # if piece belongs to player (maxplayer)
             if(piecePlayer == state.playeridx(self.maxplayer)):
 
@@ -201,12 +203,10 @@ class Strategy(abstractstrategy.Strategy):
                     playerEdgeCount += 1
                 # if pawn
                 if (not isKing):
-                    
                     playerDistList.append(state.disttoking(self.maxplayer, row))
 
             # if piece belongs to opponent (minplayer)
             else:
-                #if(foo and turn): print("here", piecePlayer, isKing)
                 # if piece is on the edge, and not a king
                 if((col==0 or col==7) and not isKing):
                     opponentEdgeCount += 1
@@ -222,10 +222,6 @@ class Strategy(abstractstrategy.Strategy):
         if(len(opponentDistList)>0):
             opponentDistMin = min(opponentDistList)
 
-        # List of possible moves per player
-        playerMoveList = state.get_actions(self.maxplayer)
-        opponentMoveList = state.get_actions(self.minplayer)
-
         # Number of possible captures per action per player
         playerCaptureSum = 0
         opponentCaptureSum = 0
@@ -233,15 +229,22 @@ class Strategy(abstractstrategy.Strategy):
         # than the total number of captures
         # standard length for the tuple at the second index in move is 2. When there is a possible
         # capture, the length of the tuple at the second index will be greater
-        for move in playerMoveList:
+        for action in state.get_actions(self.maxplayer):
             # if elemente [1] length is greater than 2 then there is a capture
-            if(len(move[1])>2):
-                playerCaptureSum += len(move)-1 # -1 so that we cut out the currentl positon
+            if(len(action[1])>2):
+                playerCaptureSum += len(action)-1 # -1 so that we only count captured pawns in that move
 
-        for move in opponentMoveList:
+        for action in state.get_actions(self.minplayer):
             # if elemente [1] length is greater than 2 then there is a capture
-            if(len(move[1])>2):
-                opponentCaptureSum += len(move)-1 # -1 so that we cut out the currentl positon
+            if(len(action[1])>2):
+                opponentCaptureSum += len(action)-1 # -1 so that we only count captured pawns in that move
+
+        # this guarantees us NO DRAWS EVER
+        # is the state a repeat state
+        terminalStateValue = 0
+        # if we have gone through 35 turns/moves with no captures
+        if(state.movecount - state.lastcapture > 35):
+            terminalStateValue = state.movecount - state.lastcapture - 35
 
         '''
         #golden ratio, depricated, does not win anymore
@@ -252,31 +255,19 @@ class Strategy(abstractstrategy.Strategy):
         eCW = 0.25      # edge count weight
         '''
 
-        '''
-        # new golden ratio, garanteed win or draw against tonto
-        pW = 2.5          # pawn weight
-        kW = 5          # king weight
-        minDW = 0.5    # min distance to king, for one piece
-        capSW = 0.5       # capture sum wight
-        eCW = 0.25      # edge count weight
-        '''
-
-        # new golden ratio, confimed victorious against tonto
+        # needs work, currently will win or draw but not louse
         pW = 3          # pawn weight
         kW = 6          # king weight
-        minDW = 0.5    # min distance to king, for one piece
-        capSW = 0.75       # capture sum wight
-        eCW = 0.25      # edge count weight
+        minDW = 0.5     # min distance to king, for one piece
+        capSW = 0.25    # capture sum weight
+        eCW = 0.75      # edge count weight
+        tW = 0.5        # terminal weigth
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
-        playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
-        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
+        playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + \
+                            playerCaptureSum*capSW + playerEdgeCount*eCW - terminalStateValue*tW
 
-        if(turn):
-            print("playerEvaluation =", playerEvaluation, self.maxplayer)
-            print(playerPawnCount*pW, playerKingCount*kW, -playerDistMin*minDW, playerCaptureSum*capSW, playerEdgeCount*eCW)
-
-            print("opponentEvaluation =", opponentEvaluation, self.maxplayer)
-            print(opponentPawnCount*pW, opponentKingCount*kW, -opponentDistMin*minDW, opponentCaptureSum*capSW, opponentEdgeCount*eCW)
+        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*2*kW - opponentDistMin*minDW + \
+                            opponentCaptureSum*2*capSW + opponentEdgeCount*eCW
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
