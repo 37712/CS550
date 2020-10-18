@@ -63,7 +63,7 @@ class AlphaBetaSearch:
         """
         value = -math.inf
         maxaction = None
-        
+
         #if cut off
         if(self.cutoff(state, ply)):
             value = self.strategy.evaluate(state)
@@ -102,7 +102,7 @@ class AlphaBetaSearch:
         #if cut off
         if(self.cutoff(state, ply)):
             value = self.strategy.evaluate(state)
-        
+
         else:
             for action in state.get_actions(self.minplayer):
                 # get temporary max value, [0] is the return value
@@ -184,41 +184,70 @@ class Strategy(abstractstrategy.Strategy):
         # iterate through each row and column and identify pawns for turn player
         # or opponent. Then determine the distance to king for the piece and
         # append its distance to the appropriate list
-        for r, c, piece in state:
+        for row, col, piece in state:
             #print(f'player token {piece} at row={r}, col={c}')
             piecePlayer, isKing = state.identifypiece(piece)
             # if player
             if(piecePlayer == state.playeridx(self.maxplayer)):
 
                 # if piece is on the edge
-                if(r==0 or r==7 or c==0 or c==7):
+                if(row==0 or row==7 or col==0 or col==7):
                     playerEdgeCount += 1
                 # if pawn
                 if (not isKing):
-                    playerDistList.append(state.disttoking(self.maxplayer, r))
+                    playerDistList.append(state.disttoking(self.maxplayer, row))
             # if opponent
             else:
                 # if piece is on the edge
-                if(r==0 or r==7 or c==0 or c==7):
+                if(row==0 or row==7 or col==0 or col==7):
                     opponentEdgeCount += 1
                 # if pawn
                 if(not isKing):
-                    opponentDistList.append(state.disttoking(self.minplayer, r))
+                    opponentDistList.append(state.disttoking(self.minplayer, row))
+        print("Number of Player Pawns",len(playerDistList))
+        print("Number of Opponent Pawns",len(opponentDistList))
+
+        playerDistSum=0;
+        opponentDistSum=0;
+        playerDistMean=0;
+        opponentDistMean=0;
+        playerDistMax=0;
+        opponentDistMax=0;
+        playerDistMin=0;
+        opponentDistMin=0;
 
         # Sum of each distance list (sum of total moves from king for each pawn)
-        playerDistSum = sum(playerDistList)
-        opponentDistSum = sum(opponentDistList)
+        # Mean of each distance list (mean of total moves from king for each pawn)
+        # Max of each distance list (max of total moves from king for each pawn)
+        # Min of each distance list (min of total moves from king for each pawn)
+        if(len(playerDistList)>0):
+            playerDistSum = sum(playerDistList)
+            playerDistMean = playerDistSum / len(playerDistList)
+            playerDistMax = max(playerDistList)
+            playerDistMin = min(playerDistList)
+        if(len(opponentDistList)>0):
+            opponentDistSum = sum(opponentDistList)
+            opponentDistMean = opponentDistSum / len(opponentDistList)
+            opponentDistMax = max(opponentDistList)
+            opponentDistMin = min(opponentDistList)
 
         # Mean of each distance list (mean of total moves from king for each pawn)
-        #playerDistMean = playerDistSum / len(playerDistList)
-        #opponentDistMean = opponentDistSum / len(opponentDistList)
+        #if(len(playerDistList)>0):
+            #playerDistMean = playerDistSum / len(playerDistList)
+        #if(len(opponentDistList)>0):
+            #opponentDistMean = opponentDistSum / len(opponentDistList)
 
         # Max of each distance list (max of total moves from king for each pawn)
-        playerDistMax = max(playerDistList)
-        opponentDistMax = max(opponentDistList)
+        #if(len(playerDistList)>0):
+            #playerDistMax = max(playerDistList)
+        #if(len(opponentDistList)>0):
+            #opponentDistMax = max(opponentDistList)
 
-        playerDistMin = min(playerDistList)
-        opponentDistMin = min(opponentDistList)
+        #if(len(playerDistList)>0):
+            #playerDistMin = min(playerDistList)
+        #if(len(opponentDistList)>0):
+            #opponentDistMin = min(opponentDistList)
+
         # Number of possible moves per player
         playerMoveList = state.get_actions(self.maxplayer)
         playerNumMoves = len(playerMoveList)
@@ -252,7 +281,7 @@ class Strategy(abstractstrategy.Strategy):
         """
 
         playerEvaluation = playerPawnCount + playerKingCount - playerDistMin + playerEdgeCount
-        opponentEvaluation = opponentPawnCount + opponentKingCount - opponentDistMin + opponentEdgeCount        
+        opponentEvaluation = opponentPawnCount + opponentKingCount - opponentDistMin + opponentEdgeCount
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
@@ -269,7 +298,7 @@ if __name__ == "__main__":
 
     print(board)
     while(not board.is_terminal()[0]):
-        
+
         print("RED TURN****************")
         redstrat = Strategy('r', board, 3)
         (board, action) = redstrat.play(board)
@@ -286,8 +315,8 @@ if __name__ == "__main__":
 
         input()
 
-        
 
-        
+
+
 
     print("DONE")
