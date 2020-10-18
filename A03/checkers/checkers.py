@@ -14,6 +14,7 @@
 # Decompilation is cheating, don't do it.
 import statistics
 import ai
+import time, datetime
 from lib import human, checkerboard, boardlibrary 
 #from lib import tonto
 
@@ -46,7 +47,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # create the board
     board = checkerboard.CheckerBoard()
-    board = boardlibrary.boards["SingleHopsRed"]
+    #board = boardlibrary.boards["SingleHopsRed"]
 
     # create players
     player_1 = red('r', board, maxplies)
@@ -55,6 +56,9 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     turnCount = 0
 
     if(verbose):print(board)
+
+    # Note start time
+    timeStart = time.time()
 
     # while the game is not finished
     while(not board.is_terminal()[0]):
@@ -85,6 +89,12 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         if(action == None):
             if verbose: print("Player_2 is Forfeit")
             return 'r'
+
+    ''' not working yet
+    if(verbose):
+        seconds = datetime.timedelta(seconds=(time.time()-timeStart)).total_seconds
+        print("\ntime elapsed to solve all puzzles %dmin %dsec" % (seconds/60, seconds%60))
+    '''
 
     return  board.is_terminal()[1] # returns winner
 
