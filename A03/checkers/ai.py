@@ -30,8 +30,7 @@ class AlphaBetaSearch:
         # we use maxvalue and cutoff to get best action
         # [1] is the best action return value
         value, maxaction = self.maxvalue(state, -math.inf, math.inf, 0)
-        #if self.verbose:
-        print("max value =",value)
+
         return maxaction
 
     # this is used by both min and max values
@@ -144,6 +143,9 @@ class Strategy(abstractstrategy.Strategy):
         play(board) - Find best move on current board for the maxplayer
         Returns (newboard, action)
         """
+
+        print(self.maxplayer,"thinking using ai.py strategy...")
+
         action = self.search.alphabeta(board)
 
         # if action is None then no action is possible
@@ -156,7 +158,7 @@ class Strategy(abstractstrategy.Strategy):
         return newboard, action
 
     # what is the utility of a state/checkerboard
-    def evaluate(self, state, turn = None):
+    def evaluate(self, state, verbose = False):
         """
         evaluate - Determine utility of terminal state or estimated
         utility of a non-terminal state
@@ -248,8 +250,6 @@ class Strategy(abstractstrategy.Strategy):
         minDW = 0.25    # min distance to king, for one piece
         capSW = 1       # capture sum wight
         eCW = 0.25      # edge count weight
-        tW = 0.5        # terminal weigth
-        turnvalue = 10  # value after wich terminal value starts incrementing
         '''
 
         #golden ratio, wins almost always
@@ -258,22 +258,23 @@ class Strategy(abstractstrategy.Strategy):
         minDW = 0.25     # min distance to king, for one piece
         capSW = 1    # capture sum weight
         eCW = 0.25      # edge count weight
-        tW = 0.2        # terminal weigth
-        turnvalue = 10  # value after wich terminal value starts incrementing
-
-        # this makes it posible to get reduce or never end in a draw
-        # is the state a repeat state
-        terminalStateValue = 0
-        # if we have gone through X turns/moves with no captures
-        if(state.movecount - state.lastcapture > turnvalue):
-            terminalStateValue = state.movecount - state.lastcapture - turnvalue
 
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
         playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + \
-                            playerCaptureSum*capSW + playerEdgeCount*eCW - terminalStateValue*tW
+                            playerCaptureSum*capSW + playerEdgeCount*eCW
 
-        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*2*kW - opponentDistMin*minDW + \
-                            opponentCaptureSum*2*capSW + opponentEdgeCount*eCW
+        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + \
+                            opponentCaptureSum*capSW + opponentEdgeCount*eCW
+
+
+        if(verbose):
+            print("playerEvaluation =", playerEvaluation, self.maxplayer)
+            print(playerPawnCount*pW, playerKingCount*kW, -playerDistMin*minDW, playerCaptureSum*capSW, playerEdgeCount*eCW)
+
+            print("opponentEvaluation =", opponentEvaluation, self.maxplayer)
+            print(opponentPawnCount*pW, opponentKingCount*kW, -opponentDistMin*minDW, opponentCaptureSum*capSW, opponentEdgeCount*eCW)
+
+
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
@@ -283,8 +284,7 @@ class Strategy(abstractstrategy.Strategy):
 # Run test cases if invoked as main module
 if __name__ == "__main__":
 
-    #board = boardlibrary.boards["StrategyTest1"]
-    board = boardlibrary.boards["Test2"]
+    board = boardlibrary.boards["Pristine"]
     print(board)
 
     Player_1 = Strategy('r', board, 3)

@@ -47,7 +47,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # create the board
     board = checkerboard.CheckerBoard()
-    #board = boardlibrary.boards["SingleHopsRed"]
+    board = boardlibrary.boards["SingleHopsRed"]
 
     # create players
     player_1 = red('r', board, maxplies)
@@ -55,7 +55,9 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     turnCount = 0
 
-    if(verbose):print(board)
+    if(verbose):
+        print("\n****Initial Board****")
+        print(board)
 
     # Note start time
     timeStart = time.time()
@@ -68,24 +70,25 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         if(verbose):print("\n****player_1, turn",turnCount,"****")
         # get new board and best move/action
         board, action = player_1.play(board)
-        if(verbose):print(board, action)
-        print("player 1 evaluate =", player_1.evaluate(board))
-        print("player 2 evaluate =", player_2.evaluate(board))
+        if(verbose):
+            print(board, action)
+            print("player 1 evaluate =", player_1.evaluate(board))
+            print("player 2 evaluate =", player_2.evaluate(board))
         if(action == None):
             if verbose: print("Player_1 is Forfeit")
             return 'b'
         
         if(board.is_terminal()[0]):break
-        #input()
 
         ##### second player's turn #####
         turnCount += 1
         if(verbose):print("\n****player_2, turn",turnCount,"****")
         # get new board and best move/action
         board, action = player_2.play(board)
-        if(verbose):print(board, action)
-        print("player 1 evaluate =", player_1.evaluate(board))
-        print("player 2 evaluate =", player_2.evaluate(board))
+        if(verbose):
+            print(board, action)
+            print("player 1 evaluate =", player_1.evaluate(board))
+            print("player 2 evaluate =", player_2.evaluate(board))
         if(action == None):
             if verbose: print("Player_2 is Forfeit")
             return 'r'
