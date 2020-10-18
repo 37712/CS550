@@ -204,8 +204,6 @@ class Strategy(abstractstrategy.Strategy):
                 # if pawn
                 if(not isKing):
                     opponentDistList.append(state.disttoking(self.minplayer, row))
-        print("Number of Player Pawns",len(playerDistList))
-        print("Number of Opponent Pawns",len(opponentDistList))
 
         playerDistSum=0;
         opponentDistSum=0;
@@ -231,23 +229,6 @@ class Strategy(abstractstrategy.Strategy):
             opponentDistMax = max(opponentDistList)
             opponentDistMin = min(opponentDistList)
 
-        # Mean of each distance list (mean of total moves from king for each pawn)
-        #if(len(playerDistList)>0):
-            #playerDistMean = playerDistSum / len(playerDistList)
-        #if(len(opponentDistList)>0):
-            #opponentDistMean = opponentDistSum / len(opponentDistList)
-
-        # Max of each distance list (max of total moves from king for each pawn)
-        #if(len(playerDistList)>0):
-            #playerDistMax = max(playerDistList)
-        #if(len(opponentDistList)>0):
-            #opponentDistMax = max(opponentDistList)
-
-        #if(len(playerDistList)>0):
-            #playerDistMin = min(playerDistList)
-        #if(len(opponentDistList)>0):
-            #opponentDistMin = min(opponentDistList)
-
         # Number of possible moves per player
         playerMoveList = state.get_actions(self.maxplayer)
         playerNumMoves = len(playerMoveList)
@@ -269,19 +250,15 @@ class Strategy(abstractstrategy.Strategy):
         for move in opponentMoveList:
             if(len(move[1])>2):
                 opponentCaptureSum += len(move) - 1
-        """
+
         pW = 1
         kW = 3
         minDW = 2
         capSW = 1
-        eCW = 1
+        eCW = 0.25
         # pawnCount, kingCount, sum of disttoking, mean of disttoking, max disttoking, moveSum, captureSum, edgeCount
-        playerEvaluation = playerPawnCount*pW + playerKingCount*kW + playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
-        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW + opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
-        """
-
-        playerEvaluation = playerPawnCount + playerKingCount - playerDistMin + playerEdgeCount
-        opponentEvaluation = opponentPawnCount + opponentKingCount - opponentDistMin + opponentEdgeCount
+        playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + playerCaptureSum*capSW + playerEdgeCount*eCW
+        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + opponentCaptureSum*capSW + opponentEdgeCount*eCW
 
         utilityEstimate = playerEvaluation - opponentEvaluation
 
@@ -306,6 +283,7 @@ if __name__ == "__main__":
         print(board)
 
         input()
+        if(board.is_terminal()[0]): break
 
         print("BLACK TURN**************")
         blackstrat = Strategy('b', board, 3)
