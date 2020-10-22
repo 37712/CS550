@@ -40,6 +40,7 @@ if True:
     minor = sys.version_info[1]
     modpath = "lib/__pycache__/tonto.cpython-{}{}.pyc".format(major, minor)
     tonto = imp.load_compiled("tonto", modpath)
+    GoldenRatio = imp.load_compiled("GoldenRatio", "lib/__pycache__/GoldenRatio.cpython-{}{}.pyc".format(major, minor))
 
 
 # this is where the game actually starts
@@ -58,7 +59,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # create the board
     board = checkerboard.CheckerBoard()
-    board = boardlibrary.boards["SingleHopsRed"]
+    #board = boardlibrary.boards["Pristine"]
 
     # create players
     player_1 = red('r', board, maxplies)
@@ -121,6 +122,7 @@ if __name__ == "__main__":
     #print(Game(red=tonto.Strategy, black=tonto.Strategy, maxplies=6))
     #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
     #print(Game(red=ai.Strategy, black=human.Strategy, maxplies=6))
+    #print(Game(red=GoldenRatio.Strategy, black=tonto.Strategy, maxplies=6))
 
     #Play with default strategies...
     #Game()
