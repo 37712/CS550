@@ -140,6 +140,8 @@ class Strategy(abstractstrategy.Strategy):
        2019 World Women's Champion
     """
 
+    
+
     def __init__(self, *args):
         """
         Strategy - Concrete implementation of abstractstrategy.Strategy
@@ -158,7 +160,9 @@ class Strategy(abstractstrategy.Strategy):
         Returns (newboard, action)
         """
 
-        print(self.maxplayer,"thinking using ai.py strategy...")
+        if(self.verbose):
+            print(self.maxplayer,"thinking using ai.py strategy...")
+
         # use alpha beta search to find optimal move
         action = self.search.alphabeta(board)
 
@@ -172,7 +176,7 @@ class Strategy(abstractstrategy.Strategy):
         return newboard, action
 
     # what is the utility of a state/checkerboard
-    def evaluate(self, state, verbose = False):
+    def evaluate(self, state, turn = None):
         """
         evaluate - Determine utility of terminal state or estimated
         utility of a non-terminal state
@@ -269,8 +273,8 @@ class Strategy(abstractstrategy.Strategy):
         #golden ratio, wins almost always
         pW = 2          # pawn weight
         kW = 5          # king weight
-        minDW = 0.25     # min distance to king, for one piece
-        capSW = 1    # capture sum weight
+        minDW = 0.1     # min distance to king, for one piece
+        capSW = 1     # capture sum weight
         eCW = 0.25      # edge count weight
 
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
@@ -281,7 +285,7 @@ class Strategy(abstractstrategy.Strategy):
                             opponentCaptureSum*capSW + opponentEdgeCount*eCW
 
 
-        if(verbose):
+        if(turn):
             print("playerEvaluation =", playerEvaluation, self.maxplayer)
             print(playerPawnCount*pW, playerKingCount*kW, -playerDistMin*minDW, playerCaptureSum*capSW, playerEdgeCount*eCW)
 

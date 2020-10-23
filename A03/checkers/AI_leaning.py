@@ -44,7 +44,7 @@ if True:
 
 
 # this is where the game actually starts
-def Game(red=human.Strategy, black=tonto.Strategy,
+def Game(
          maxplies=6, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
     Start a game of checkers
@@ -56,68 +56,72 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     Returns winning player 'r' or 'b'
     """
+    for(i=0; i<40; i+=1)
 
-    # create the board
-    board = checkerboard.CheckerBoard()
-    #board = boardlibrary.boards["Pristine"]
+        red=ai.Strategy, black=tonto.Strategy, verbose=False))
+        red=tonto.Strategy, black=ai.Strategy, verbose=False))
 
-    # create players
-    player_1 = red('r', board, maxplies, False)
-    player_2 = black('b', board, maxplies, False)
+        # create the board
+        board = checkerboard.CheckerBoard()
+        #board = boardlibrary.boards["Pristine"]
 
-    turnCount = 0
+        # create players
+        player_1 = red('r', board, maxplies, False)
+        player_2 = black('b', board, maxplies, False)
 
-    if(verbose):
-        print("\n****Initial Board****")
-        print(board)
+        turnCount = 0
 
-    # start time
-    timeStart = time.time()
-
-    # while the game is not finished
-    while(not board.is_terminal()[0]):
-        
-        ##### first player's turn #####
-        turnCount += 1
-        if(verbose):print("\n****player_1, turn",turnCount,"****")
-        # get new board and best move/action
-        board, action = player_1.play(board)
         if(verbose):
-            print(board, action)
-            print("player 1 evaluate =", player_1.evaluate(board))
-            print("player 2 evaluate =", player_2.evaluate(board))
-        if(action == None):
-            if verbose: print("Player_1 is Forfeit")
-            return 'b'
-        
-        if(board.is_terminal()[0]):break
+            print("\n****Initial Board****")
+            print(board)
 
-        ##### second player's turn #####
-        turnCount += 1
-        if(verbose):print("\n****player_2, turn",turnCount,"****")
-        # get new board and best move/action
-        board, action = player_2.play(board)
+        # Note start time
+        timeStart = time.time()
+
+        # while the game is not finished
+        while(not board.is_terminal()[0]):
+            
+            ##### first player's turn #####
+            turnCount += 1
+            if(verbose):print("\n****player_1, turn",turnCount,"****")
+            # get new board and best move/action
+            board, action = player_1.play(board)
+            if(verbose):
+                print(board, action)
+                print("player 1 evaluate =", player_1.evaluate(board))
+                print("player 2 evaluate =", player_2.evaluate(board))
+            if(action == None):
+                if verbose: print("Player_1 is Forfeit")
+                return 'b'
+            
+            if(board.is_terminal()[0]):break
+
+            ##### second player's turn #####
+            turnCount += 1
+            if(verbose):print("\n****player_2, turn",turnCount,"****")
+            # get new board and best move/action
+            board, action = player_2.play(board)
+            if(verbose):
+                print(board, action)
+                print("player 1 evaluate =", player_1.evaluate(board))
+                print("player 2 evaluate =", player_2.evaluate(board))
+            if(action == None):
+                if verbose: print("Player_2 is Forfeit")
+                return 'r'
+
+        ''' not working yet
         if(verbose):
-            print(board, action)
-            print("player 1 evaluate =", player_1.evaluate(board))
-            print("player 2 evaluate =", player_2.evaluate(board))
-        if(action == None):
-            if verbose: print("Player_2 is Forfeit")
-            return 'r'
-
-    ''' not working yet
-    if(verbose):
-        seconds = datetime.timedelta(seconds=(time.time()-timeStart)).total_seconds
-        print("\ntime elapsed to solve all puzzles %dmin %dsec" % (seconds/60, seconds%60))
-    '''
-
+            seconds = datetime.timedelta(seconds=(time.time()-timeStart)).total_seconds
+            print("\ntime elapsed to solve all puzzles %dmin %dsec" % (seconds/60, seconds%60))
+        '''
+    print(board, turnCount)
     return  board.is_terminal()[1] # returns winner
 
 if __name__ == "__main__":
 
     # my test
-    print(Game(red=ai.Strategy, black=tonto.Strategy, verbose=False))
-    print(Game(red=tonto.Strategy, black=ai.Strategy, verbose=False))
+    #print(Game(red=ai.Strategy, black=tonto.Strategy, verbose=False))
+    #print(Game(red=tonto.Strategy, black=ai.Strategy, verbose=False))
     #print(Game(red=ai.Strategy, black=ai.Strategy, maxplies=6))
     #print(Game(red=tonto.Strategy, black=tonto.Strategy, maxplies=6))
     #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
@@ -125,7 +129,7 @@ if __name__ == "__main__":
     #print(Game(red=GoldenRatio.Strategy, black=tonto.Strategy, maxplies=6))
 
     #Play with default strategies...
-    #Game()
+    Game()
         
         
         
