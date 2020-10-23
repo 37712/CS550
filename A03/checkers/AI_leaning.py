@@ -1,16 +1,5 @@
 """
-Pair Programming Equitable Participation & Honesty Affidavit
-We the undersigned promise that we have in good faith attempted to follow the principles of pair programming.
-Although we were free to discuss ideas with others, the implementation is our own.
-We have shared a common workspace and taken turns at the keyboard for the majority of the work that we are submitting.
-Furthermore, any non programming portions of the assignment were done independently.
-We recognize that should this not be the case, we will be subject to penalties as outlined in the course syllabus.
-
-
-Pair Programmer 1 (print & sign your name, then date it)    Scott Sindewald 10/18/2020
-
-
-Pair Programmer 2 (print & sign your name, then date it)    Carlos Gamino Reyes 10/18/2020
+Author: Carlos Gamino Reyes
 """
 
 # Game representation and mechanics
@@ -23,8 +12,8 @@ Pair Programmer 2 (print & sign your name, then date it)    Carlos Gamino Reyes 
 # against another computer player.
 #
 # Decompilation is cheating, don't do it.
-import statistics
-import ai
+import statistics, random
+import ai_plus
 import time, datetime
 from lib import human, checkerboard, boardlibrary 
 #from lib import tonto
@@ -44,30 +33,59 @@ if True:
 
 
 # this is where the game actually starts
-def Game(
-         maxplies=6, init=None, verbose=True, firstmove=0):
-    """Game(red, black, maxplies, init, verbose, turn)
-    Start a game of checkers
-    red,black - Strategy classes (not instances)
-    maxplies - # of turns to explore (default 10)
-    init - Start with given board (default None uses a brand new game)
-    verbose - Show messages (default True)
-    firstmove - Player N starts 0 (red) or 1 (black).  Default 0. 
+def AI_learn(maxplies=6, init=None, verbose=False, firstmove=0):
+    # best values
+    #_pW = 2          # pawn weight
+    #_kW = 5          # king weight
+    #_minDW = 0.25     # min distance to king, for one piece
+    #_capSW = 1    # capture sum weight
+    #_eCW = 0.25      # edge count weight
 
-    Returns winning player 'r' or 'b'
-    """
-    for(i=0; i<40; i+=1)
 
-        red=ai.Strategy, black=tonto.Strategy, verbose=False))
-        red=tonto.Strategy, black=ai.Strategy, verbose=False))
+    # BEST WEIGHTS SO FAR 10/22/2020
+    _pW = 2 
+    _kW = 4.563486995637862 
+    _minDW = -0.20805803766397996 
+    _capSW = 1.363555349866284 
+    _eCW = -0.18493943623434173
+
+
+    # test values
+    pW =_pW          # pawn weight
+    kW = _kW          # king weight
+    minDW = _minDW     # min distance to king, for one piece
+    capSW = _capSW    # capture sum weight
+    eCW = _eCW      # edge count weight
+
+    utilityValue = 0
+    util_r = 0
+    util_b = 0
+
+
+    i=0
+    while(i<50):
 
         # create the board
         board = checkerboard.CheckerBoard()
         #board = boardlibrary.boards["Pristine"]
 
+        print("\n\n############iteration,", i, "#############\n")
+        print("Testing the following weights")
+        print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
+
+        # change strategy order
+        if(i%2 == 0):
+            red=ai_plus.Strategy('r', board, 6)
+            black=tonto.Strategy('b', board, 6)
+            red.setWeights(pW, kW, minDW, capSW, eCW)
+        else:
+            red=tonto.Strategy('r', board, 6)
+            black=ai_plus.Strategy('b', board, 6)
+            black.setWeights(pW, kW, minDW, capSW, eCW)
+
         # create players
-        player_1 = red('r', board, maxplies, False)
-        player_2 = black('b', board, maxplies, False)
+        player_1 = red
+        player_2 = black
 
         turnCount = 0
 
@@ -75,8 +93,10 @@ def Game(
             print("\n****Initial Board****")
             print(board)
 
-        # Note start time
+        # start time
         timeStart = time.time()
+
+        winner = None
 
         # while the game is not finished
         while(not board.is_terminal()[0]):
@@ -92,9 +112,12 @@ def Game(
                 print("player 2 evaluate =", player_2.evaluate(board))
             if(action == None):
                 if verbose: print("Player_1 is Forfeit")
-                return 'b'
+                winner = 'b'
             
-            if(board.is_terminal()[0]):break
+            
+            if(board.is_terminal()[0]):
+                winner = board.is_terminal()[1]
+                break
 
             ##### second player's turn #####
             turnCount += 1
@@ -107,29 +130,150 @@ def Game(
                 print("player 2 evaluate =", player_2.evaluate(board))
             if(action == None):
                 if verbose: print("Player_2 is Forfeit")
-                return 'r'
+                winner = 'r'
 
-        ''' not working yet
-        if(verbose):
-            seconds = datetime.timedelta(seconds=(time.time()-timeStart)).total_seconds
-            print("\ntime elapsed to solve all puzzles %dmin %dsec" % (seconds/60, seconds%60))
-        '''
-    print(board, turnCount)
-    return  board.is_terminal()[1] # returns winner
+            winner = board.is_terminal()[1]
+        
+        # calculate utility value
+        #utility
+        #turns
+        #win, louse, None
+        # ai is red
+        if(i%2 == 0):
+            if(winner == 'r'):
+                sing = 1
+            else:
+                sing = -1
+            
+            util_r = sing * red.evaluate(board) - int(turnCount*0.05)
+            print("turncount =", turnCount)
+            print(board,"util_r =", util_r)
+
+            # time elapsed
+            seconds = time.time() - timeStart
+            print("\nTime elapsed: %dmin %dsec" % (int(seconds/60), int(seconds%60)))
+
+            print("winner =", winner)
+
+            if(sing == -1):
+                print("BAD WEIGHTS, skipping black player test")
+                print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
+
+                # restore to previous values
+                pW =_pW          # pawn weight
+                kW = _kW          # king weight
+                minDW = _minDW     # min distance to king, for one piece
+                capSW = _capSW    # capture sum weight
+                eCW = _eCW      # edge count weight
+
+                # modify weights
+                if(random.randint(0,1)):
+                    sing = 1
+                else:
+                    sing = -1
+                x = random.randint(0,4)
+                ran = random.uniform(0,0.5)
+                if(x == 0):pW += (sing * ran)
+                elif(x == 1):kW += (sing * ran)
+                elif(x == 2):minDW += (sing * ran)
+                elif(x == 3):capSW += (sing * ran)
+                else: eCW += (sing * ran)
+                
+                # skip thiw weight testing and start from scratch
+                i+=1
+
+        
+        # ai is black
+        else:
+
+            # if ai lost
+            if(winner == 'b'):
+                sing = 1
+            else:
+                sing = -1
+            util_b = sing * black.evaluate(board) - int(turnCount*0.05)
+            print("turncount =", turnCount)
+            print(board, "util_b =", util_b)
+            
+            # time elapsed
+            seconds = time.time() - timeStart
+            print("\nTime elapsed: %dmin %dsec" % (int(seconds/60), int(seconds%60)))
+            
+            print("winner =", winner)
+
+            print("\nutil_r =", util_r)
+            print("util_b =", util_b)
+            util_avg = (util_r + util_b) / 2
+            print("util_avg =", util_avg)
+
+            # populate utilityValue of starting weights
+            if(utilityValue == 0):
+                print("utility of initial weights SET")
+                utilityValue = util_avg
+
+            # if better weights are found
+            elif(util_avg > utilityValue and sing == 1):
+                print("BETTER WEIGHTS FOUND")
+                print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
+
+                # save weights in to original and continue modifying
+                _pW =pW          # pawn weight
+                _kW = kW          # king weight
+                _minDW = minDW     # min distance to king, for one piece
+                _capSW = capSW    # capture sum weight
+                _eCW = eCW      # edge count weight
+
+                # modify weights
+                if(random.randint(0,1)):
+                    sing = 1
+                else:
+                    sing = -1
+                x = random.randint(0,4)
+                ran = random.uniform(0,0.5)
+                if(x == 0):pW += (sing * ran)
+                elif(x == 1):kW += (sing * ran)
+                elif(x == 2):minDW += (sing * ran)
+                elif(x == 3):capSW += (sing * ran)
+                else: eCW += (sing * ran)
+
+            
+            
+            # new weights are no good, return to original and modify weights
+            else:
+                print("BAD WEIGHTS")
+                print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
+
+                # test values
+                pW =_pW          # pawn weight
+                kW = _kW          # king weight
+                minDW = _minDW     # min distance to king, for one piece
+                capSW = _capSW    # capture sum weight
+                eCW = _eCW      # edge count weight
+
+                # modify weights
+                if(random.randint(0,1)):
+                    sing = 1
+                else:
+                    sing = -1
+                x = random.randint(0,4)
+                ran = random.uniform(0,0.5)
+                if(x == 0):pW += (sing * ran)
+                elif(x == 1):kW += (sing * ran)
+                elif(x == 2):minDW += (sing * ran)
+                elif(x == 3):capSW += (sing * ran)
+                else: eCW += (sing * ran)
+
+        i+=1
+        
+    
+    
+    
+    print("BEST WEIGHTS SO FAR")
+    print("_pW =",_pW, "\n_kW =", _kW, "\n_minDW =", _minDW, "\n_capSW =", _capSW, "\n_eCW =", _eCW)
+    print("\n***DONE***")
 
 if __name__ == "__main__":
-
-    # my test
-    #print(Game(red=ai.Strategy, black=tonto.Strategy, verbose=False))
-    #print(Game(red=tonto.Strategy, black=ai.Strategy, verbose=False))
-    #print(Game(red=ai.Strategy, black=ai.Strategy, maxplies=6))
-    #print(Game(red=tonto.Strategy, black=tonto.Strategy, maxplies=6))
-    #print(Game(red=human.Strategy, black=ai.Strategy, maxplies=6))
-    #print(Game(red=ai.Strategy, black=human.Strategy, maxplies=6))
-    #print(Game(red=GoldenRatio.Strategy, black=tonto.Strategy, maxplies=6))
-
-    #Play with default strategies...
-    Game()
+    AI_learn()
         
         
         

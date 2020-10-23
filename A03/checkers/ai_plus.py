@@ -88,7 +88,7 @@ class AlphaBetaSearch:
 
                 # get temporary min value, [0] is the return value
                 tmpValue = self.minvalue(state.move(action), alpha, beta, ply + 1)[0]
-
+                
                 # if better value
                 if(tmpValue > value):
                     value = tmpValue
@@ -120,14 +120,14 @@ class AlphaBetaSearch:
 
         else:
             for action in state.get_actions(self.minplayer):
-                
+
                 # get temporary max value, [0] is the return value
                 tmpValue = self.maxvalue(state.move(action), alpha, beta, ply + 1)[0]
-
+                
                 # if better value
                 if(tmpValue < value):
                     value = tmpValue
-                    minaction = action
+                    minaction = action      
 
                 # if value is less or equal to lower bound, prune
                 if(value <= alpha): break # skip the rest of the posible actions
@@ -146,6 +146,16 @@ class Strategy(abstractstrategy.Strategy):
         Strategy - Concrete implementation of abstractstrategy.Strategy
         See abstractstrategy.Strategy for parameters
         """
+
+        # test golden ratio, wins almost always
+        self.pW = 2          # pawn weight
+        self.kW = 5          # king weight
+        self.minDW = 0.25     # min distance to king, for one piece
+        self.capSW = 1    # capture sum weight
+        self.eCW = 0.25      # edge count weight
+
+        self.tW = 0.2        # terminal weigth
+        self.turnvalue = 30  # value after wich terminal value starts incrementing
 
         super(Strategy, self).__init__(*args)
 
@@ -261,7 +271,7 @@ class Strategy(abstractstrategy.Strategy):
 
 
         '''
-        #golden ratio, wins on regular board, decent weights
+        #old golden ratio, wins and draws, decent weights
         pW = 2          # pawn weight
         kW = 5          # king weight
         minDW = 0.25    # min distance to king, for one piece
@@ -269,52 +279,55 @@ class Strategy(abstractstrategy.Strategy):
         eCW = 0.25      # edge count weight
         '''
 
-        #golden ratio, wins almost always
-        pW = 2          # pawn weight
-        kW = 5          # king weight
-        minDW = 0.1     # min distance to king, for one piece
-        capSW = 1     # capture sum weight
-        eCW = 0.25      # edge count weight
+        # this makes it posible to get reduce or never end in a draw
+        # is the state a repeat state
+        terminalStateValue = 0
+        # if we have gone through X turns/moves with no captures
+        if(state.movecount - state.lastcapture > self.turnvalue):
+            terminalStateValue = state.movecount - state.lastcapture - self.turnvalue
 
         # pawnCount, kingCount, min disttoking, captureSum, edgeCount
-        playerEvaluation = playerPawnCount*pW + playerKingCount*kW - playerDistMin*minDW + \
-                            playerCaptureSum*capSW + playerEdgeCount*eCW
+        playerEvaluation = playerPawnCount*self.pW + playerKingCount*self.kW - playerDistMin*self.minDW + \
+                            playerCaptureSum*self.capSW + playerEdgeCount*self.eCW - terminalStateValue*self.tW
 
-        opponentEvaluation = opponentPawnCount*pW + opponentKingCount*kW - opponentDistMin*minDW + \
-                            opponentCaptureSum*capSW + opponentEdgeCount*eCW
-
-
-        if(turn):
-            print("playerEvaluation =", playerEvaluation, self.maxplayer)
-            print(playerPawnCount*pW, playerKingCount*kW, -playerDistMin*minDW, playerCaptureSum*capSW, playerEdgeCount*eCW)
-
-            print("opponentEvaluation =", opponentEvaluation, self.maxplayer)
-            print(opponentPawnCount*pW, opponentKingCount*kW, -opponentDistMin*minDW, opponentCaptureSum*capSW, opponentEdgeCount*eCW)
-
+        opponentEvaluation = opponentPawnCount*self.pW + opponentKingCount*self.kW - opponentDistMin*self.minDW + \
+                            opponentCaptureSum*self.capSW + opponentEdgeCount*self.eCW
 
         # positive if good for player, negative if bad for the player
         utilityEstimate = playerEvaluation - opponentEvaluation
 
         return utilityEstimate
 
+    # these methods are for AI learning
+    def getWeights(self):
+        return self.pW, self.kW, self.minDW, self.capSW, self.eCW
+
+    def setWeights(self, pW, kW, minDW, capSW, eCW):
+        self.pW = pW
+        self.kW = kW
+        self.minDW = minDW
+        self.capSW = capSW
+        self.eCW = eCW
+
+
 
 # Run test cases if invoked as main module
 if __name__ == "__main__":
-
+    '''
     board = boardlibrary.boards["Pristine"]
     print(board)
 
-    Player_1 = Strategy('r', board, 3)
-    Player_2 = Strategy('b', board, 3)
+    Player_1 = Strategy('r', board, 6)
+    Player_2 = Strategy('b', board, 6)
     print("Player_1, red")
     Player_1.evaluate(board, True)
     print("\n\nPlayer_2, black")
     Player_2.evaluate(board, True)
-
-
     '''
-    Player_1 = Strategy('r', board, 3)
-    Player_2 = Strategy('b', board, 3)
+
+    board = boardlibrary.boards["Pristine"]
+    Player_1 = Strategy('r', board, 6)
+    Player_2 = Strategy('b', board, 6)
 
     print(board)
     while(not board.is_terminal()[0]):
@@ -336,5 +349,5 @@ if __name__ == "__main__":
         print(board)
 
         input()
-    '''
+    
     print("\nDONE")
