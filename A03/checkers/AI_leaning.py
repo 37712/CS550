@@ -29,18 +29,17 @@ if True:
     minor = sys.version_info[1]
     modpath = "lib/__pycache__/tonto.cpython-{}{}.pyc".format(major, minor)
     tonto = imp.load_compiled("tonto", modpath)
-    GoldenRatio = imp.load_compiled("GoldenRatio", "lib/__pycache__/GoldenRatio.cpython-{}{}.pyc".format(major, minor))
+    #GoldenRatio = imp.load_compiled("GoldenRatio", "lib/__pycache__/GoldenRatio.cpython-{}{}.pyc".format(major, minor))
 
 
 # this is where the game actually starts
-def AI_learn(maxplies=6, init=None, verbose=False, firstmove=0):
-    # best values
+def AI_learn(maxplies=6, verbose=False):
+    # old best values
     #_pW = 2          # pawn weight
     #_kW = 5          # king weight
     #_minDW = 0.25     # min distance to king, for one piece
     #_capSW = 1    # capture sum weight
     #_eCW = 0.25      # edge count weight
-
 
     # BEST WEIGHTS SO FAR 10/22/2020
     _pW = 2 
@@ -49,18 +48,17 @@ def AI_learn(maxplies=6, init=None, verbose=False, firstmove=0):
     _capSW = 1.363555349866284 
     _eCW = -0.18493943623434173
 
-
     # test values
     pW =_pW          # pawn weight
     kW = _kW          # king weight
     minDW = _minDW     # min distance to king, for one piece
     capSW = _capSW    # capture sum weight
     eCW = _eCW      # edge count weight
-
+    
+    # used to calculate utility of each run
     utilityValue = 0
     util_r = 0
     util_b = 0
-
 
     i=0
     while(i<50):
@@ -264,9 +262,6 @@ def AI_learn(maxplies=6, init=None, verbose=False, firstmove=0):
                 else: eCW += (sing * ran)
 
         i+=1
-        
-    
-    
     
     print("BEST WEIGHTS SO FAR")
     print("_pW =",_pW, "\n_kW =", _kW, "\n_minDW =", _minDW, "\n_capSW =", _capSW, "\n_eCW =", _eCW)
