@@ -266,9 +266,14 @@ def AI_learn(maxplies=6, verbose=False):
     print("BEST WEIGHTS SO FAR")
     print("_pW =",_pW, "\n_kW =", _kW, "\n_minDW =", _minDW, "\n_capSW =", _capSW, "\n_eCW =", _eCW)
     print("\n***DONE***")
+    file2write=open("values",'w')
+    file2write.write("here goes the data\n")
+    file2write.write("_pW = "+str(_pW)+"\n_kW = "+str(_kW)+"\n_minDW = "+str(_minDW)+"\n_capSW = "+str(_capSW)+"\n_eCW = "+str(_eCW)+"\n")
+    file2write.close()
 
 if __name__ == "__main__":
     AI_learn()
+    
         
         
         
