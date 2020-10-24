@@ -14,8 +14,9 @@ Author: Carlos Gamino Reyes
 # Decompilation is cheating, don't do it.
 import statistics, random
 import ai_plus
-import time, datetime
-from lib import human, checkerboard, boardlibrary 
+import time
+from lib import human, checkerboard, boardlibrary
+from datetime import datetime
 #from lib import tonto
 
 # Python can load compiled modules using the imp module (deprecated)
@@ -31,54 +32,141 @@ if True:
     tonto = imp.load_compiled("tonto", modpath)
     #GoldenRatio = imp.load_compiled("GoldenRatio", "lib/__pycache__/GoldenRatio.cpython-{}{}.pyc".format(major, minor))
 
+# Global variables
+_title = None
+
+# BEST WEIGHTS SO FAR
+_pW = 0
+_kW = 0
+_minDW = 0
+_capSW = 0
+_eCW = 0
+
+# test weights
+pW = 0      # pawn weight
+kW = 0      # king weight
+minDW = 0   # min distance to king, for one piece
+capSW = 0   # capture sum weight
+eCW = 0     # edge count weight
+
+# write new values to txt file
+def write_values():
+    global _title
+    global pW, _pW
+    global kW, _kW
+    global minDW, _minDW
+    global capSW, _capSW
+    global eCW ,_eCW
+
+    # append old weights to end of history file
+    with open("values history.txt", "a") as txt: # you dont have to close it with this code, a is for append
+        txt.write("\n")
+        txt.write(_title)
+        txt.write("_pW = "+str(_pW)+"\n_kW = "+str(_kW)+"\n_minDW = "+str(_minDW)+ \
+                    "\n_capSW = "+str(_capSW)+"\n_eCW = "+str(_eCW)+"\n")
+
+    # write new values to txt file
+    _title = "# BEST WEIGHTS SO FAR " + datetime.now().strftime("%m/%d/%Y %H:%M:%S") + "\n"
+    with open("values.txt", "w") as txt:
+        txt.write(_title)
+        txt.write("_pW = "+str(pW)+"\n_kW = "+str(kW)+"\n_minDW = "+str(minDW)+ \
+                "\n_capSW = "+str(capSW)+"\n_eCW = "+str(eCW)+"\n")
+
+# load values from txt file
+def load_values():
+    global _title
+    global pW, _pW
+    global kW, _kW
+    global minDW, _minDW
+    global capSW, _capSW
+    global eCW ,_eCW
+
+    file = open("values.txt")
+    txt = file.readlines()
+    if(len(txt) < 6): print("there is a problem with the values.txt file")
+    print(txt[0])
+    input()
+    _title = txt[0]
+    _pW = float(txt[1].split(" = ")[1])
+    _kW = float(txt[2].split(" = ")[1])
+    _minDW = float(txt[3].split(" = ")[1])
+    _capSW = float(txt[4].split(" = ")[1])
+    _eCW = float(txt[5].split(" = ")[1])
+    file.close()
+
+
+# modify weights
+def mod_weights():
+    global pW, _pW
+    global kW, _kW
+    global minDW, _minDW
+    global capSW, _capSW
+    global eCW ,_eCW
+
+    if(random.randint(0,1)):
+        sing = 1
+    else:
+        sing = -1
+    x = random.randint(0,4)
+    ran = random.uniform(0,0.5)
+    if(x == 0):pW += (sing * ran)
+    elif(x == 1):kW += (sing * ran)
+    elif(x == 2):minDW += (sing * ran)
+    elif(x == 3):capSW += (sing * ran)
+    else: eCW += (sing * ran)
 
 # this is where the game actually starts
 def AI_learn(maxplies=6, verbose=False):
-    # old best values
-    #_pW = 2          # pawn weight
-    #_kW = 5          # king weight
-    #_minDW = 0.25     # min distance to king, for one piece
-    #_capSW = 1    # capture sum weight
-    #_eCW = 0.25      # edge count weight
 
-    # BEST WEIGHTS SO FAR 10/22/2020
-    _pW = 2 
-    _kW = 4.563486995637862 
-    _minDW = -0.20805803766397996 
-    _capSW = 1.363555349866284 
-    _eCW = -0.18493943623434173
+    global pW, _pW
+    global kW, _kW
+    global minDW, _minDW
+    global capSW, _capSW
+    global eCW ,_eCW
 
-    # test values
-    pW =_pW          # pawn weight
+    # load best values
+    load_values()
+
+    # set test values
+    pW = _pW          # pawn weight
     kW = _kW          # king weight
     minDW = _minDW     # min distance to king, for one piece
     capSW = _capSW    # capture sum weight
     eCW = _eCW      # edge count weight
-    
+
     # used to calculate utility of each run
     utilityValue = 0
     util_r = 0
     util_b = 0
 
-    i=0
-    while(i<50):
+    # needed for iteration count
+    i = 0
+
+    # run indefenitly
+    while(True):
 
         # create the board
         board = checkerboard.CheckerBoard()
+
+        # load specific board
         #board = boardlibrary.boards["Pristine"]
 
-        print("\n\n############iteration,", i, "#############\n")
+        print("\n############iteration,", i, "#############\n")
         print("Testing the following weights")
-        print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
+        print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW, "\n")
 
-        # change strategy order
+        # if ai_plus is first player
         if(i%2 == 0):
             red=ai_plus.Strategy('r', board, 6)
             black=tonto.Strategy('b', board, 6)
+            # set weights
             red.setWeights(pW, kW, minDW, capSW, eCW)
+
+        # else ai_plus is first player
         else:
             red=tonto.Strategy('r', board, 6)
             black=ai_plus.Strategy('b', board, 6)
+            # set weights
             black.setWeights(pW, kW, minDW, capSW, eCW)
 
         # create players
@@ -97,7 +185,7 @@ def AI_learn(maxplies=6, verbose=False):
         winner = None
 
         # while the game is not finished
-        while(not board.is_terminal()[0]):
+        while(True):
             
             ##### first player's turn #####
             turnCount += 1
@@ -112,7 +200,7 @@ def AI_learn(maxplies=6, verbose=False):
                 if verbose: print("Player_1 is Forfeit")
                 winner = 'b'
             
-            
+            # if game has ended
             if(board.is_terminal()[0]):
                 winner = board.is_terminal()[1]
                 break
@@ -129,21 +217,22 @@ def AI_learn(maxplies=6, verbose=False):
             if(action == None):
                 if verbose: print("Player_2 is Forfeit")
                 winner = 'r'
-
-            winner = board.is_terminal()[1]
-        
-        # calculate utility value
-        #utility
-        #turns
-        #win, louse, None
-        # ai is red
-        if(i%2 == 0):
-            if(winner == 'r'):
-                sing = 1
-            else:
-                sing = -1
             
-            util_r = sing * red.evaluate(board) - int(turnCount*0.05)
+            # if game has ended
+            if(board.is_terminal()[0]):
+                winner = board.is_terminal()[1]
+                break
+
+        # if ai is red
+        if(i%2 == 0):
+
+            # if ai won
+            if(winner == 'r'): sing = 1
+            # else ai lost
+            else: sing = -1
+            
+            # calculate utility value
+            util_r = sing * red.evaluate(board) - (turnCount*0.05)
             print("turncount =", turnCount)
             print(board,"util_r =", util_r)
 
@@ -153,6 +242,7 @@ def AI_learn(maxplies=6, verbose=False):
 
             print("winner =", winner)
 
+            # if weight's don't win
             if(sing == -1):
                 print("BAD WEIGHTS, skipping black player test")
                 print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
@@ -165,31 +255,21 @@ def AI_learn(maxplies=6, verbose=False):
                 eCW = _eCW      # edge count weight
 
                 # modify weights
-                if(random.randint(0,1)):
-                    sing = 1
-                else:
-                    sing = -1
-                x = random.randint(0,4)
-                ran = random.uniform(0,0.5)
-                if(x == 0):pW += (sing * ran)
-                elif(x == 1):kW += (sing * ran)
-                elif(x == 2):minDW += (sing * ran)
-                elif(x == 3):capSW += (sing * ran)
-                else: eCW += (sing * ran)
+                mod_weights()
                 
-                # skip thiw weight testing and start from scratch
+                # i++ to skip this weight testing and start from scratch
                 i+=1
 
-        
-        # ai is black
+        # else ai is black
         else:
 
-            # if ai lost
-            if(winner == 'b'):
-                sing = 1
-            else:
-                sing = -1
-            util_b = sing * black.evaluate(board) - int(turnCount*0.05)
+            # if ai won
+            if(winner == 'b'): sing = 1
+            # else ai lost
+            else: sing = -1
+
+            # calculate utility value
+            util_b = sing * black.evaluate(board) - (turnCount*0.05)
             print("turncount =", turnCount)
             print(board, "util_b =", util_b)
             
@@ -206,7 +286,7 @@ def AI_learn(maxplies=6, verbose=False):
 
             # populate utilityValue of starting weights
             if(utilityValue == 0):
-                print("utility of initial weights SET")
+                print("\nInitial weights utility SET")
                 utilityValue = util_avg
 
             # if better weights are found
@@ -214,25 +294,18 @@ def AI_learn(maxplies=6, verbose=False):
                 print("BETTER WEIGHTS FOUND")
                 print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
 
+                # write new weights in to txt file
+                write_values()
+
                 # save weights in to original and continue modifying
-                _pW =pW          # pawn weight
+                _pW = pW          # pawn weight
                 _kW = kW          # king weight
                 _minDW = minDW     # min distance to king, for one piece
                 _capSW = capSW    # capture sum weight
                 _eCW = eCW      # edge count weight
 
                 # modify weights
-                if(random.randint(0,1)):
-                    sing = 1
-                else:
-                    sing = -1
-                x = random.randint(0,4)
-                ran = random.uniform(0,0.5)
-                if(x == 0):pW += (sing * ran)
-                elif(x == 1):kW += (sing * ran)
-                elif(x == 2):minDW += (sing * ran)
-                elif(x == 3):capSW += (sing * ran)
-                else: eCW += (sing * ran)
+                mod_weights()
 
             
             
@@ -241,7 +314,7 @@ def AI_learn(maxplies=6, verbose=False):
                 print("BAD WEIGHTS")
                 print("pW =", pW, "\nkW =", kW, "\nminDW =", minDW, "\ncapSW =", capSW, "\neCW =", eCW)
 
-                # test values
+                # reset test values to previous known good values
                 pW =_pW          # pawn weight
                 kW = _kW          # king weight
                 minDW = _minDW     # min distance to king, for one piece
@@ -249,28 +322,12 @@ def AI_learn(maxplies=6, verbose=False):
                 eCW = _eCW      # edge count weight
 
                 # modify weights
-                if(random.randint(0,1)):
-                    sing = 1
-                else:
-                    sing = -1
-                x = random.randint(0,4)
-                ran = random.uniform(0,0.5)
-                if(x == 0):pW += (sing * ran)
-                elif(x == 1):kW += (sing * ran)
-                elif(x == 2):minDW += (sing * ran)
-                elif(x == 3):capSW += (sing * ran)
-                else: eCW += (sing * ran)
+                mod_weights()
 
+        # iteration counter
         i+=1
-    
-    print("BEST WEIGHTS SO FAR")
-    print("_pW =",_pW, "\n_kW =", _kW, "\n_minDW =", _minDW, "\n_capSW =", _capSW, "\n_eCW =", _eCW)
-    print("\n***DONE***")
-    file2write=open("values",'w')
-    file2write.write("here goes the data\n")
-    file2write.write("_pW = "+str(_pW)+"\n_kW = "+str(_kW)+"\n_minDW = "+str(_minDW)+"\n_capSW = "+str(_capSW)+"\n_eCW = "+str(_eCW)+"\n")
-    file2write.close()
 
+# defines where to start
 if __name__ == "__main__":
     AI_learn()
     

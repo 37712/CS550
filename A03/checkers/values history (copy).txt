@@ -1,0 +1,20 @@
+# old best values
+#_pW = 2          # pawn weight
+#_kW = 5          # king weight
+#_minDW = 0.25     # min distance to king, for one piece
+#_capSW = 1    # capture sum weight
+#_eCW = 0.25      # edge count weight
+
+# BEST WEIGHTS SO FAR 10/22/2020
+_pW = 2 
+_kW = 4.563486995637862 
+_minDW = -0.20805803766397996 
+_capSW = 1.363555349866284 
+_eCW = -0.18493943623434173
+
+# BETTER WEIGHTS FOUND 10/23/2020
+_pW = 2.296430439095401
+_kW = 5.206992054614
+_minDW = -0.20805803766397996
+_capSW = 1.363555349866284
+_eCW = -0.0963666766480667

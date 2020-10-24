@@ -155,7 +155,7 @@ class Strategy(abstractstrategy.Strategy):
         self.eCW = 0.25      # edge count weight
 
         self.tW = 0.2        # terminal weigth
-        self.turnvalue = 30  # value after wich terminal value starts incrementing
+        self.turnvalue = 25  # value after wich terminal value starts incrementing
 
         super(Strategy, self).__init__(*args)
 
