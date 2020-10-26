@@ -84,8 +84,6 @@ def load_values():
     file = open("values.txt")
     txt = file.readlines()
     if(len(txt) < 6): print("there is a problem with the values.txt file")
-    print(txt[0])
-    input()
     _title = txt[0]
     _pW = float(txt[1].split(" = ")[1])
     _kW = float(txt[2].split(" = ")[1])
@@ -162,7 +160,7 @@ def AI_learn(maxplies=6, verbose=False):
             # set weights
             red.setWeights(pW, kW, minDW, capSW, eCW)
 
-        # else ai_plus is first player
+        # else ai_plus is second player
         else:
             red=tonto.Strategy('r', board, 6)
             black=ai_plus.Strategy('b', board, 6)
@@ -306,8 +304,6 @@ def AI_learn(maxplies=6, verbose=False):
 
                 # modify weights
                 mod_weights()
-
-            
             
             # new weights are no good, return to original and modify weights
             else:
