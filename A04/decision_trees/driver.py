@@ -4,7 +4,6 @@ decision trees
 """
 import time
 
-
 from ml_lib.ml_util import DataSet
 
 from decision_tree import  DecisionTreeLearner
@@ -32,7 +31,7 @@ def main():
     Machine learning with decision trees.
     Runs cross validation on data sets and reports results/trees
     """
-    raise NotImplementedError
+    print("Hello world")
 
 if __name__ == '__main__':
     main()
