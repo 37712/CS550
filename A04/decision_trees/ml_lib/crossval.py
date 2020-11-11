@@ -1,7 +1,7 @@
 from copy import copy
 import random
 
-from ml_lib.ml_util import err_ratio
+from ml_util import err_ratio
 
 
 def cross_validation(learner, dataset, *learner_posn_args, k=10, trials=1,

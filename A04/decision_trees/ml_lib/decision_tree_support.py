@@ -1,4 +1,4 @@
-from ml_lib.ml_util import argmax_random_tie, best_index
+from ml_util import argmax_random_tie, best_index
 
 class DecisionFork:
     """
@@ -60,7 +60,7 @@ class DecisionFork:
             # Predict at this node.
             if self.default_child is None:
                 # Nothing specified, use pluarality value
-                selectged_class =  best_index(self.distribution)
+                selected_class =  best_index(self.distribution)
                 prediction = selected_class
             else:
                 # User specified their own method for deciding the class
