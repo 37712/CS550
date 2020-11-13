@@ -1,0 +1,9 @@
+
+once you have separated your subset of data
+use the add method on decisiciontreesupport.py
+to add a branch that contains the subset data
+everytime we fork (decisitonfork) we are asking anew question
+
+for prunning you have to compute the chi2 statistic
+prunning only happens once you have reached the leaf nodes of the tree
+

@@ -1,4 +1,4 @@
-from ml_util import argmax_random_tie, best_index
+from ml_lib.ml_util import argmax_random_tie, best_index
 
 class DecisionFork:
     """
@@ -38,7 +38,7 @@ class DecisionFork:
         self.distribution = distribution
         self.attr_name = attr_name or attr
         self.default_child = default_child
-        self.branches = branches or {}
+        self.branches = branches or {} # Dictionary
 
         self.parent = parent
         if parent is None:
@@ -73,6 +73,7 @@ class DecisionFork:
         """Predict class of example"""
         return self(example)
 
+    # add a branch
     def add(self, val, subtree):
         """Add a branch. If self.attr = val, go to the given subtree."""
         self.branches[val] = subtree

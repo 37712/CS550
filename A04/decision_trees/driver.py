@@ -31,7 +31,40 @@ def main():
     Machine learning with decision trees.
     Runs cross validation on data sets and reports results/trees
     """
-    print("Hello world")
+    mushroom = DataSet(name="mushrooms")
+    print(mushroom)
+
+    # print out the line 1 and 2 of actual .csv file
+    #print(mushroom.examples[0])
+    #print(mushroom.examples[1])
+
+    # number of attributes
+    print("attributes =",mushroom.attrs)
+
+    # determines the target attribute 
+    # according to professor, the target attribute is the one that is eliminated
+    # and the others are the ones we want to be making questions on
+    print("mushroom.target =",mushroom.target)
+
+    # to specify target, 0 = edible
+    mushroom = DataSet(name="mushrooms", target=0)
+    print("mushroom new target")
+    print("mushroom.target =",mushroom.target)
+
+    # attr_names=True, takes the first line and interprets it as lavels
+    # instead part of the dataset
+    mushroom = DataSet(name="mushrooms", target=0, attr_names=True)
+    print("mushroom.target =",mushroom.target)
+    print("mushroom.attr_names =",mushroom.attr_names)
+
+    # get all posible values for specific atribute
+    # example attribute 0 should only have edible=e, poisonous=p
+    print("values for edible",mushroom.values[0])
+
+
+
+
+
 
 if __name__ == '__main__':
     main()

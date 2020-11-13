@@ -11,7 +11,7 @@ from statistics import mean, stdev
 from collections import defaultdict
 
 # Contributed
-from utils import open_data, num_or_str
+from ml_lib.utils import open_data, num_or_str
 
 
 def shuffled(iterable):
