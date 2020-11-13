@@ -50,6 +50,7 @@ def cross_validation(learner, dataset, *learner_posn_args, k=10, trials=1,
         trial_errs = 0
         results = []
         for t in range(trials):
+            # proferos says varible size should be replaced with 1 but would confirm later
             results.append(cross_validation(learner, dataset, size, k))
 
     else:

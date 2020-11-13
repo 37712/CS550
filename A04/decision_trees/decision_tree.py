@@ -130,6 +130,18 @@ class DecisionTreeLearner:
 
     @classmethod
     def information_content(cls, class_counts):
+        # new commnet from professor
+        """info = information_content(class_counts)
+        Given an iterable of counts associated with classes
+        compute the empirical entropy.
+
+        Example: 3 class problem where we have 3 examples of class 0,
+        2 examples of class 1, and 0 examples of class 2:
+        information_content((3, 2, 0)) returns ~ .971
+
+        Hint: Ignore zero counts; function normalize may be helpful
+        """
+        # old original commnet
         """info = information_content(class_counts)
         Given a list of counts associated with classes
         compute the empirical information associated
