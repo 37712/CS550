@@ -31,6 +31,7 @@ def main():
     Machine learning with decision trees.
     Runs cross validation on data sets and reports results/trees
     """
+    """
     mushroom = DataSet(name="mushrooms")
     print(mushroom)
 
@@ -60,8 +61,30 @@ def main():
     # get all posible values for specific atribute
     # example attribute 0 should only have edible=e, poisonous=p
     print("values for edible",mushroom.values[0])
+    """
 
 
+    animal = DataSet(name="tiny_animal_set", target=1, attr_names=True)
+    #print(animal.target)
+    #print(animal.attr_names)
+    print(animal.values[1])
+
+    #print(animal.examples)
+    #print(len(animal.examples))
+
+    #print(animal.values[animal.target])
+    #print(animal.attr_names)
+    #print(animal.attrs)
+
+    #learner = DecisionTreeLearner(animal, p_value=0.05)
+    #print(animal.values[0])
+    #print(learner.plurality_value(animal.examples[0]))
+    #print(learner.split_by(1,animal.examples))
+
+    #print(animal.inputs) # print the other attributes
+
+    print(animal.values[1][0])
+    print(animal.values[1].index("yes"))
 
 
 

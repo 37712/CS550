@@ -7,3 +7,9 @@ everytime we fork (decisitonfork) we are asking anew question
 for prunning you have to compute the chi2 statistic
 prunning only happens once you have reached the leaf nodes of the tree
 
+things to ask profesor.
+how do you call or link to parent when caling the next decision_tree_learning?
+
+
+review:
+how does information gainwork, slide 27, and how does it work when you have more than 2 values (not binary)

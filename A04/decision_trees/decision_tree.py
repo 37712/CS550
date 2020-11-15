@@ -39,8 +39,6 @@ class DecisionTreeLearner:
 
         self.debug = debug
 
-
-
     def __str__(self):
         "str - Create a string representation of the tree"
         if self.tree is None:
@@ -49,6 +47,7 @@ class DecisionTreeLearner:
             result = str(self.tree)  # string representation of tree
         return result
 
+    # node
     def decision_tree_learning(self, examples, attrs, parent=None, parent_examples=()):
         """
         decision_tree_learning(examples, attrs, parent_examples)
@@ -63,8 +62,32 @@ class DecisionTreeLearner:
 
         # Hints:  See pseudocode from class and leverage classes
         # DecisionFork and DecisionLeaf
+        if len(examples) == 0:
+            return self.plurality_value(parent_examples)
+        elif self.all_same_class(examples):
+            return examples[0]
+        elif len(attrs) == 0:
+            return self.plurality_value(examples)
+        else:
+            a = self.choose_attribute(attrs, examples)
+            tree = DecisionFork(a, self.count_targets(examples), attr_name=self.dataset.attr)
+            attrs.remove(a) # remove attribute a from attrs list
+            for v in self.split_by(a,examples):
+                subtree = self.decision_tree_learning(v[1], attrs, parent=self, \
+                                                        parent_examples=examples)
+                tree.add(v[0], subtree)
 
-        raise NotImplementedError
+            """
+            split_examples = self.split_by(a,examples)
+            for v in self.dataset.value[a]:
+            """
+            
+            return tree
+
+            
+            
+
+        #raise NotImplementedError
 
     def plurality_value(self, examples):
         """
@@ -163,6 +186,7 @@ class DecisionTreeLearner:
         """
         # Hint:  list of classes can be obtained from
         # self.data.set.values[self.dataset.target]
+        
 
         raise NotImplementedError
 
@@ -245,12 +269,3 @@ class DecisionTreeLearner:
         """str - String representation of the tree"""
         return str(self.tree)
 '''
-
-
-
-
-
-
-
-
-
