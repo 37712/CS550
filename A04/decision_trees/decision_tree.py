@@ -70,7 +70,7 @@ class DecisionTreeLearner:
             return self.plurality_value(examples)
         else:
             a = self.choose_attribute(attrs, examples)
-            tree = DecisionFork(a, self.count_targets(examples), attr_name=self.dataset.attr)
+            '''tree = DecisionFork(a, self.count_targets(examples), attr_name=self.dataset.attr)
             attrs.remove(a) # remove attribute a from attrs list
             for v in self.split_by(a,examples):
                 subtree = self.decision_tree_learning(v[1], attrs, parent=self, \
@@ -82,7 +82,8 @@ class DecisionTreeLearner:
             for v in self.dataset.value[a]:
             """
             
-            return tree
+            return tree'''
+            return 0
 
             
             
@@ -151,8 +152,6 @@ class DecisionTreeLearner:
         originalTotals[:] = [x / totalElems for x in originalTotals]
         originalEntropy = scipy.stats.entropy(originalTotals, base = 2)
 
-        print("ORIGINAL: ", originalTotals)
-
         remainder = 0
         for i, group in enumerate(arr):
             target_group = self.split_by(self.dataset.target, group[1]) #Splits by target, which is class (mammal/bird)
@@ -162,17 +161,17 @@ class DecisionTreeLearner:
             for subgroup in target_group:
                 group_totals.append(len(subgroup[1]))
                 totalElems = totalElems + len(subgroup[1])
+            print("ELEMS: ", group_totals)
+            print("TOTAL: ", totalElems)
+            if totalElems != 0:
+                group_totals[:] = [x / totalElems for x in group_totals]
+                entropy = scipy.stats.entropy(group_totals, base = 2)
+                print(entropy)
 
-            group_totals[:] = [x / totalElems for x in group_totals]
-            print(group_totals)
-            print(scipy.stats.entropy(group_totals, base = 2))
-            entropy = scipy.stats.entropy(group_totals, base = 2)
-
-            remainder = remainder + (entropy * originalTotals[i])
+                remainder = remainder + (entropy * originalTotals[i])
 
         informationGain = originalEntropy - remainder
-        print(informationGain)
-        input()
+        print("GAIN:", informationGain)
 
         #entropy(, base=2)
         #for a in arr[0]
