@@ -70,9 +70,12 @@ class DecisionTreeLearner:
             return self.plurality_value(examples)
         else:
             a = self.choose_attribute(attrs, examples)
-            '''tree = DecisionFork(a, self.count_targets(examples), attr_name=self.dataset.attr)
-            attrs.remove(a) # remove attribute a from attrs list
-            for v in self.split_by(a,examples):
+            attribute = attrs[a]
+            
+            tree = DecisionFork(a, self.count_targets(examples), attr_name=attrs[a], default_child=self.predict)
+            split = self.split_by(attrs[a],examples)
+            attrs.pop(a) # remove attribute a from attrs list
+            for v in split:
                 subtree = self.decision_tree_learning(v[1], attrs, parent=self, \
                                                         parent_examples=examples)
                 tree.add(v[0], subtree)
@@ -82,9 +85,7 @@ class DecisionTreeLearner:
             for v in self.dataset.value[a]:
             """
             
-            return tree'''
-            return 0
-
+            return tree
             
             
 
@@ -147,11 +148,11 @@ class DecisionTreeLearner:
 
 
         #Calculating the totals per subgroup:
-        originalTotals = []
+        subTotals = []
         for subgroup in arr:
-            originalTotals.append(len(subgroup[1]))
+            subTotals.append(len(subgroup[1]))
             totalElems = totalElems + len(subgroup[1])
-        originalTotals[:] = [x / totalElems for x in originalTotals]
+        subTotals[:] = [x / totalElems for x in subTotals]
 
         #Calculating the original entropy:
         tempTotals = []
@@ -176,7 +177,7 @@ class DecisionTreeLearner:
             if totalElems != 0:
                 group_totals[:] = [x / totalElems for x in group_totals]
                 entropy = scipy.stats.entropy(group_totals, base = 2)
-                remainder = remainder + (entropy * originalTotals[i])
+                remainder = remainder + (entropy * subTotals[i])
 
         informationGain = originalEntropy - remainder
         print("GAIN:", informationGain)
