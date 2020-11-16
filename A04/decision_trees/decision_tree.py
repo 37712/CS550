@@ -150,14 +150,10 @@ class DecisionTreeLearner:
             totalElems = 0
 
             for subgroup in target_group:
-                print(subgroup)
-                print(target_group)
                 group_totals.append(len(subgroup[1]))
                 totalElems = totalElems + len(subgroup[1])
-
-            for i in range(len(group_totals)):
-                group_totals[i] = group_totals[i] / totalElems
-
+                
+            group_totals[:] = [x / totalElems for x in group_totals]
 
             print(group_totals)
             print(scipy.stats.entropy(group_totals, base = 2))
