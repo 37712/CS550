@@ -67,7 +67,7 @@ def main():
     animal = DataSet(name="tiny_animal_set", target=1, attr_names=True)
     #print(animal.target)
     #print(animal.attr_names)
-    print(animal.values[1])
+    #print(animal.values[1])
 
     #print(animal.examples)
     #print(len(animal.examples))
@@ -76,15 +76,15 @@ def main():
     #print(animal.attr_names)
     #print(animal.attrs)
 
-    #learner = DecisionTreeLearner(animal, p_value=0.05)
+    learner = DecisionTreeLearner(animal, p_value=0.05)
     #print(animal.values[0])
     #print(learner.plurality_value(animal.examples[0]))
     #print(learner.split_by(1,animal.examples))
 
     #print(animal.inputs) # print the other attributes
 
-    print(animal.values[1][0])
-    print(animal.values[1].index("yes"))
+    #print(animal.values[1][0])
+    #print(animal.values[1].index("yes"))
 
 
 

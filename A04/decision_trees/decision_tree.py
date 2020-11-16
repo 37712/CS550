@@ -129,14 +129,26 @@ class DecisionTreeLearner:
 
     def choose_attribute(self, attrs, examples):
         """Choose the attribute with the highest information gain."""
-
+        gain_value = -1
+        for attr in attrs:
+            tmp_value = self.information_gain(attrs[1], examples)
+            if gain_value < tmp_value:
+                gain_value = tmp_value
+                attribute = attr
+        
         # Returns the attribute index
-        raise NotImplementedError
+        return attrs.index(attribute)
 
-    def information_gain(self, attr, examples):
+    def information_gain(self, attr, examples): # the quality of a split
         """Return the expected reduction in entropy for examples from splitting by attr."""
-
-        raise NotImplementedError
+        print(attr)
+        arr = self.split_by(attr, examples)
+        print(arr[0])
+        print(arr[1])
+        input()
+        entropy(, base=2)
+        #for a in arr[0]
+        return 0
 
     def split_by(self, attr, examples):
         """split_by(attr, examples)
