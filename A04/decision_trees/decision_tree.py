@@ -142,9 +142,19 @@ class DecisionTreeLearner:
     def information_gain(self, attr, examples): # the quality of a split
         """Return the expected reduction in entropy for examples from splitting by attr."""
         arr = self.split_by(attr, examples) #Splits by flying
-        
+        originalTotals = []
+        totalElems = 0
 
-        for group in arr:
+        for subgroup in arr:
+            originalTotals.append(len(subgroup[1]))
+            totalElems = totalElems + len(subgroup[1])
+        originalTotals[:] = [x / totalElems for x in originalTotals]
+        originalEntropy = scipy.stats.entropy(originalTotals, base = 2)
+
+        print("ORIGINAL: ", originalTotals)
+
+        remainder = 0
+        for i, group in enumerate(arr):
             target_group = self.split_by(self.dataset.target, group[1]) #Splits by target, which is class (mammal/bird)
             group_totals = []
             totalElems = 0
@@ -152,19 +162,21 @@ class DecisionTreeLearner:
             for subgroup in target_group:
                 group_totals.append(len(subgroup[1]))
                 totalElems = totalElems + len(subgroup[1])
-                
-            group_totals[:] = [x / totalElems for x in group_totals]
 
+            group_totals[:] = [x / totalElems for x in group_totals]
             print(group_totals)
             print(scipy.stats.entropy(group_totals, base = 2))
+            entropy = scipy.stats.entropy(group_totals, base = 2)
 
+            remainder = remainder + (entropy * originalTotals[i])
 
-
+        informationGain = originalEntropy - remainder
+        print(informationGain)
         input()
 
         #entropy(, base=2)
         #for a in arr[0]
-        return 0
+        return informationGain
 
     def split_by(self, attr, examples):
         """split_by(attr, examples)
