@@ -132,7 +132,7 @@ class DecisionTreeLearner:
         """Choose the attribute with the highest information gain."""
         gain_value = -1
         for attr in attrs:
-            tmp_value = self.information_gain(attrs[1], examples)
+            tmp_value = self.information_gain(attr, examples)
             if gain_value < tmp_value:
                 gain_value = tmp_value
                 attribute = attr
@@ -143,14 +143,26 @@ class DecisionTreeLearner:
     def information_gain(self, attr, examples): # the quality of a split
         """Return the expected reduction in entropy for examples from splitting by attr."""
         arr = self.split_by(attr, examples) #Splits by flying
-        originalTotals = []
         totalElems = 0
 
+
+        #Calculating the totals per subgroup:
+        originalTotals = []
         for subgroup in arr:
             originalTotals.append(len(subgroup[1]))
             totalElems = totalElems + len(subgroup[1])
         originalTotals[:] = [x / totalElems for x in originalTotals]
-        originalEntropy = scipy.stats.entropy(originalTotals, base = 2)
+
+        #Calculating the original entropy:
+        tempTotals = []
+        totalElems = 0
+        originalArr = self.split_by(self.dataset.target, examples)
+        for subgroup in originalArr:
+            tempTotals.append(len(subgroup[1]))
+            totalElems = totalElems + len(subgroup[1])
+        tempTotals[:] = [x / totalElems for x in tempTotals]
+        originalEntropy = scipy.stats.entropy(tempTotals, base = 2)
+        print(originalEntropy)
 
         remainder = 0
         for i, group in enumerate(arr):
@@ -161,13 +173,9 @@ class DecisionTreeLearner:
             for subgroup in target_group:
                 group_totals.append(len(subgroup[1]))
                 totalElems = totalElems + len(subgroup[1])
-            print("ELEMS: ", group_totals)
-            print("TOTAL: ", totalElems)
             if totalElems != 0:
                 group_totals[:] = [x / totalElems for x in group_totals]
                 entropy = scipy.stats.entropy(group_totals, base = 2)
-                print(entropy)
-
                 remainder = remainder + (entropy * originalTotals[i])
 
         informationGain = originalEntropy - remainder
