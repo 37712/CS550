@@ -64,7 +64,7 @@ def main():
     """
 
 
-    animal = DataSet(name="tiny_animal_set", target=1, attr_names=True)
+    animal = DataSet(name="tiny_animal_set", target=2, attr_names=True)
     #print(animal.target)
     #print(animal.attr_names)
     #print(animal.values[1])
