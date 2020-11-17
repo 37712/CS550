@@ -86,6 +86,8 @@ def main():
     #print(animal.values[1][0])
     #print(animal.values[1].index("yes"))
 
+    learner.information_per_class
+
 
 
 

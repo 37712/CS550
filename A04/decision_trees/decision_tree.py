@@ -100,7 +100,7 @@ class DecisionTreeLearner:
                                     key=lambda v: self.count(self.dataset.target, v, examples))
         return popular
 
-    def count(self, attr, val, examples):
+    def count(self, attr, val, examples): # val = the string of actual class?
         """Count the number of examples that have example[attr] = val."""
         return sum(e[attr] == val for e in examples)
 
@@ -137,37 +137,58 @@ class DecisionTreeLearner:
             if gain_value < tmp_value:
                 gain_value = tmp_value
                 attribute = attr
+            print("###########################################")
         
         # Returns the attribute index
         return attrs.index(attribute)
 
     def information_gain(self, attr, examples): # the quality of a split
         """Return the expected reduction in entropy for examples from splitting by attr."""
+        
+        print("info_per_class =", self.information_per_class(examples))
+        print("count targets =", self.count_targets(examples), "\n")
+        
+        print("attr =", attr)
+        print("examples =", examples, "\n")
+        
         arr = self.split_by(attr, examples) #Splits by flying
-        totalElems = 0
-
+        
+        #Calculating the totals per subgroup:
+        xsubTotals = self.count_targets(examples)
+        xtotalElems = sum(xsubTotals)
+        print("subTotals before =", xsubTotals)
+        xsubTotals[:] = [x / xtotalElems for x in xsubTotals]
+        #print("totalElems =", sum(subTotals))
+        print("subTotals after =", xsubTotals, "\n")
 
         #Calculating the totals per subgroup:
         subTotals = []
         for subgroup in arr:
+            print("arr subgroup = ", subgroup)
             subTotals.append(len(subgroup[1]))
             totalElems = totalElems + len(subgroup[1])
+        print("subTotals before =", subTotals)
         subTotals[:] = [x / totalElems for x in subTotals]
-
+        print("subTotals after =", subTotals)
+        print("totalElems =", totalElems, "\n")
+        
         #Calculating the original entropy:
         tempTotals = []
         totalElems = 0
         originalArr = self.split_by(self.dataset.target, examples)
         for subgroup in originalArr:
+            print("originalArr subgroup = ", subgroup)
             tempTotals.append(len(subgroup[1]))
             totalElems = totalElems + len(subgroup[1])
         tempTotals[:] = [x / totalElems for x in tempTotals]
         originalEntropy = scipy.stats.entropy(tempTotals, base = 2)
-        print(originalEntropy)
-
+        print("originalEntropy", originalEntropy)
+        print("\n")
         remainder = 0
         for i, group in enumerate(arr):
+            print("group", group)
             target_group = self.split_by(self.dataset.target, group[1]) #Splits by target, which is class (mammal/bird)
+            print("target_group =", target_group)
             group_totals = []
             totalElems = 0
 
@@ -175,11 +196,13 @@ class DecisionTreeLearner:
                 group_totals.append(len(subgroup[1]))
                 totalElems = totalElems + len(subgroup[1])
             if totalElems != 0:
+                print("i =", i)
                 group_totals[:] = [x / totalElems for x in group_totals]
                 entropy = scipy.stats.entropy(group_totals, base = 2)
                 remainder = remainder + (entropy * subTotals[i])
 
         informationGain = originalEntropy - remainder
+        print("remainder", remainder)
         print("GAIN:", informationGain)
 
         #entropy(, base=2)
@@ -233,10 +256,16 @@ class DecisionTreeLearner:
         Returns information content per class.
         """
         # Hint:  list of classes can be obtained from
-        # self.data.set.values[self.dataset.target]
-        
+        # self.dataset.values[self.dataset.target]
+        #print("here = ",self.dataset.values[self.dataset.target])
 
-        raise NotImplementedError
+        target_split = self.split_by(self.dataset.target, examples) #Splits by target, which is class (mammal/bird)
+        return_group = []
+        for subgroup in target_split:
+            return_group.append(len(subgroup[1]))
+            print("subgroup =", subgroup)
+
+        return return_group # return [5, 6] when target class is mammal/bird
 
     def prune(self, p_value):
         """Prune leaves of a tree when the hypothesis that the distribution

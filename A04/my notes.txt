@@ -14,3 +14,5 @@ target is the attribute you dont make questions on.
 
 review:
 how does information gainwork, slide 27, and how does it work when you have more than 2 values (not binary)
+
+what exactly does information_per_class and information_content return? can you give us an example
