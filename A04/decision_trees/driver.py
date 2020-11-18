@@ -88,8 +88,10 @@ def main():
 
     x = learner.information_per_class(animal.examples)
     print(x)
-    y = learner.information_content
-
+    z = learner.count_targets(animal.examples)
+    print(z)
+    y = learner.information_content((3, 2, 0))
+    print(y)
 
 
 

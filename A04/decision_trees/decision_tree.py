@@ -239,11 +239,11 @@ class DecisionTreeLearner:
         print("here = ",self.dataset.values[self.dataset.target])
 
         target_split = self.split_by(self.dataset.target, examples) #Splits by target, which is class (mammal/bird)
-        print("target_split =",target_split)
+        #print("target_split =",target_split)
         return_group = []
         for subgroup in target_split:
             return_group.append(len(subgroup[1]))
-            print("subgroup =", subgroup)
+            #print("subgroup =", subgroup)
 
         return return_group # return [5, 6] when target class is mammal/bird
 
