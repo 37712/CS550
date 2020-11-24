@@ -13,6 +13,8 @@ how do you call or link to parent when caling the next decision_tree_learning?
 target is the attribute you dont make questions on.
 
 review:
-how does information gain work, slide 27, and how does it work when you have more than 2 values (not binary)
+how does information gain work, slide 27, and how does it work when you have more than 2 values (not binary) - this should be taken care by the entropy funciton right - Carlos
 
 what exactly does information_per_class return? can you give us an example
+
+question 4 b we are asked to compute gradient loss but we are not given any values for y, w, or x.
