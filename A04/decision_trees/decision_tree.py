@@ -63,34 +63,23 @@ class DecisionTreeLearner:
         # Hints:  See pseudocode from class and leverage classes
         # DecisionFork and DecisionLeaf
         if len(examples) == 0:
-            return self.plurality_value(parent_examples)
+            return DecisionLeaf(self.plurality_value(parent_examples), self.count_targets(parent_examples), parent=parent)
         elif self.all_same_class(examples):
-            return examples[0]
+            return DecisionLeaf(examples[0][self.dataset.target], self.count_targets(examples), parent=parent)
         elif len(attrs) == 0:
-            return self.plurality_value(examples)
+            return DecisionLeaf(self.plurality_value(examples), self.count_targets(examples), parent=parent)
         else:
             a = self.choose_attribute(attrs, examples) #Returns the index with the highest information gain
             attribute = attrs[a] #Gives the value of the attribute with the highest importance
-            
-            tree = DecisionFork(a, self.count_targets(examples), attr_name=attrs[a], default_child=self.predict)
-            split = self.split_by(attrs[a],examples)
+            xtree = DecisionFork(attribute, self.count_targets(examples), attr_name=attrs[a])
+            split = self.split_by(attribute,examples)
             attrs.pop(a) # remove attribute a from attrs list
             for v in split:
-                subtree = self.decision_tree_learning(v[1], attrs, parent=self, \
-                                                        parent_examples=examples)
-                tree.add(v[0], subtree)
-
-            """
-            split_examples = self.split_by(a,examples)
-            for v in self.dataset.value[a]:
-            """
+                subtree = self.decision_tree_learning(v[1], attrs, parent_examples=examples)
+                xtree.add(v[0], subtree)
             
-            return tree
+            return xtree
             
-            
-
-        #raise NotImplementedError
-
     def plurality_value(self, examples):
         """
         Return the most popular target value for this set of examples.
