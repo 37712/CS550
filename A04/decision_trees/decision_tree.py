@@ -69,8 +69,8 @@ class DecisionTreeLearner:
         elif len(attrs) == 0:
             return self.plurality_value(examples)
         else:
-            a = self.choose_attribute(attrs, examples)
-            attribute = attrs[a]
+            a = self.choose_attribute(attrs, examples) #Returns the index with the highest information gain
+            attribute = attrs[a] #Gives the value of the attribute with the highest importance
             
             tree = DecisionFork(a, self.count_targets(examples), attr_name=attrs[a], default_child=self.predict)
             split = self.split_by(attrs[a],examples)
@@ -163,33 +163,17 @@ class DecisionTreeLearner:
         #print("totalElems =", totalElems, "\n")
         
         #Calculating the original entropy:
-        tempTotals = []
-        totalElems = 0
-        originalArr = self.split_by(self.dataset.target, examples)
-        for subgroup in originalArr:
-            #print("originalArr subgroup = ", subgroup)
-            tempTotals.append(len(subgroup[1]))
-            totalElems = totalElems + len(subgroup[1])
-        tempTotals[:] = [x / totalElems for x in tempTotals]
-        originalEntropy = scipy.stats.entropy(tempTotals, base = 2)
+        originalEntropy = self.information_per_class(examples)
+
         #print("originalEntropy", originalEntropy, "\n")
         remainder = 0
         for i, group in enumerate(arr):
-            target_group = self.split_by(self.dataset.target, group[1]) #Splits by target, which is class (mammal/bird)
-            group_totals = []
-            totalElems = 0
-
-            for subgroup in target_group:
-                group_totals.append(len(subgroup[1]))
-                totalElems = totalElems + len(subgroup[1])
-            if totalElems != 0:
-                group_totals[:] = [x / totalElems for x in group_totals]
-                entropy = scipy.stats.entropy(group_totals, base = 2)
-                remainder = remainder + (entropy * subTotals[i])
+            entropy = self.information_per_class(group[1])
+            remainder = remainder + (entropy * subTotals[i])
 
         informationGain = originalEntropy - remainder
         #print("remainder", remainder)
-        #print("GAIN:", informationGain)
+        print("GAIN:", informationGain)
 
         return informationGain
 
@@ -236,7 +220,7 @@ class DecisionTreeLearner:
         """
         # Hint:  list of classes can be obtained from
         # self.dataset.values[self.dataset.target]
-        print("here = ",self.dataset.values[self.dataset.target])
+        #print("here = ",self.dataset.values[self.dataset.target])
 
         target_split = self.split_by(self.dataset.target, examples) #Splits by target, which is class (mammal/bird)
         #print("target_split =",target_split)
@@ -245,7 +229,7 @@ class DecisionTreeLearner:
             return_group.append(len(subgroup[1]))
             #print("subgroup =", subgroup)
 
-        return return_group # return [5, 6] when target class is mammal/bird
+        return self.information_content(return_group) # return [5, 6] when target class is mammal/bird
 
     def prune(self, p_value):
         """Prune leaves of a tree when the hypothesis that the distribution
