@@ -126,7 +126,7 @@ class DecisionTreeLearner:
             if gain_value < tmp_value:
                 gain_value = tmp_value
                 attribute = attr
-            print("###########################################")
+            #print("###########################################")
         
         # Returns the attribute index
         return attrs.index(attribute)
@@ -162,7 +162,7 @@ class DecisionTreeLearner:
 
         informationGain = originalEntropy - remainder
         #print("remainder", remainder)
-        print("GAIN:", informationGain)
+        #print("GAIN:", informationGain)
 
         return informationGain
 
@@ -291,7 +291,27 @@ class DecisionTreeLearner:
         # Don't forget, scipy has an inverse cdf for chi^2
         # scipy.stats.chi2.ppf
 
-        raise NotImplementedError
+        value = 0
+        for p in fork.branches.values():
+            for n in range(len(fork.distribution)):
+
+                # calculate p-hat
+                p_hat = fork.distribution[n] * (sum(p.distribution)/sum(fork.distribution))
+                
+                if p_hat != 0:
+                    value += ((p.distribution[n] - p_hat) **2)/ p_hat
+
+        # tuple type result to return
+        chi2result = namedtuple("chi2r", ["value", "similar"])
+        change = scipy.stats.chi2.ppf(1 - p_value, self.dof)
+        
+        similar = True
+        if value >= change:
+            similar = False
+        
+        return chi2result(value, similar)
+
+        
 
 # this method has already been defined on line 44
 '''

@@ -65,6 +65,7 @@ def main():
 
 
     animal = DataSet(name="tiny_animal_set", target=2, attr_names=True)
+    #animal = DataSet(name="tiny2", target=2, attr_names=True)
     #print(animal.target)
     #print(animal.attr_names)
     #print(animal.values[1])
@@ -77,21 +78,16 @@ def main():
     #print(animal.attrs)
 
     learner = DecisionTreeLearner(animal, p_value=0.05)
-    #print(animal.values[0])
-    #print(learner.plurality_value(animal.examples[0]))
-    #print(learner.split_by(1,animal.examples))
 
-    #print(animal.inputs) # print the other attributes
+    print("tree =",learner.tree)
+    print("\ntree branches =", learner.tree.branches)
+    print("\ntree branches['lion'] =", learner.tree.branches["lion"])
+    print("\ntree default child =", learner.tree.default_child)
+    print("\ntree distribution =", learner.tree.distribution)
+    print("\ntree branches values =", learner.tree.branches.values())
+    print("\ntree depth =", learner.tree.depth)
 
-    #print(animal.values[1][0])
-    #print(animal.values[1].index("yes"))
-
-    x = learner.information_per_class(animal.examples)
-    print(x)
-    z = learner.count_targets(animal.examples)
-    print(z)
-    y = learner.information_content((3, 2, 0))
-    print(y)
+    #learner.chi2test
 
 
 
