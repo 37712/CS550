@@ -64,7 +64,7 @@ def main():
     """
 
 
-    animal = DataSet(name="tiny_animal_set", target=2, attr_names=True)
+    animal = DataSet(name="mushrooms", target=0, attr_names=True)
     #animal = DataSet(name="tiny2", target=2, attr_names=True)
     #print(animal.target)
     #print(animal.attr_names)
@@ -79,16 +79,17 @@ def main():
 
     learner = DecisionTreeLearner(animal, p_value=0.05)
 
-    print("tree =",learner.tree)
+    #print("tree =",learner.tree)
     print("\ntree branches =", learner.tree.branches)
-    print("\ntree branches['lion'] =", learner.tree.branches["lion"])
-    print("\ntree default child =", learner.tree.default_child)
-    print("\ntree distribution =", learner.tree.distribution)
+    #print("\ntree branches['lion'] =", learner.tree.branches["lion"])
+    #print("\ntree default child =", learner.tree.default_child)
+    #print("\ntree distribution =", learner.tree.distribution)
     print("\ntree branches values =", learner.tree.branches.values())
     print("\ntree depth =", learner.tree.depth)
 
-    #learner.chi2test
 
+    #learner.chi2test
+    learner.prune(0.05)
 
 
 if __name__ == '__main__':

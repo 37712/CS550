@@ -232,10 +232,26 @@ class DecisionTreeLearner:
         pruning, it is examined for pruning as well.
         """
 
+
+
         # Hint - Easiest to do with a recursive auxiliary function, that takes
         # a parent argument, but you are free to implement as you see fit.
         # e.g. self.prune_aux(p_value, self.tree, None)
-        raise NotImplementedError
+        self.prune_aux(p_value, self.tree.branches)
+        print(self.tree.branches.values())
+
+        return
+
+    def prune_aux(self, p_value, branch):
+        if isinstance(branch, DecisionLeaf):
+            return
+        else:
+            print("branch:" , branch)
+            input()
+            branch.chi2 = self.chi2test(p_value, branch)
+
+            for child in branch.branches.values():
+                self.prune_aux(p_value, child)
 
     def chi_annotate(self, p_value):
         """chi_annotate(p_value)
@@ -302,7 +318,7 @@ class DecisionTreeLearner:
                     value += ((p.distribution[n] - p_hat) **2)/ p_hat
 
         # tuple type result to return
-        chi2result = namedtuple("chi2r", ["value", "similar"])
+        chi2result = namedtuple("chi2result", ["value", "similar"])
         change = scipy.stats.chi2.ppf(1 - p_value, self.dof)
         
         similar = True
