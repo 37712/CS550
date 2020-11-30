@@ -237,24 +237,66 @@ class DecisionTreeLearner:
         # Hint - Easiest to do with a recursive auxiliary function, that takes
         # a parent argument, but you are free to implement as you see fit.
         # e.g. self.prune_aux(p_value, self.tree, None)
+
         for branch in self.tree.branches.values():
-            print("this branch =", branch)
+            
             if isinstance(branch, DecisionFork):
                 print("desision fork found")
                 self.prune_aux(p_value, branch)
+            
+            #else:
+            #    print("this branch =", branch)
 
-        
 
         return
 
-    def prune_aux(self, p_value, branch):
-        if isinstance(branch, DecisionLeaf):
-            return
-        else:
-            branch.chi2 = self.chi2test(p_value, branch)
+    def my_prune_helper(self, p_value, branches):
+        for key in branches:
+            print(branches[key])
 
-            for child in branch.branches.values():
-                self.prune_aux(p_value, child)
+            # if it is a fork
+            if isinstance(branch, DecisionFork):
+                print("desision fork found")
+
+                branch.chi2 = self.chi2test(p_value, branch)
+                print(branch.chi2)
+
+                # will go through children
+                self.my_prune_helper(p_value, branch)
+
+            else:
+                print("this branch =", branch)
+
+
+    # will go through all children of decision fork and assing chi2 test value
+    def prune_aux(self, p_value, branch):
+
+        # if decision leaf
+        if isinstance(branch, DecisionLeaf):
+            #print("decision leaf =",branch)
+            #print(branch.result)
+            #print(branch.distribution)
+            #input()
+            return False
+
+        # if it is a decision fork
+        else:
+        
+            for key in branch.branches:
+                #self.prune_aux(p_value, branch.branches[key])
+                if self.prune_aux(p_value, branch.branches[key]):
+                    dist = branch.branches[key].distribution
+                    print("##########", dist)
+                    print(branch.branches[key].attr)
+                    input()
+                    #branch.branches[key] = DecisionLeaf()
+
+                
+
+            branch.chi2 = self.chi2test(p_value, branch)
+            print(branch.chi2)
+            return branch.chi2.similar
+            
 
     def chi_annotate(self, p_value):
         """chi_annotate(p_value)
@@ -329,6 +371,7 @@ class DecisionTreeLearner:
             similar = False
         
         return chi2result(value, similar)
+
 
         
 
