@@ -44,7 +44,7 @@ def main():
     mushroom_tree = DecisionTreeLearner(mushroom_data, p_value=0.05)
     mushroom_result = cross_validation(DecisionTreeLearner, mushroom_data)
 
-    zoo_data = DataSet(name="zoo", target=17, attr_names=True)
+    zoo_data = DataSet(name="zoo", target=17, exclude = [0], attr_names=True)
     zoo_tree = DecisionTreeLearner(zoo_data, p_value=0.05)
     zoo_result = cross_validation(DecisionTreeLearner, zoo_data)
 
@@ -61,8 +61,9 @@ def main():
     print("Zoo Stdev Error: ", stdev(mushroom_error))
 
     #Example of Zoo Decision Tree
-    zoo = DataSet(name="zoo", target=0, attr_names=True)
+    zoo = DataSet(name="zoo", target=17, exclude = [0], attr_names=True)
     learner = DecisionTreeLearner(zoo, p_value=0.05)
+    learner.chi_annotate(.05)
     print("\nZoo Tree Before Pruning:", learner.tree)
     learner.prune(0.05)
     print("\nZoo Tree After Pruning:", learner.tree)
@@ -71,6 +72,7 @@ def main():
     #Example of Mushroom Decision Tree
     mushrooms = DataSet(name="mushrooms", target=3, attr_names=True)
     learner = DecisionTreeLearner(mushrooms, p_value=0.05)
+    learner.chi_annotate(.05)
     print("\nMushroom Tree Before Pruning:", learner.tree)
     learner.prune(0.05)
     print("\nMushroom Tree After Pruning:", learner.tree)

@@ -1,1 +1,170 @@
-Mushroom Mean Error:  0.44901477832512315Mushroom Stdev Error:  0.10766486655740211Zoo Mean Error:  0.49Zoo Stdev Error:  0.10766486655740211Zoo Tree Before Pruning: 17 split (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)amphibian -> 7 split (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0)0 -> toad is predicted1 -> 14 split (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> frog is predicted1 -> newt is predictedshellfish -> 13 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0)0 -> 10 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0)0 -> 6 split (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0)0 -> clam is predicted1 -> seawasp is predicted1 -> 1 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 2 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 3 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> worm is predicted1 -> 4 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 5 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 8 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 9 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 11 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 12 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 15 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> 16 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)0 -> slug is predicted1 -> slug is predicted1 -> worm is predicted1 -> worm is predicted1 -> slug is predicted1 -> slug is predicted1 -> worm is predicted1 -> slug is predicted1 -> slug is predicted1 -> worm is predicted1 -> slug is predicted2 -> octopus is predicted4 -> crab is predicted5 -> starfish is predicted6 -> lobster is predicted8 -> scorpion is predictedreptile -> seasnake is predictedmammal -> sealion is predictedbird -> gull is predictedinsect -> wasp is predictedfish -> catfish is predictedZoo Tree After Pruning: 17 split (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)amphibian -> 7 Chi2=4.000 split (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0)0 -> toad is predicted1 -> pitviper is predictedshellfish -> 13 Chi2=40.000 split (0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0)0 -> moth is predicted2 -> octopus is predicted4 -> crab is predicted5 -> starfish is predicted6 -> lobster is predicted8 -> scorpion is predictedreptile -> seasnake is predictedmammal -> sealion is predictedbird -> gull is predictedinsect -> wasp is predictedfish -> catfish is predictedMushroom Tree Before Pruning: 5 split (1500,44,16,1040,2284,144,1072,168,1840,16)a -> 11 split (0,0,0,152,48,0,200,0,0,0)c -> 0 split (0,0,0,128,0,0,128,0,0,0)e -> 1 split (0,0,0,128,0,0,128,0,0,0)c -> y is predictedf -> w is predictedb -> 2 split (0,0,0,64,0,0,64,0,0,0)y -> 4 split (0,0,0,32,0,0,32,0,0,0)t -> 6 split (0,0,0,32,0,0,32,0,0,0)a -> w is predictedf -> 7 split (0,0,0,32,0,0,32,0,0,0)c -> 8 split (0,0,0,32,0,0,32,0,0,0)b -> 9 split (0,0,0,32,0,0,32,0,0,0)e -> y is predictedo -> w is predictedh -> w is predictedw -> 10 split (0,0,0,8,0,0,8,0,0,0)t -> y is predictede -> 12 split (0,0,0,8,0,0,8,0,0,0)y -> y is predicteds -> 13 split (0,0,0,8,0,0,8,0,0,0)y -> w is predicteds -> 14 split (0,0,0,8,0,0,8,0,0,0)e -> w is predictedc -> y is predictedo -> w is predictedw -> 15 split (0,0,0,8,0,0,8,0,0,0)e -> y is predictedc -> y is predictedo -> y is predictedw -> 16 split (0,0,0,8,0,0,8,0,0,0)p -> 17 split (0,0,0,8,0,0,8,0,0,0)y -> y is predictedo -> y is predictedn -> w is predictedw -> 18 split (0,0,0,8,0,0,8,0,0,0)t -> w is predictedo -> 19 split (0,0,0,8,0,0,8,0,0,0)e -> y is predictedl -> w is predictedp -> 20 split (0,0,0,8,0,0,8,0,0,0)o -> y is predictedh -> w is predictedw -> w is predictedr -> w is predictedn -> 21 split (0,0,0,4,0,0,4,0,0,0)a -> w is predictedv -> y is predictedc -> w is predictedn -> 22 split (0,0,0,2,0,0,2,0,0,0)w -> y is predictedl -> w is predictedd -> y is predictedp -> w is predictedu -> y is predictedg -> y is predictedm -> w is predictedy -> w is predicteds -> w is predictedy -> w is predictedu -> y is predictedb -> w is predictedk -> y is predictedn -> y is predictedf -> y is predictedn -> y is predictedn -> y is predictedp -> y is predictedb -> w is predictedy -> y is predictedg -> w is predictedn -> y is predictedp -> y is predictedb -> w is predictedy -> y is predictedg -> w is predictedk -> y is predictedf -> w is predictedk -> w is predictedf -> w is predictedr -> y is predictedn -> y is predictedp -> y is predictedb -> y is predictedu -> w is predictedg -> y is predictedy -> y is predictedk -> y is predictedn -> w is predictedw -> y is predictedf -> w is predictedg -> y is predicteds -> y is predictedf -> w is predictedx -> y is predicteds -> w is predictedk -> w is predictedp -> y is predicted? -> y is predictede -> y is predictedr -> y is predictedb -> w is predictedc -> w is predictedl -> y is predictedp -> w is predictedn -> n is predictedy -> e is predicteds -> e is predictedm -> e is predictedf -> g is predictedMushroom Tree After Pruning: 5 split (1500,44,16,1040,2284,144,1072,168,1840,16)a -> 11 Chi2=200.000 split (0,0,0,152,48,0,200,0,0,0)c -> w is predicted? -> y is predictede -> y is predictedr -> y is predictedb -> w is predictedc -> w is predictedl -> y is predictedp -> w is predictedn -> n is predictedy -> e is predicteds -> e is predictedm -> e is predictedf -> g is predicted
+Mushroom Mean Error:  0.4429802955665025
+Mushroom Stdev Error:  0.12692372325934614
+Zoo Mean Error:  0.5599999999999999
+Zoo Stdev Error:  0.12692372325934614
+
+Zoo Tree Before Pruning: 13 Chi2=241.729 split (41,5,13,8,10,20,4)
+0 -> 12 Chi2=23.000 split (3,3,13,0,4,0,0)
+0 -> 8 Chi2=7.000 split (0,3,0,0,4,0,0)
+0 -> shellfish is predicted
+1 -> reptile is predicted
+1 -> 3 Chi2=16.000 split (3,0,13,0,0,0,0)
+0 -> mammal is predicted
+1 -> fish is predicted
+2 -> 1 Chi2=27.000 split (7,0,0,0,0,20,0)
+0 -> bird is predicted
+1 -> mammal is predicted
+4 -> 4 Chi2=38.000 split (31,2,0,0,1,0,4)
+0 -> 6 Chi2=7.000 split (0,2,0,0,1,0,4)
+0 -> reptile is predicted
+1 -> 9 Chi2=5.000 split (0,0,0,0,1,0,4)
+0 -> shellfish is predicted
+1 -> amphibian is predicted
+1 -> mammal is predicted
+5 -> shellfish is predicted
+6 -> 10 Chi2=10.000 split (0,0,0,8,2,0,0)
+0 -> shellfish is predicted
+1 -> insect is predicted
+8 -> shellfish is predicted
+
+Zoo Tree After Pruning: 13 Chi2=241.729 split (41,5,13,8,10,20,4)
+0 -> 12 Chi2=23.000 split (3,3,13,0,4,0,0)
+0 -> mammal is predicted
+1 -> 3 Chi2=16.000 split (3,0,13,0,0,0,0)
+0 -> mammal is predicted
+1 -> fish is predicted
+2 -> 1 Chi2=27.000 split (7,0,0,0,0,20,0)
+0 -> bird is predicted
+1 -> mammal is predicted
+4 -> 4 Chi2=38.000 split (31,2,0,0,1,0,4)
+0 -> mammal is predicted
+1 -> mammal is predicted
+5 -> shellfish is predicted
+6 -> 10 Chi2=10.000 split (0,0,0,8,2,0,0)
+0 -> shellfish is predicted
+1 -> insect is predicted
+8 -> shellfish is predicted
+
+Mushroom Tree Before Pruning: 5 Chi2=7164.821 split (44,1840,144,2284,1072,168,1500,1040,16,16)
+s -> 0 Chi2=0.000 split (0,0,0,288,0,0,288,0,0,0)
+p -> 1 Chi2=0.000 split (0,0,0,288,0,0,288,0,0,0)
+s -> e is predicted
+c -> e is predicted
+b -> n is predicted
+f -> 2 Chi2=0.000 split (0,0,0,96,0,0,96,0,0,0)
+y -> 4 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+f -> 6 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+f -> 7 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+w -> n is predicted
+c -> 8 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+b -> n is predicted
+n -> 9 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+g -> n is predicted
+p -> n is predicted
+n -> n is predicted
+o -> e is predicted
+b -> 10 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+t -> 11 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+? -> 12 Chi2=0.000 split (0,0,0,48,0,0,48,0,0,0)
+y -> e is predicted
+s -> 13 Chi2=0.000 split (0,0,0,24,0,0,24,0,0,0)
+y -> n is predicted
+s -> 14 Chi2=0.000 split (0,0,0,12,0,0,12,0,0,0)
+c -> n is predicted
+g -> e is predicted
+p -> 15 Chi2=0.000 split (0,0,0,6,0,0,6,0,0,0)
+c -> n is predicted
+g -> e is predicted
+p -> 16 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+p -> 17 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+w -> 18 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+o -> 19 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+p -> e is predicted
+n -> n is predicted
+f -> e is predicted
+e -> 20 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+n -> e is predicted
+o -> n is predicted
+y -> n is predicted
+b -> e is predicted
+k -> e is predicted
+w -> 21 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+s -> n is predicted
+c -> n is predicted
+n -> n is predicted
+y -> e is predicted
+v -> 22 Chi2=0.000 split (0,0,0,3,0,0,3,0,0,0)
+g -> e is predicted
+p -> n is predicted
+d -> n is predicted
+m -> e is predicted
+w -> n is predicted
+l -> e is predicted
+u -> e is predicted
+a -> e is predicted
+h -> e is predicted
+r -> n is predicted
+u -> e is predicted
+l -> e is predicted
+n -> e is predicted
+t -> n is predicted
+y -> e is predicted
+n -> n is predicted
+o -> e is predicted
+n -> n is predicted
+o -> n is predicted
+b -> e is predicted
+y -> n is predicted
+e -> n is predicted
+w -> e is predicted
+n -> n is predicted
+o -> e is predicted
+b -> n is predicted
+y -> e is predicted
+e -> n is predicted
+w -> n is predicted
+f -> n is predicted
+k -> e is predicted
+f -> n is predicted
+k -> e is predicted
+c -> n is predicted
+b -> e is predicted
+e -> e is predicted
+r -> e is predicted
+e -> e is predicted
+y -> e is predicted
+k -> n is predicted
+e -> n is predicted
+w -> e is predicted
+h -> n is predicted
+r -> e is predicted
+u -> n is predicted
+a -> n is predicted
+t -> n is predicted
+s -> n is predicted
+f -> n is predicted
+g -> e is predicted
+x -> n is predicted
+k -> e is predicted
+e -> n is predicted
+c -> p is predicted
+p -> n is predicted
+n -> n is predicted
+m -> e is predicted
+y -> e is predicted
+f -> g is predicted
+a -> y is predicted
+l -> y is predicted
+
+Mushroom Tree After Pruning: 5 Chi2=7164.821 split (44,1840,144,2284,1072,168,1500,1040,16,16)
+s -> 0 Chi2=0.000 split (0,0,0,288,0,0,288,0,0,0)
+p -> w is predicted
+e -> n is predicted
+c -> p is predicted
+p -> n is predicted
+n -> n is predicted
+m -> e is predicted
+y -> e is predicted
+f -> g is predicted
+a -> y is predicted
+l -> y is predicted
