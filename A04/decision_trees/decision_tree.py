@@ -47,7 +47,6 @@ class DecisionTreeLearner:
             result = str(self.tree)  # string representation of tree
         return result
 
-    # node
     def decision_tree_learning(self, examples, attrs, parent=None, parent_examples=()):
         """
         decision_tree_learning(examples, attrs, parent_examples)
@@ -62,10 +61,14 @@ class DecisionTreeLearner:
 
         # Hints:  See pseudocode from class and leverage classes
         # DecisionFork and DecisionLeaf
-        if len(examples) == 0:
+
+        # If there are no examples
+        if len(examples) == 0: 
             return DecisionLeaf(self.plurality_value(parent_examples), self.count_targets(parent_examples), parent=parent)
+        # If all examples are in the same class
         elif self.all_same_class(examples):
             return DecisionLeaf(examples[0][self.dataset.target], self.count_targets(examples), parent=parent)
+        # If there are no remaining attributes
         elif len(attrs) == 0:
             return DecisionLeaf(self.plurality_value(examples), self.count_targets(examples), parent=parent)
         else:
@@ -99,8 +102,6 @@ class DecisionTreeLearner:
         as the DataSet values associated with the target
         (self.dataset.values[self.dataset.target])
         """
-        #print("DATASET:" , self.dataset.values)
-        #print("EXAMPLES:" , examples)
 
         tidx = self.dataset.target # index of target attribute
         target_values = self.dataset.values[tidx]  # Class labels across dataset
@@ -112,10 +113,7 @@ class DecisionTreeLearner:
             position = target_values.index(target)
             counts[position] += 1
         
-        #print("COUNTS:" , counts, "\n\n\n") 
-
         return counts
-
 
     def all_same_class(self, examples):
         """Are all these examples in the same target class?"""
@@ -127,19 +125,16 @@ class DecisionTreeLearner:
         gain_value = -1
         for attr in attrs:
             tmp_value = self.information_gain(attr, examples)
+            # If new information gain is better, store the new one
             if gain_value < tmp_value:
                 gain_value = tmp_value
                 attribute = attr
-            #print("###########################################")
-        
+
         # Returns the attribute index
         return attrs.index(attribute)
 
     def information_gain(self, attr, examples): # the quality of a split
         """Return the expected reduction in entropy for examples from splitting by attr."""
-        
-        #print("info_per_class =", self.information_per_class(examples))
-        #print("count targets =", self.count_targets(examples), "\n")
         
         arr = self.split_by(attr, examples) #Splits by flying
 
@@ -147,26 +142,20 @@ class DecisionTreeLearner:
         subTotals = []
         totalElems = 0
         for subgroup in arr:
-            #print("arr subgroup = ", subgroup)
             subTotals.append(len(subgroup[1]))
             totalElems = totalElems + len(subgroup[1])
-        #print("subTotals before =", subTotals)
         subTotals[:] = [x / totalElems for x in subTotals]
-        #print("subTotals after =", subTotals)
-        #print("totalElems =", totalElems, "\n")
         
         #Calculating the original entropy:
         originalEntropy = self.information_per_class(examples)
 
-        #print("originalEntropy", originalEntropy, "\n")
+        # Calculate the remainder:
         remainder = 0
         for i, group in enumerate(arr):
             entropy = self.information_per_class(group[1])
             remainder = remainder + (entropy * subTotals[i])
 
         informationGain = originalEntropy - remainder
-        #print("remainder", remainder)
-        #print("GAIN:", informationGain)
 
         return informationGain
 
@@ -213,14 +202,11 @@ class DecisionTreeLearner:
         """
         # Hint:  list of classes can be obtained from
         # self.dataset.values[self.dataset.target]
-        #print("here = ",self.dataset.values[self.dataset.target])
 
         target_split = self.split_by(self.dataset.target, examples) #Splits by target, which is class (mammal/bird)
-        #print("target_split =",target_split)
         return_group = []
         for subgroup in target_split:
             return_group.append(len(subgroup[1]))
-            #print("subgroup =", subgroup)
 
         return self.information_content(return_group) # return [5, 6] when target class is mammal/bird
 
@@ -236,43 +222,44 @@ class DecisionTreeLearner:
         pruning, it is examined for pruning as well.
         """
 
-
-
         # Hint - Easiest to do with a recursive auxiliary function, that takes
         # a parent argument, but you are free to implement as you see fit.
         # e.g. self.prune_aux(p_value, self.tree, None)
         if isinstance(self.tree, DecisionFork):
-            for branch in self.tree.branches.values():
-                
+            for branch in self.tree.branches.values():     
                 if isinstance(branch, DecisionFork):
                     self.prune_aux(p_value, branch)
-                
-                #else:
-                #    print("this branch =", branch)
-        return
 
     # will go through all children of decision fork and assing chi2 test value
     def prune_aux(self, p_value, branch):
 
-        # if decision leaf
+        # if decision leaf, no pruning needed, so return false
         if isinstance(branch, DecisionLeaf):
             return False
 
         # if it is a decision fork
         else:
+            # Search through the children of the DecisionFork
             for key in branch.branches:
-                if self.prune_aux(p_value, branch.branches[key]):
+                # if the decision fork needs to be pruned
+                if self.prune_aux(p_value, branch.branches[key]): 
+                    # Get the distribution and result from the DecisionFork to create DecisionLeaf
                     dist = branch.branches[key].distribution
                     examples = self.get_examples(branch.branches[key].distribution)
                     result = self.plurality_value(examples)
+                    # Replace DecisionFork with DecisionLeaf
                     branch.branches[key] = DecisionLeaf(result, dist, None)
 
+            #Calculate Chi2 value for DecisionFork
             branch.chi2 = self.chi2test(p_value, branch)
+            #Return true if DecisionFork needs to be pruned
             return branch.chi2.similar
     
+    # Helper method that gets examples based on a given distribution
     def get_examples(self, distribution):
         examples = []
         for i in range(len(distribution)):
+            # If the class is included, append it to examples
             if distribution[i]:
                 examples.append(self.dataset.examples[i]) 
         return examples
@@ -351,13 +338,3 @@ class DecisionTreeLearner:
             similar = False
         
         return chi2result(value, similar)
-
-
-        
-
-# this method has already been defined on line 44
-'''
-    def __str__(self):
-        """str - String representation of the tree"""
-        return str(self.tree)
-'''
