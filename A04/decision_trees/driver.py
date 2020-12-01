@@ -66,7 +66,7 @@ def main():
 
     #animal = DataSet(name="mushrooms", target=0, attr_names=True)
     #animal = DataSet(name="zoo", target=0, attr_names=True)
-    animal = DataSet(name="tiny_animal_set", target=0, attr_names=True)
+    animal = DataSet(name="mushrooms", target=2, attr_names=True)
     #print(animal.target)
     #print(animal.attr_names)
     #print(animal.values[1])
@@ -91,6 +91,7 @@ def main():
 
     #learner.chi2test
     learner.prune(0.05)
+    print("\ntree branches =", learner.tree.branches)
 
     #print("\ntree branches =", learner.tree.branches)
 

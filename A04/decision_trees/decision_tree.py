@@ -99,6 +99,8 @@ class DecisionTreeLearner:
         as the DataSet values associated with the target
         (self.dataset.values[self.dataset.target])
         """
+        #print("DATASET:" , self.dataset.values)
+        #print("EXAMPLES:" , examples)
 
         tidx = self.dataset.target # index of target attribute
         target_values = self.dataset.values[tidx]  # Class labels across dataset
@@ -109,6 +111,8 @@ class DecisionTreeLearner:
             target = e[tidx]
             position = target_values.index(target)
             counts[position] += 1
+        
+        #print("COUNTS:" , counts, "\n\n\n") 
 
         return counts
 
@@ -273,29 +277,26 @@ class DecisionTreeLearner:
 
         # if decision leaf
         if isinstance(branch, DecisionLeaf):
-            #print("decision leaf =",branch)
-            #print(branch.result)
-            #print(branch.distribution)
-            #input()
             return False
 
         # if it is a decision fork
         else:
-        
             for key in branch.branches:
-                #self.prune_aux(p_value, branch.branches[key])
                 if self.prune_aux(p_value, branch.branches[key]):
                     dist = branch.branches[key].distribution
-                    print("##########", dist)
-                    print(branch.branches[key].attr)
-                    input()
-                    #branch.branches[key] = DecisionLeaf()
-
-                
+                    examples = self.get_examples(branch.branches[key].distribution)
+                    result = self.plurality_value(examples)
+                    branch.branches[key] = DecisionLeaf(result, dist, None)
 
             branch.chi2 = self.chi2test(p_value, branch)
-            print(branch.chi2)
             return branch.chi2.similar
+    
+    def get_examples(self, distribution):
+        examples = []
+        for i in range(len(distribution)):
+            if distribution[i]:
+                examples.append(self.dataset.examples[i]) 
+        return examples
             
 
     def chi_annotate(self, p_value):
