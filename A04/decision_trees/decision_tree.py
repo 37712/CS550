@@ -241,36 +241,15 @@ class DecisionTreeLearner:
         # Hint - Easiest to do with a recursive auxiliary function, that takes
         # a parent argument, but you are free to implement as you see fit.
         # e.g. self.prune_aux(p_value, self.tree, None)
-
-        for branch in self.tree.branches.values():
-            
-            if isinstance(branch, DecisionFork):
-                print("desision fork found")
-                self.prune_aux(p_value, branch)
-            
-            #else:
-            #    print("this branch =", branch)
-
-
+        if isinstance(self.tree, DecisionFork):
+            for branch in self.tree.branches.values():
+                
+                if isinstance(branch, DecisionFork):
+                    self.prune_aux(p_value, branch)
+                
+                #else:
+                #    print("this branch =", branch)
         return
-
-    def my_prune_helper(self, p_value, branches):
-        for key in branches:
-            print(branches[key])
-
-            # if it is a fork
-            if isinstance(branch, DecisionFork):
-                print("desision fork found")
-
-                branch.chi2 = self.chi2test(p_value, branch)
-                print(branch.chi2)
-
-                # will go through children
-                self.my_prune_helper(p_value, branch)
-
-            else:
-                print("this branch =", branch)
-
 
     # will go through all children of decision fork and assing chi2 test value
     def prune_aux(self, p_value, branch):

@@ -27,73 +27,40 @@ that you can see the 𝜒^2 statistic for each decision node.
 
     
 def main():
-    """
-    Machine learning with decision trees.
-    Runs cross validation on data sets and reports results/trees
-    """
-    """
-    mushroom = DataSet(name="mushrooms")
-    print(mushroom)
+    mushroom_data = DataSet(name="mushrooms", target=0, attr_names=True)
+    mushroom_tree = DecisionTreeLearner(mushroom_data, p_value=0.05)
+    mushroom_result = cross_validation(DecisionTreeLearner, mushroom_data)
 
-    # print out the line 1 and 2 of actual .csv file
-    #print(mushroom.examples[0])
-    #print(mushroom.examples[1])
+    zoo_data = DataSet(name="zoo", target=17, attr_names=True)
+    zoo_tree = DecisionTreeLearner(zoo_data, p_value=0.05)
+    zoo_result = cross_validation(DecisionTreeLearner, zoo_data)
 
-    # number of attributes
-    print("attributes =",mushroom.attrs)
+    mushroom_error = mushroom_result[0]
+    mushroom_model = mushroom_result[1]
 
-    # determines the target attribute 
-    # according to professor, the target attribute is the one that is eliminated
-    # and the others are the ones we want to be making questions on
-    print("mushroom.target =",mushroom.target)
+    zoo_error = zoo_result[0]
+    zoo_model = zoo_result[1]
 
-    # to specify target, 0 = edible
-    mushroom = DataSet(name="mushrooms", target=0)
-    print("mushroom new target")
-    print("mushroom.target =",mushroom.target)
+    #Standard Deviations and Means:
+    print("Mushroom Mean Error: ", mean(mushroom_error))
+    print("Mushroom Stdev Error: ", stdev(mushroom_error))
+    print("Zoo Mean Error: ", mean(zoo_error))
+    print("Zoo Stdev Error: ", stdev(mushroom_error))
 
-    # attr_names=True, takes the first line and interprets it as lavels
-    # instead part of the dataset
-    mushroom = DataSet(name="mushrooms", target=0, attr_names=True)
-    print("mushroom.target =",mushroom.target)
-    print("mushroom.attr_names =",mushroom.attr_names)
-
-    # get all posible values for specific atribute
-    # example attribute 0 should only have edible=e, poisonous=p
-    print("values for edible",mushroom.values[0])
-    """
-
-
-    #animal = DataSet(name="mushrooms", target=0, attr_names=True)
-    #animal = DataSet(name="zoo", target=0, attr_names=True)
-    animal = DataSet(name="mushrooms", target=2, attr_names=True)
-    #print(animal.target)
-    #print(animal.attr_names)
-    #print(animal.values[1])
-
-    #print(animal.examples)
-    #print(len(animal.examples))
-
-    #print(animal.values[animal.target])
-    #print(animal.attr_names)
-    #print(animal.attrs)
-
-    learner = DecisionTreeLearner(animal, p_value=0.05)
-
-    #print("tree =",learner.tree)
-    print("\ntree branches =", learner.tree.branches)
-    #print("\ntree branches['lion'] =", learner.tree.branches["lion"])
-    #print("\ntree default child =", learner.tree.default_child)
-    #print("\ntree distribution =", learner.tree.distribution)
-    #print("\ntree branches values =", learner.tree.branches.values())
-    #print("\ntree depth =", learner.tree.depth)
-
-
-    #learner.chi2test
+    #Example of Zoo Decision Tree
+    zoo = DataSet(name="zoo", target=0, attr_names=True)
+    learner = DecisionTreeLearner(zoo, p_value=0.05)
+    print("\nZoo Tree Before Pruning:", learner.tree)
     learner.prune(0.05)
-    print("\ntree branches =", learner.tree.branches)
+    print("\nZoo Tree After Pruning:", learner.tree)
 
-    #print("\ntree branches =", learner.tree.branches)
+
+    #Example of Mushroom Decision Tree
+    mushrooms = DataSet(name="mushrooms", target=3, attr_names=True)
+    learner = DecisionTreeLearner(mushrooms, p_value=0.05)
+    print("\nMushroom Tree Before Pruning:", learner.tree)
+    learner.prune(0.05)
+    print("\nMushroom Tree After Pruning:", learner.tree)
 
 
 if __name__ == '__main__':
